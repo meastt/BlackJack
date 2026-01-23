@@ -1,0 +1,32 @@
+{
+  "name": "card-counter-ai",
+  "version": "1.0.0",
+  "description": "The only app that actually teaches you to count cards—from complete beginner to casino-ready",
+  "private": true,
+  "workspaces": [
+    "mobile",
+    "backend",
+    "shared"
+  ],
+  "scripts": {
+    "mobile": "cd mobile && npm start",
+    "backend": "cd backend && npm run dev",
+    "install:all": "npm install && npm run install:mobile && npm run install:backend && npm run install:shared",
+    "install:mobile": "cd mobile && npm install",
+    "install:backend": "cd backend && npm install",
+    "install:shared": "cd shared && npm install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/meastt/BlackJack"
+  },
+  "keywords": [
+    "blackjack",
+    "card-counting",
+    "casino",
+    "training",
+    "ai"
+  ],
+  "author": "",
+  "license": "MIT"
+}
