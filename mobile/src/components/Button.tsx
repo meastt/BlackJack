@@ -111,6 +111,15 @@ const styles = StyleSheet.create({
   text_outline: {
     color: colors.accent,
   },
+  text_primary: {
+    color: colors.textPrimary,
+  },
+  text_secondary: {
+    color: colors.textPrimary,
+  },
+  text_accent: {
+    color: colors.textPrimary,
+  },
   text_small: {
     fontSize: 14,
   },

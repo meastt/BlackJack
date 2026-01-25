@@ -1,0 +1,41 @@
+import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+import { HomeScreen } from '../screens/Home/HomeScreen';
+import { Phase1CardValues } from '../screens/GuidedLearning/Phase1CardValues';
+import { colors } from '../theme/colors';
+
+const Stack = createStackNavigator();
+
+export const AppNavigator = () => {
+    return (
+        <Stack.Navigator
+            initialRouteName="Home"
+            screenOptions={{
+                headerStyle: {
+                    backgroundColor: colors.background,
+                    borderBottomColor: colors.border,
+                    borderBottomWidth: 1,
+                    elevation: 0, // Android shadow
+                    shadowOpacity: 0, // iOS shadow
+                },
+                headerTintColor: colors.textPrimary,
+                headerTitleStyle: {
+                    fontWeight: 'bold',
+                },
+                cardStyle: { backgroundColor: colors.background },
+                headerBackTitleVisible: false,
+            }}
+        >
+            <Stack.Screen
+                name="Home"
+                component={HomeScreen}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="Phase1CardValues"
+                component={Phase1CardValues}
+                options={{ title: 'Phase 1: Card Values' }}
+            />
+        </Stack.Navigator>
+    );
+};

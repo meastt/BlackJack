@@ -1,21 +1,17 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
-import { Phase1CardValues } from './src/screens/GuidedLearning/Phase1CardValues';
-import { colors } from './src/theme/colors';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { NavigationContainer } from '@react-navigation/native';
+import { AppNavigator } from './src/navigation/AppNavigator';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <StatusBar style="light" />
-      <Phase1CardValues />
-    </View>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <StatusBar style="light" />
+        <AppNavigator />
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-});
