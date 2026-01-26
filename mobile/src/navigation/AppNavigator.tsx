@@ -13,14 +13,16 @@ export const AppNavigator = () => {
             screenOptions={{
                 headerStyle: {
                     backgroundColor: colors.background,
-                    borderBottomColor: colors.border,
+                    borderBottomColor: colors.glassBorder,
                     borderBottomWidth: 1,
-                    elevation: 0, // Android shadow
-                    shadowOpacity: 0, // iOS shadow
+                    elevation: 0,
+                    shadowOpacity: 0,
                 },
-                headerTintColor: colors.textPrimary,
+                headerTintColor: colors.accentBlue,
                 headerTitleStyle: {
-                    fontWeight: 'bold',
+                    fontWeight: '600',
+                    fontSize: 17,
+                    color: colors.textPrimary,
                 },
                 cardStyle: { backgroundColor: colors.background },
                 headerBackTitleVisible: false,
@@ -34,7 +36,10 @@ export const AppNavigator = () => {
             <Stack.Screen
                 name="Phase1CardValues"
                 component={Phase1CardValues}
-                options={{ title: 'Phase 1: Card Values' }}
+                options={{
+                    title: 'Card Values',
+                    headerTitleAlign: 'center',
+                }}
             />
         </Stack.Navigator>
     );
