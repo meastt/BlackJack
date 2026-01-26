@@ -1,19 +1,26 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, StatusBar, Image } from 'react-native';
 import { colors, neonGlow } from '../../theme/colors';
 import { fontStyles } from '../../theme/typography';
+import { useProgressStore } from '../../store/useProgressStore';
+import * as Haptics from 'expo-haptics';
 
 interface HomeScreenProps {
   navigation: any;
 }
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
+  const { isPhaseUnlocked, phase0Complete, phase1Complete } = useProgressStore();
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={colors.background} />
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* Header with neon glow effect */}
         <View style={styles.header}>
+          <Image
+            source={require('../../../assets/icon.png')}
+            style={styles.logo}
+          />
           <Text style={styles.headerTitle}>
             <Text style={styles.neonPink}>Card</Text>
             <Text style={styles.neonCyan}> Counter</Text>
@@ -26,40 +33,96 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Guided Learning</Text>
 
-          {/* Phase 1 - Active */}
+          {/* Phase 0 - Basic Strategy */}
           <TouchableOpacity
-            style={[styles.card, styles.cardActive]}
-            onPress={() => navigation.navigate('Phase1CardValues')}
+            style={[styles.card, isPhaseUnlocked(0) ? styles.cardActive : styles.cardLocked]}
+            onPress={() => {
+              if (isPhaseUnlocked(0)) {
+                Haptics.selectionAsync();
+                navigation.navigate('Phase0BasicStrategy');
+              }
+            }}
             activeOpacity={0.8}
+            disabled={!isPhaseUnlocked(0)}
           >
-            <View style={styles.cardGlow} />
+            {isPhaseUnlocked(0) && <View style={styles.cardGlow} />}
             <View style={styles.cardContent}>
-              <View style={[styles.iconContainer, styles.iconActive]}>
+              <View style={[styles.iconContainer, isPhaseUnlocked(0) ? styles.iconZero : styles.iconLocked]}>
+                <Text style={styles.icon}>🧠</Text>
+              </View>
+              <View style={styles.textContainer}>
+                <View style={styles.titleRow}>
+                  <Text style={[styles.cardTitle, !isPhaseUnlocked(0) && styles.textLocked]}>Phase 0: Basic Strategy</Text>
+                  {phase0Complete && <Text style={styles.checkMark}>✓</Text>}
+                </View>
+                <Text style={[styles.cardDescription, !isPhaseUnlocked(0) && styles.textLocked]}>Prerequisite: Learn when to Hit, Stand, Split, or Double.</Text>
+              </View>
+              {isPhaseUnlocked(0) ? (
+                <Text style={styles.arrow}>›</Text>
+              ) : (
+                <Text style={styles.lockIcon}>🔒</Text>
+              )}
+            </View>
+          </TouchableOpacity>
+
+          {/* Phase 1 - Card Values */}
+          <TouchableOpacity
+            style={[styles.card, isPhaseUnlocked(1) ? styles.cardActive : styles.cardLocked]}
+            onPress={() => {
+              if (isPhaseUnlocked(1)) {
+                Haptics.selectionAsync();
+                navigation.navigate('Phase1CardValues');
+              }
+            }}
+            activeOpacity={0.8}
+            disabled={!isPhaseUnlocked(1)}
+          >
+            {isPhaseUnlocked(1) && <View style={styles.cardGlow} />}
+            <View style={styles.cardContent}>
+              <View style={[styles.iconContainer, isPhaseUnlocked(1) ? styles.iconActive : styles.iconLocked]}>
                 <Text style={styles.icon}>🎴</Text>
               </View>
               <View style={styles.textContainer}>
-                <Text style={styles.cardTitle}>Phase 1: Card Values</Text>
-                <Text style={styles.cardDescription}>Learn the Hi-Lo values for every card rank.</Text>
+                <View style={styles.titleRow}>
+                  <Text style={[styles.cardTitle, !isPhaseUnlocked(1) && styles.textLocked]}>Phase 1: Card Values</Text>
+                  {phase1Complete && <Text style={styles.checkMark}>✓</Text>}
+                </View>
+                <Text style={[styles.cardDescription, !isPhaseUnlocked(1) && styles.textLocked]}>Learn the Hi-Lo values for every card rank.</Text>
               </View>
-              <Text style={styles.arrow}>›</Text>
+              {isPhaseUnlocked(1) ? (
+                <Text style={styles.arrow}>›</Text>
+              ) : (
+                <Text style={styles.lockIcon}>🔒</Text>
+              )}
             </View>
           </TouchableOpacity>
 
-          {/* Phase 2 - Locked */}
-          <TouchableOpacity style={[styles.card, styles.cardLocked]} disabled>
+          {/* Phase 2 - Running Count */}
+          <TouchableOpacity
+            style={[styles.card, isPhaseUnlocked(2) ? styles.cardActive : styles.cardLocked]}
+            onPress={() => {
+              if (isPhaseUnlocked(2)) {
+                Haptics.selectionAsync();
+                navigation.navigate('Phase2RunningCount');
+              }
+            }}
+            activeOpacity={0.8}
+            disabled={!isPhaseUnlocked(2)}
+          >
+            {isPhaseUnlocked(2) && <View style={styles.cardGlow} />}
             <View style={styles.cardContent}>
-              <View style={[styles.iconContainer, styles.iconLocked]}>
+              <View style={[styles.iconContainer, isPhaseUnlocked(2) ? styles.iconActive : styles.iconLocked]}>
                 <Text style={styles.icon}>🔢</Text>
               </View>
               <View style={styles.textContainer}>
-                <Text style={[styles.cardTitle, styles.textLocked]}>Phase 2: Running Count</Text>
-                <Text style={[styles.cardDescription, styles.textLocked]}>Keep the count as cards are dealt.</Text>
+                <Text style={[styles.cardTitle, !isPhaseUnlocked(2) && styles.textLocked]}>Phase 2: Running Count</Text>
+                <Text style={[styles.cardDescription, !isPhaseUnlocked(2) && styles.textLocked]}>Keep the count as cards are dealt.</Text>
               </View>
-              <Text style={styles.lockIcon}>🔒</Text>
+              {!isPhaseUnlocked(2) && <Text style={styles.lockIcon}>🔒</Text>}
             </View>
           </TouchableOpacity>
 
-          {/* Phase 3 - Locked */}
+          {/* Phase 3 - True Count */}
           <TouchableOpacity style={[styles.card, styles.cardLocked]} disabled>
             <View style={styles.cardContent}>
               <View style={[styles.iconContainer, styles.iconLocked]}>
@@ -73,7 +136,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
             </View>
           </TouchableOpacity>
 
-          {/* Phase 4 - Locked */}
+          {/* Phase 4 - Betting */}
           <TouchableOpacity style={[styles.card, styles.cardLocked]} disabled>
             <View style={styles.cardContent}>
               <View style={[styles.iconContainer, styles.iconLocked]}>
@@ -120,6 +183,13 @@ const styles = StyleSheet.create({
   header: {
     marginTop: 20,
     marginBottom: 36,
+    alignItems: 'center', // Center everything in header
+  },
+  logo: {
+    width: 80,
+    height: 80,
+    marginBottom: 16,
+    borderRadius: 16, // Optional rounding
   },
   headerTitle: {
     fontSize: 36,
@@ -209,6 +279,21 @@ const styles = StyleSheet.create({
   },
   iconLocked: {
     backgroundColor: colors.surfaceLight,
+  },
+  iconZero: {
+    backgroundColor: `${colors.accent}20`,
+    borderColor: colors.accent,
+  },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  checkMark: {
+    color: colors.accentGreen,
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginBottom: 4,
   },
   icon: {
     fontSize: 24,
