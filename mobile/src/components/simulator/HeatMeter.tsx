@@ -3,11 +3,16 @@ import { View, Text, StyleSheet, Animated } from 'react-native';
 import { useSimState } from '../../store/SimState';
 import { colors } from '../../theme/colors';
 
+import { HapticEngine } from '../../utils/HapticEngine';
+
 export const HeatMeter: React.FC = () => {
     const { suspicionLevel } = useSimState();
     const widthAnim = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
+        if (suspicionLevel > 80) {
+            HapticEngine.triggerHeatWarning();
+        }
         // Animate bar width based on percentage
         Animated.timing(widthAnim, {
             toValue: suspicionLevel, // 0 to 100

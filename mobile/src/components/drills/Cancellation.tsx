@@ -6,6 +6,8 @@ import { Card as CardComponent } from '../Card';
 import { colors } from '../../theme/colors';
 import { fontStyles } from '../../theme/typography';
 
+import { HapticEngine } from '../../utils/HapticEngine';
+
 const TIMEOUT_MS = 2000;
 
 export const Cancellation: React.FC = () => {
@@ -61,6 +63,7 @@ export const Cancellation: React.FC = () => {
         setFeedback('Too Slow!');
         setGameState('FEEDBACK');
         incrementSpeedErrors();
+        HapticEngine.triggerError();
         setTimeout(startNewRound, 1500);
     };
 
@@ -81,12 +84,14 @@ export const Cancellation: React.FC = () => {
         if (inputVal === correctNet) {
             setFeedback('Correct!');
             setGameState('FEEDBACK');
+            HapticEngine.triggerSuccess();
             // Immediate next round for speed? Or short delay?
             setTimeout(startNewRound, 500);
         } else {
             setFeedback(`Wrong! Net was ${correctNet > 0 ? '+' : ''}${correctNet}`);
             setGameState('FEEDBACK');
             incrementLogicErrors(); // Wrong math is a logic error
+            HapticEngine.triggerError();
             setTimeout(startNewRound, 1500);
         }
     };

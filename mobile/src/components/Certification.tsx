@@ -16,6 +16,8 @@ export const Certification: React.FC = () => {
     } = useSimState();
 
     const [showSuccess, setShowSuccess] = useState(false);
+    const [rubric, setRubric] = useState<{ failReason: string; improvementTip: string } | null>(null);
+    const [showFail, setShowFail] = useState(false);
 
     const handleStart = () => {
         Alert.alert(
@@ -29,11 +31,12 @@ export const Certification: React.FC = () => {
     };
 
     const handleFinish = () => {
-        const success = completeChallenge();
-        if (success) {
+        const result = completeChallenge();
+        if (result.success) {
             setShowSuccess(true);
         } else {
-            Alert.alert("Challenge Failed", "You did not meet the criteria. Check your stats and try again.");
+            setRubric(result.rubric);
+            setShowFail(true);
         }
     };
 
@@ -105,6 +108,29 @@ export const Certification: React.FC = () => {
                         </View>
                         <TouchableOpacity style={styles.closeBtn} onPress={() => setShowSuccess(false)}>
                             <Text style={styles.btnText}>Close</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+            
+            {/* Failure/Rubric Modal */}
+            <Modal visible={showFail} transparent animationType="slide">
+                <View style={styles.modalOverlay}>
+                    <View style={[styles.modalContent, styles.failContent]}>
+                        <Text style={[styles.modalTitle, styles.failTitle]}>Challenge Failed</Text>
+                        
+                        <View style={styles.rubricBox}>
+                            <Text style={styles.rubricLabel}>DIAGNOSTIC REPORT</Text>
+                            <Text style={styles.rubricReason}>{rubric?.failReason}</Text>
+                        </View>
+                        
+                        <View style={styles.tipBox}>
+                             <Text style={styles.tipLabel}>COACHING TIP:</Text>
+                             <Text style={styles.tipText}>{rubric?.improvementTip}</Text>
+                        </View>
+
+                        <TouchableOpacity style={styles.closeBtn} onPress={() => setShowFail(false)}>
+                            <Text style={styles.btnText}>Dismiss</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -277,5 +303,52 @@ const styles = StyleSheet.create({
     },
     closeBtn: {
         padding: 10,
-    }
+        backgroundColor: colors.surfaceLight,
+        borderRadius: 8,
+        minWidth: 100,
+        alignItems: 'center',
+    },
+    failContent: {
+        borderColor: colors.accentRed,
+    },
+    failTitle: {
+        color: colors.accentRed,
+    },
+    rubricBox: {
+        width: '100%',
+        backgroundColor: 'rgba(255,0,0,0.1)',
+        padding: 15,
+        borderRadius: 8,
+        marginBottom: 15,
+        borderLeftWidth: 4,
+        borderLeftColor: colors.accentRed,
+    },
+    rubricLabel: {
+        fontSize: 12,
+        color: colors.accentRed,
+        fontWeight: 'bold',
+        marginBottom: 5,
+        letterSpacing: 1,
+    },
+    rubricReason: {
+        color: colors.textPrimary,
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    tipBox: {
+        width: '100%',
+        marginBottom: 25,
+    },
+    tipLabel: {
+        color: colors.textSecondary,
+        fontSize: 12,
+        fontWeight: 'bold',
+        marginBottom: 5,
+    },
+    tipText: {
+        color: colors.textPrimary,
+        fontSize: 16,
+        lineHeight: 22,
+        fontStyle: 'italic',
+    },
 });

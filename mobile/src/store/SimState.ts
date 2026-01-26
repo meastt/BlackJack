@@ -148,24 +148,39 @@ export const useSimState = create<SimState>((set, get) => ({
       const state = get();
       const s = state.challengeStats;
       
-      // Pass Criteria:
-      // 2 Shoes (Shoes Completed >= 2)
-      // Accuracy 100% (correctCounts === countChecks)
-      // Decision > 98% (decisionErrors / totalHands <= 0.02)
-      // Heat < Red (maxHeat < 80)
-      
       const countAccuracy = s.countChecks > 0 ? (s.correctCounts / s.countChecks) : 1;
       const decisionAccuracy = s.totalHands > 0 ? 1 - (s.decisionErrors / s.totalHands) : 1;
       const heatSafe = s.maxHeat < 80;
 
+      let success = false;
+      let failReason = "None";
+      let improvementTip = "Perfect Session!";
+
       if (s.shoesCompleted >= 2 && countAccuracy === 1 && decisionAccuracy > 0.98 && heatSafe) {
+          success = true;
           set({ certificationStatus: 'PRO', challengeStats: { ...s, isActive: false } });
-          return true;
+      } else {
+          success = false;
+          // Determine Rubric Feedback
+          if (countAccuracy < 1) {
+             const errorRate = Math.round((1 - countAccuracy) * 100);
+             failReason = `Math Accuracy < 100%`;
+             improvementTip = `Math Drift. Your count was off by ${errorRate}% at shuffle points. You are betting on bad data.`;
+          } else if (decisionAccuracy <= 0.98) {
+             failReason = `Deviation Accuracy < 98%`;
+             improvementTip = "Tactical Failure. You gave the house back their edge on index plays.";
+          } else if (!heatSafe) {
+             failReason = `Max Heat > 80%`;
+             improvementTip = "Banned! Your bet spread was too aggressive for your cover level.";
+          } else if (s.shoesCompleted < 2) {
+             failReason = "Incomplete Session";
+             improvementTip = "Endurance Failure. You must complete 2 full shoes to prove consistency.";
+          }
+          
+          set({ challengeStats: { ...s, isActive: false } });
       }
-      
-      // Failed or not done
-      set({ challengeStats: { ...s, isActive: false } }); // End anyway
-      return false;
+
+      return { success, rubric: { failReason, improvementTip } };
   },
 
   /**

@@ -41,6 +41,8 @@ const DEVIATIONS_MAP: Record<string, DeviationRule> = {
   // The prompt said "Use THESE 5 critical...", implying exclusivity for this task.
 };
 
+import { HapticEngine } from '../../utils/HapticEngine';
+
 export const Deviations: React.FC = () => {
   const shoe = useRef(new Shoe(6)).current; // 6 Decks
   const { 
@@ -207,6 +209,7 @@ export const Deviations: React.FC = () => {
       setFeedback('Correct!');
       setLastResult('CORRECT');
       trackEV(true, isDeviationRequired ? 'DEVIATION' : 'BASIC');
+      HapticEngine.triggerSuccess();
       setTimeout(startNewHand, 1000);
     } else {
       setLastResult('ERROR');
@@ -214,10 +217,12 @@ export const Deviations: React.FC = () => {
         setFeedback(`Missed Deviation! ${deviation.description} (TC: ${trueCountGroundTruth.toFixed(1)})`);
         trackEV(false, 'DEVIATION');
         incrementLogicErrors();
+        HapticEngine.triggerError();
       } else {
         setFeedback(`Incorrect. Basic Strategy says ${basicAction}.`);
         trackEV(false, 'BASIC');
         incrementLogicErrors(); 
+        HapticEngine.triggerError();
       }
       setTimeout(startNewHand, 2500);
     }
