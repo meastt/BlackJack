@@ -9,6 +9,10 @@ interface SimState {
   suspicionLevel: number; // 0-100 representing "Pit Boss Suspicion"
   logicErrors: number;
   speedErrors: number;
+  evTracking: {
+    theoreticalWin: number; // Total EV gained from correct plays
+    mistakesCost: number; // EV lost from mistakes
+  };
 
   // Actions
   setRunningCount: (count: number) => void;
@@ -18,6 +22,7 @@ interface SimState {
   setSuspicionLevel: (level: number) => void;
   incrementLogicErrors: () => void;
   incrementSpeedErrors: () => void;
+  trackEV: (isCorrect: boolean, type: 'INSURANCE' | 'DEVIATION' | 'BASIC') => void;
   validateBet: (amount: number) => void;
   updateBankroll: (delta: number) => void;
   resetSimState: () => void;
@@ -34,6 +39,7 @@ export const useSimState = create<SimState>((set, get) => ({
   suspicionLevel: 0,
   logicErrors: 0,
   speedErrors: 0,
+  evTracking: { theoreticalWin: 0, mistakesCost: 0 },
 
   setRunningCount: (count) => set({ runningCount: count }),
   setTrueCountUserEstimate: (count) => set({ trueCountUserEstimate: count }),
@@ -43,6 +49,36 @@ export const useSimState = create<SimState>((set, get) => ({
   incrementLogicErrors: () => set((state) => ({ logicErrors: state.logicErrors + 1 })),
   incrementSpeedErrors: () => set((state) => ({ speedErrors: state.speedErrors + 1 })),
   
+  trackEV: (isCorrect, type) => set((state) => {
+    // Simplified EV values for "Theoretical Win/Loss" simulation
+    // Insurance at TC +3: +6% EV roughly? No, Insurance pays 2:1.
+    // If TC >= 3, Insurance is +EV. Let's assign an arbitrary unit value for the drill tracking.
+    // Say +0.1 Unit per correct decision, -0.1 Unit per incorrect.
+    
+    // More realistic: 
+    // Insurance EV is approx +0.06 * Bet at TC +3.
+    // Deviation EV varies.
+    
+    // For drill feedback, we'll use a standard unit of "EV Points".
+    const unit = 0.5; // 0.5 units per decision
+    
+    if (isCorrect) {
+        return { 
+            evTracking: { 
+                ...state.evTracking, 
+                theoreticalWin: state.evTracking.theoreticalWin + unit 
+            } 
+        };
+    } else {
+        return { 
+            evTracking: { 
+                ...state.evTracking, 
+                mistakesCost: state.evTracking.mistakesCost + unit 
+            } 
+        };
+    }
+  }),
+
   validateBet: (amount) => {
     const state = get();
     const suggested = state.getSuggestedBet(10); // Assume min bet 10 for now
@@ -72,6 +108,7 @@ export const useSimState = create<SimState>((set, get) => ({
     suspicionLevel: 0,
     logicErrors: 0,
     speedErrors: 0,
+    evTracking: { theoreticalWin: 0, mistakesCost: 0 },
   }),
 
   /**
