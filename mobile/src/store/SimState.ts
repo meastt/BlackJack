@@ -122,6 +122,52 @@ export const useSimState = create<SimState>((set, get) => ({
     bankrollHistory: [1000],
   }),
 
+  toggleProMode: () => set(state => ({ isProMode: !state.isProMode })),
+  
+  startChallenge: () => set({
+      challengeStats: {
+          isActive: true,
+          shoesCompleted: 0,
+          totalHands: 0,
+          correctCounts: 0,
+          countChecks: 0,
+          decisionErrors: 0,
+          maxHeat: 0
+      },
+      // Reset session stats too?
+      bankroll: 1000,
+      suspicionLevel: 0,
+      logicErrors: 0
+  }),
+
+  updateChallengeStats: (stats) => set(state => ({
+      challengeStats: { ...state.challengeStats, ...stats }
+  })),
+
+  completeChallenge: () => {
+      const state = get();
+      const s = state.challengeStats;
+      
+      // Pass Criteria:
+      // 2 Shoes (Shoes Completed >= 2)
+      // Accuracy 100% (correctCounts === countChecks)
+      // Decision > 98% (decisionErrors / totalHands <= 0.02)
+      // Heat < Red (maxHeat < 80)
+      
+      const countAccuracy = s.countChecks > 0 ? (s.correctCounts / s.countChecks) : 1;
+      const decisionAccuracy = s.totalHands > 0 ? 1 - (s.decisionErrors / s.totalHands) : 1;
+      const heatSafe = s.maxHeat < 80;
+
+      if (s.shoesCompleted >= 2 && countAccuracy === 1 && decisionAccuracy > 0.98 && heatSafe) {
+          set({ certificationStatus: 'PRO', challengeStats: { ...s, isActive: false } });
+          return true;
+      }
+      
+      // Failed or not done
+      set({ challengeStats: { ...s, isActive: false } }); // End anyway
+      return false;
+  },
+
   /**
    * Kelly Criterion Formula: Bet = (Edge / Variance) * Bankroll
    * Assumptions:
