@@ -34,70 +34,47 @@ Analyze the current project structure and propose a new folder hierarchy that se
 
 # 🎰 PROJECT BLUEPRINT: The Blackjack Flight Simulator (BFS)
 
-## 1. PROJECT MISSION & "THE WHY"
-Most blackjack apps are "games" that encourage gambling. **BFS is a high-fidelity training simulator.**
-* **The Goal:** Automate the cognitive load of card counting (Hi-Lo System) so it becomes subconscious.
-* **The Philosophy:** If the user has to "think" about the math, they have already failed. The math must move from the prefrontal cortex to the basal ganglia (muscle memory).
+## 1. MISSION & PRODUCT PHILOSOPHY
+**Goal:** Transition the user from "Basic Strategy" to "Professional Advantage Play" by automating cognitive load.
+**Core Principle:** Move math from the prefrontal cortex to the basal ganglia (muscle memory). 
 
 ---
 
 ## 2. CORE ARCHITECTURE: THE "MODULAR MASTERY" PLAN
 
-### Phase 1: The Logic Engine (The Source of Truth)
-The engine must move away from "random card generation" and toward "data-set simulation."
-* **Deck Engine:** Support 1 to 8 decks. Must track exact deck composition to calculate "Ground Truth" behind the scenes.
-* **State Management:** A global `SimState` tracking:
-    * `RunningCount`: Integer sum of all seen cards.
-    * `DecksRemaining`: Visual volume estimate (User Input vs. Reality).
-    * `TrueCount`: (RunningCount / DecksRemaining).
-* **Validation:** The system always knows the real count. User accuracy is measured by the delta between their input and the Ground Truth.
+### Phase 1: The "Source of Truth" Logic Engine
+* **ShoeEngine.ts:** * Tracks exact composition of 1–8 decks (52 cards each).
+    * **Ground Truth:** Calculates actual Running Count (RC) and True Count (TC) based on $RC / DecksRemaining$.
+    * **Validation:** Compares User Input to Ground Truth for real-time scoring.
+* **Betting Engine:** * Implements **Kelly Criterion** betting: $Bet = (Edge / Variance) * Bankroll$.
+    * Calculates "Risk of Ruin" (RoR) for user-defined bankrolls.
 
-### Phase 2: The "Muscle Memory" Drills
-Isolated environments to build specific sub-skills before full-game simulation.
-* **Cancellation Drill:** Displays pairs of cards. 
-    * *Why:* Teaches the brain to ignore "neutral" pairs (+1 and -1), reducing mental processing by 50%.
-* **Visual Volume Estimation:** Displays stacks of cards in a discard tray. 
-    * *Why:* True Count is useless if the user cannot estimate the denominator by eye.
-    * 
-* **The Illustrious 18 (Decision Deviations):** Rapid-fire "Basic Strategy" pivots. 
-    * *Why:* Professional counters change their play based on the count (e.g., taking Insurance at True +3).
-    * 
+### Phase 2: Isolated "Muscle Memory" Drills
+* **The Cancellation Drill:** * Displays 2 cards at once. 
+    * *Goal:* Recognize net-zero pairs (+1, -1) instantly to reduce mental load by 50%.
+* **Visual Volume Estimation:** * Displays static/3D renders of card stacks in a discard tray.
+    * *Goal:* Calibrate the user's eye to estimate decks remaining to the nearest 0.5 deck.
+* **The Illustrious 18 (Decision Deviations):** * Tests the 18 specific scenarios where counting overrides Basic Strategy (e.g., Taking Insurance at TC +3, Standing on 16 vs 10 at TC 0+).
 
-### Phase 3: The "Vegas Stress" Simulator (UX Refactor)
-Moves the user from a quiet room to a chaotic casino floor.
-* **The Distraction Engine:** * Integrated audio loops (casino floor noise/chatter).
-    * "Dealer Talk" pop-ups: Users must answer a text question (e.g., "Where you from?") without losing the count.
-* **The Heat Meter (Security AI):** * A logic-based meter monitoring **Bet Volatility**. If the user jumps from $10 to $200 instantly, the meter spikes.
-    * *Why:* Teaches "Bet Ramping" and "Camouflage." Being "backed off" (banned) is the same as losing.
+### Phase 3: The "Casino Chaos" Simulator
+* **The Distraction Engine:** Random audio/visual triggers (Casino noise, dealer banter, waitress pop-ups).
+* **The Heat Meter (Security AI):** * Monitors "Bet Volatility."
+    * *Detection Logic:* If $CurrentBet / MinimumBet > 5x$ immediately following a TC spike, increase "Suspicion" by 25%.
+* **Camouflage Mode:** Rewards users for "Cover Plays" (intentional minor EV losses to avoid detection).
 
 ---
 
-## 3. FUTURE FEATURE ROADMAP
-
-### A. The "Risk of Ruin" (RoR) Dashboard
-* **Feature:** User inputs bankroll (e.g., $10,000) and bet unit ($25).
-* **Logic:** Simulates 1,000 "Shadow Sessions" to show the probability of bankruptcy due to variance, even with a perfect count.
-
-### B. AR Discard Tray Calibration
-* **Feature:** Use the phone's camera/Lidar to scan a physical stack of cards and overlay the "Deck Count."
-* **Logic:** Calibrates the user's eye for real-world play using physical decks.
-
-### C. The "Perfect Session" Certification
-* **Feature:** A 20-minute un-interrupted session requirement.
-* **Requirement:** 100% counting accuracy, 0 strategy errors, and "Heat Meter" below detection threshold.
-* **Why:** The final gatekeeper before a user is "Casino Ready."
+## 3. TECHNICAL GUARDRAILS FOR AI AGENTS
+1. **State Management:** Use a centralized `SimState`. Counts must be persistent across drill transitions.
+2. **Latency:** Card flip animations must be <100ms.
+3. **Betting Units:** All bets must be calculated in "Units" (e.g., 1 Unit = $10) for easier bankroll scaling.
+4. **No "Random" Cards:** Every card must be popped from the `Shoe` object to ensure the remaining deck composition is mathematically valid.
 
 ---
 
-## 4. TECHNICAL GUARDRAILS FOR AI AGENTS
-1.  **Strict Card Logic:** All cards must be drawn from a strictly defined `Shoe` object to ensure mathematical integrity. No "randomized" values that don't exist in the remaining deck.
-2.  **Normalization:** All Betting Ramps must be calculated as `Units` (e.g., 1 unit = $10) to allow scaling.
-3.  **Latency:** The "Card Flip" in speed drills must be sub-100ms to mimic the rapid "Sweep" of a Vegas dealer.
-4.  **No Hedging:** If the user misses a count in "Test Mode," the app should not correct them until the end of the shoe to simulate real-world consequences.
+## 4. FOLDER STRUCTURE REFACTOR
+- `/src/engines/` -> `ShoeEngine.ts`, `MathLogic.ts`
+- `/src/components/drills/` -> `Cancellation.tsx`, `VolumeEstimate.tsx`, `Deviations.tsx`
+- `/src/components/simulator/` -> `CasinoView.tsx`, `HeatMeter.tsx`, `DistractionLayer.tsx`
+- `/src/analytics/` -> `RiskOfRuin.ts`, `ExpectedValue.ts`
 
----
-
-## 5. REFACTORING COMMANDS FOR CURSOR
-* "Initialize folder structure for `/src/engines/math` and `/src/components/drills`."
-* "Refactor the main view to include the `Heat Meter` logic based on `TrueCount` bet volatility."
-* "Build the `ShoeEngine.ts` to handle 100% accurate card tracking."
