@@ -7,6 +7,8 @@ interface SimState {
   trueCountGroundTruth: number;
   bankroll: number;
   suspicionLevel: number; // 0-100 representing "Pit Boss Suspicion"
+  logicErrors: number;
+  speedErrors: number;
 
   // Actions
   setRunningCount: (count: number) => void;
@@ -14,6 +16,9 @@ interface SimState {
   setTrueCountGroundTruth: (count: number) => void;
   setBankroll: (amount: number) => void;
   setSuspicionLevel: (level: number) => void;
+  incrementLogicErrors: () => void;
+  incrementSpeedErrors: () => void;
+  validateBet: (amount: number) => void;
   updateBankroll: (delta: number) => void;
   resetSimState: () => void;
 
@@ -27,13 +32,36 @@ export const useSimState = create<SimState>((set, get) => ({
   trueCountGroundTruth: 0,
   bankroll: 1000, // Default starting bankroll
   suspicionLevel: 0,
+  logicErrors: 0,
+  speedErrors: 0,
 
   setRunningCount: (count) => set({ runningCount: count }),
   setTrueCountUserEstimate: (count) => set({ trueCountUserEstimate: count }),
   setTrueCountGroundTruth: (count) => set({ trueCountGroundTruth: count }),
   setBankroll: (amount) => set({ bankroll: amount }),
   setSuspicionLevel: (level) => set({ suspicionLevel: level }),
+  incrementLogicErrors: () => set((state) => ({ logicErrors: state.logicErrors + 1 })),
+  incrementSpeedErrors: () => set((state) => ({ speedErrors: state.speedErrors + 1 })),
   
+  validateBet: (amount) => {
+    const state = get();
+    const suggested = state.getSuggestedBet(10); // Assume min bet 10 for now
+    const { trueCountGroundTruth, suspicionLevel } = state;
+
+    // Only monitor suspicion on High Counts (e.g. TC >= 2)
+    if (trueCountGroundTruth >= 2) {
+      const diff = Math.abs(amount - suggested);
+      const percentDiff = diff / suggested;
+
+      if (percentDiff > 0.2) {
+        // Increase suspicion
+        // Cap at 100
+        const newSuspicion = Math.min(100, suspicionLevel + 10); // +10 per bad bet?
+        set({ suspicionLevel: newSuspicion });
+      }
+    }
+  },
+
   updateBankroll: (delta) => set((state) => ({ bankroll: state.bankroll + delta })),
   
   resetSimState: () => set({
@@ -42,6 +70,8 @@ export const useSimState = create<SimState>((set, get) => ({
     trueCountGroundTruth: 0,
     bankroll: 1000,
     suspicionLevel: 0,
+    logicErrors: 0,
+    speedErrors: 0,
   }),
 
   /**
