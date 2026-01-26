@@ -1,250 +1,128 @@
 # 🃏 Card Counter AI
 
-The only app that actually teaches you to count cards—from complete beginner to casino-ready. Not a gimmick, not a flashcard toy. Progressive skill-building with AI coaching until you can hold a true count under pressure.
+The only app that actually teaches you to count cards—from complete beginner to casino-ready. Progressive skill-building with AI coaching until you can hold a true count under pressure.
 
 ## ✨ Features
 
-### Free Features
-- **Guided Learning Mode**: Complete Hi-Lo system training
-  - Phase 1: Card Values (learn the basics)
-  - Phase 2: Running Count (maintain count during play)
-  - Phase 3: True Count Conversion (deck estimation)
-  - Phase 4: Betting Correlation (optimal bet sizing)
-- **AI Coach**: Get help understanding concepts at any time
+### Guided Learning Mode
+- **Phase 1: Card Values** - Learn the Hi-Lo card values (+1, 0, -1)
+- **Phase 2: Running Count** - Maintain count as cards are dealt
+- **Phase 3: True Count** - Convert running count based on decks remaining
+- **Phase 4: Betting Correlation** - Size bets based on count advantage
 
-### Premium Features ($9.99/mo or $49.99/yr)
-- **Casino Simulation** (5 progressive tiers)
-  - Tier 1: Empty table practice
-  - Tier 2: Crowded table with distractions
-  - Tier 3: Pit boss pressure simulation
-  - Tier 4: Multi-table rotation
-  - Tier 5: Vegas floor graduation test
-- **Pressure Training**: Speed drills, distraction resistance
-- **Advanced Systems**: KO, Hi-Opt I/II, Omega II, Zen Count
-- **Session Analysis**: AI-powered performance reviews
+### AI Coach
+Real-time coaching powered by Claude AI to help you understand concepts and improve your technique.
 
-## 🏗️ Architecture
-
-This is a monorepo containing:
-- `/mobile` - React Native mobile app (iOS & Android)
-- `/backend` - Serverless backend (Express.js)
-- `/shared` - Shared TypeScript types and logic
-
-### Tech Stack
-- **Mobile**: React Native + Expo, TypeScript, Zustand
-- **Backend**: Node.js, Express, Anthropic SDK (Claude AI)
-- **Database**: Firebase/Firestore (user data)
-- **Subscriptions**: RevenueCat
-- **AI**: Claude 3.5 Sonnet (coaching & analysis)
+### Counting Systems
+- **Hi-Lo** - Beginner-friendly, balanced (+1/0/-1)
+- **KO** - Unbalanced, no true count conversion needed
+- **Hi-Opt I** - Intermediate, more accurate
+- **Hi-Opt II** - Advanced, multi-level
+- **Omega II** - Expert level, highest accuracy
+- **Zen** - Advanced, balanced multi-level
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 - Node.js 18+
-- npm or yarn
-- Expo CLI (for mobile development)
-- Anthropic API key (for AI coach)
+- Expo Go app on your phone (for testing)
 
 ### Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/meastt/BlackJack.git
-   cd BlackJack
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm run install:all
-   ```
-
-3. **Set up environment variables**
-   ```bash
-   cp backend/.env.example backend/.env
-   # Edit backend/.env with your API keys
-   ```
-
-4. **Build shared package**
-   ```bash
-   cd shared
-   npm run build
-   cd ..
-   ```
-
-5. **Start the backend**
-   ```bash
-   cd backend
-   npm run dev
-   ```
-
-6. **Start the mobile app** (in a new terminal)
-   ```bash
-   cd mobile
-   npm start
-   ```
-
-For detailed setup instructions, see [SETUP.md](SETUP.md).
-
-## 📱 Mobile App
-
-The mobile app is built with React Native and Expo for cross-platform development.
-
-### Running on Device/Simulator
-
 ```bash
-cd mobile
-npm run ios     # iOS simulator
-npm run android # Android emulator
-npm run web     # Web browser
+# Clone the repository
+git clone https://github.com/meastt/BlackJack.git
+cd BlackJack
+
+# Install all dependencies
+npm install
+
+# Build the shared package
+cd shared && npm run build && cd ..
+
+# Start the mobile app
+cd mobile && npx expo start
 ```
 
-### Key Components
+### Running on Device
+1. Install [Expo Go](https://expo.dev/client) on your phone
+2. Run `npx expo start` from the `/mobile` directory
+3. Scan the QR code with your phone
 
-- **Card Component**: Renders playing cards with proper styling
-- **Button Component**: Reusable button with variants
-- **Phase1CardValues**: First learning module (card value drills)
-- **ApiService**: Backend API communication
-- **GameStore**: Zustand state management
+## 📱 Tech Stack
 
-## 🔧 Backend API
+- **Framework**: React Native + Expo SDK 54
+- **Language**: TypeScript
+- **State Management**: Zustand
+- **Navigation**: React Navigation
+- **AI**: Anthropic Claude API (direct client calls)
+- **Storage**: AsyncStorage (local device storage)
 
-RESTful API with the following endpoints:
-
-### Coach AI
-- `POST /api/coach/ask` - Get coaching advice
-- `POST /api/coach/analyze-session` - Analyze completed session
-
-### User Stats
-- `GET /api/stats/:userId` - Get user statistics
-- `POST /api/stats/:userId` - Update user stats
-- `POST /api/stats/:userId/session` - Record session
-
-### Subscriptions
-- `GET /api/subscription/:userId` - Get subscription status
-- `POST /api/subscription/webhook` - RevenueCat webhook handler
-
-## 🧮 Card Counting Engine
-
-The core counting logic is in `/shared/src/engine/CardCountingEngine.ts`:
-
-```typescript
-import { CardCountingEngine, CountingSystem } from '@card-counter-ai/shared';
-
-// Create engine with Hi-Lo system
-const engine = new CardCountingEngine(CountingSystem.HI_LO, 6);
-
-// Count cards
-const cards = CardCountingEngine.createShoe(6);
-engine.countCards(cards.slice(0, 10));
-
-// Get counts
-const runningCount = engine.getRunningCount();
-const trueCount = engine.getTrueCount();
-const betMultiplier = engine.getBetMultiplier();
-```
-
-### Supported Systems
-
-- **Hi-Lo**: Beginner-friendly, balanced (+1/0/-1)
-- **KO**: Unbalanced, no true count needed
-- **Hi-Opt I**: Intermediate, more accurate
-- **Hi-Opt II**: Advanced, multi-level with ace side count
-- **Omega II**: Expert level, highest accuracy
-- **Zen**: Advanced, balanced multi-level
-
-## 📊 User Progression
-
-The app tracks detailed metrics:
-- Cards per minute (speed)
-- Running count accuracy %
-- True count accuracy %
-- Bet correlation score
-- Heat score (detectability)
-- Distraction resistance
-- Session EV (expected value)
-
-## 🔐 Security & Privacy
-
-- API keys stored server-side only
-- Claude API calls via secure backend proxy
-- RevenueCat for secure subscription management
-- Encrypted user data storage
-- No sensitive data on client
-
-## 📄 Legal Disclaimer
-
-Card counting is a legal advantage play technique. This app teaches the skill for educational purposes. Casinos are private property and may restrict players at their discretion. Play responsibly.
-
-## 🛠️ Development
-
-### Project Structure
+## 🏗️ Project Structure
 
 ```
 BlackJack/
 ├── mobile/              # React Native app
 │   ├── src/
-│   │   ├── components/  # Reusable UI components
+│   │   ├── components/  # Reusable UI (Button, Card)
 │   │   ├── screens/     # App screens
 │   │   ├── services/    # API services
-│   │   ├── store/       # State management
+│   │   ├── store/       # Zustand state
 │   │   └── theme/       # Colors & typography
-│   ├── app.json
-│   └── package.json
-├── backend/             # Serverless backend
-│   ├── src/
-│   │   ├── routes/      # API routes
-│   │   ├── services/    # Business logic
-│   │   └── middleware/  # Express middleware
-│   └── package.json
-├── shared/              # Shared code
-│   ├── src/
-│   │   ├── types/       # TypeScript types
-│   │   └── engine/      # Counting logic
-│   └── package.json
-└── package.json         # Root package
+│   └── App.tsx          # Entry point
+├── shared/              # Shared TypeScript package
+│   └── src/
+│       ├── types/       # Type definitions
+│       └── engine/      # Card counting logic
+└── package.json         # Root workspace config
 ```
 
-### Documentation
+## 🔧 Configuration
 
-- **[SETUP.md](SETUP.md)** - Complete setup guide
-- **[ARCHITECTURE.md](ARCHITECTURE.md)** - System architecture details
-- **API Docs** - See individual route files in `/backend/src/routes`
+### Environment Variables
 
-### Building for Production
+Create `mobile/.env`:
+```env
+EXPO_PUBLIC_ANTHROPIC_API_KEY=sk-ant-your-key-here
+```
 
-**Mobile:**
+Get your API key from [Anthropic Console](https://console.anthropic.com/).
+
+## 📊 User Progression
+
+The app tracks:
+- Cards per minute (speed)
+- Running count accuracy
+- True count accuracy
+- Bet correlation score
+- Session performance
+
+## 🔐 Architecture
+
+This app runs **entirely on-device** with no backend server required:
+- AI coaching calls Anthropic API directly from the app
+- User stats stored locally on device via AsyncStorage
+- Card counting engine runs as pure TypeScript
+
+## 📱 Building for App Stores
+
 ```bash
 cd mobile
+
+# Build for iOS
 eas build --platform ios
+
+# Build for Android
 eas build --platform android
 ```
 
-**Backend:**
-Deploy to your serverless platform (Vercel, AWS Lambda, etc.)
+## 📄 Legal Disclaimer
 
-## 🤝 Contributing
-
-This is a private project. For issues or questions, contact the repository owner.
+Card counting is a legal advantage play technique. This app teaches the skill for educational purposes. Casinos are private property and may restrict players at their discretion. Play responsibly.
 
 ## 📝 License
 
-MIT License - See LICENSE file for details
-
-## 🎯 Roadmap
-
-**V1 (Current)**
-- ✅ Hi-Lo system training
-- ✅ Guided learning (4 phases)
-- ✅ AI coaching
-- ✅ Basic casino simulation
-- ✅ Stats tracking
-
-**V2 (Planned)**
-- Advanced counting systems
-- Multi-table training
-- Team play simulation
-- Live dealer integration
-- Advanced heat management
+MIT License
 
 ---
 

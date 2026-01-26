@@ -5,16 +5,12 @@
   "private": true,
   "workspaces": [
     "mobile",
-    "backend",
     "shared"
   ],
   "scripts": {
-    "mobile": "cd mobile && npm start",
-    "backend": "cd backend && npm run dev",
-    "install:all": "npm install && npm run install:mobile && npm run install:backend && npm run install:shared",
-    "install:mobile": "cd mobile && npm install",
-    "install:backend": "cd backend && npm install",
-    "install:shared": "cd shared && npm install"
+    "start": "cd mobile && npm start",
+    "build:shared": "cd shared && npm run build",
+    "setup": "npm install && npm run build:shared"
   },
   "repository": {
     "type": "git",
@@ -25,7 +21,8 @@
     "card-counting",
     "casino",
     "training",
-    "ai"
+    "react-native",
+    "expo"
   ],
   "author": "",
   "license": "MIT"

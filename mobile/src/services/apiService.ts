@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {
   CoachRequest,
   CoachResponse,
@@ -6,111 +5,73 @@ import {
   GameSession,
   UserSubscription,
 } from '@card-counter-ai/shared';
+import { LocalStatsService } from './localStatsService';
+import { LocalCoachService } from './localCoachService';
 
-// Configure API base URL
-const API_BASE_URL = __DEV__
-  ? 'http://localhost:3000/api'
-  : 'https://your-production-api.com/api';
-
-const api = axios.create({
-  baseURL: API_BASE_URL,
-  timeout: 30000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+// Re-export services for direct use if needed
+export { LocalStatsService, LocalCoachService };
 
 export class ApiService {
   /**
-   * Get coaching advice from AI
+   * Get coaching advice from AI (Direct Client Call)
    */
   static async getCoachAdvice(request: CoachRequest): Promise<CoachResponse> {
-    try {
-      const response = await api.post<CoachResponse>('/coach/ask', request);
-      return response.data;
-    } catch (error) {
-      console.error('Error getting coach advice:', error);
-      throw new Error('Failed to get coaching advice');
-    }
+    return LocalCoachService.getCoachResponse(request);
   }
 
   /**
-   * Analyze a completed session
+   * Analyze a completed session (Mock/Stub for now, or Local Analysis)
    */
   static async analyzeSession(
     userId: string,
     sessionId: string
   ): Promise<CoachResponse> {
-    try {
-      const response = await api.post<CoachResponse>('/coach/analyze-session', {
-        userId,
-        sessionId,
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error analyzing session:', error);
-      throw new Error('Failed to analyze session');
-    }
+    return LocalCoachService.analyzeSession(userId, sessionId);
   }
 
   /**
-   * Get user statistics
+   * Get user statistics (Local Storage)
    */
   static async getUserStats(userId: string): Promise<UserStats> {
-    try {
-      const response = await api.get<UserStats>(`/stats/${userId}`);
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching user stats:', error);
-      throw new Error('Failed to fetch user statistics');
+    const stats = await LocalStatsService.getUserStats(userId);
+    if (!stats) {
+      throw new Error('Could not initialize stats');
     }
+    return stats;
   }
 
   /**
-   * Update user statistics
+   * Update user statistics (Local Storage)
    */
   static async updateUserStats(
     userId: string,
     stats: Partial<UserStats>
   ): Promise<UserStats> {
-    try {
-      const response = await api.post<UserStats>(`/stats/${userId}`, stats);
-      return response.data;
-    } catch (error) {
-      console.error('Error updating user stats:', error);
-      throw new Error('Failed to update user statistics');
-    }
+    return LocalStatsService.updateUserStats(userId, stats);
   }
 
   /**
-   * Record a completed session
+   * Record a completed session (Local Storage)
    */
   static async recordSession(
     userId: string,
     session: GameSession
   ): Promise<UserStats> {
-    try {
-      const response = await api.post<UserStats>(
-        `/stats/${userId}/session`,
-        session
-      );
-      return response.data;
-    } catch (error) {
-      console.error('Error recording session:', error);
-      throw new Error('Failed to record session');
-    }
+    return LocalStatsService.recordSession(userId, session);
   }
 
   /**
    * Get user subscription status
+   * TODO: Integrate with RevenueCat properly using react-native-purchases
    */
   static async getSubscription(userId: string): Promise<UserSubscription> {
-    try {
-      const response = await api.get<UserSubscription>(`/subscription/${userId}`);
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching subscription:', error);
-      throw new Error('Failed to fetch subscription status');
-    }
+    // Placeholder - assume free tier for now or implement RevenueCat check here
+    return {
+      userId,
+      tier: 'free',
+      status: 'active',
+      expiryDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365).toISOString(), // 1 year
+      features: ['basic_drills'],
+    } as any;
   }
 }

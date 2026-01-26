@@ -25,7 +25,11 @@ build/
 .DS_Store
 Thumbs.db
 
-# Mobile specific
+# Expo
+.expo/
+*.expo/
+
+# Mobile builds
 mobile/ios/Pods/
 mobile/ios/build/
 mobile/android/app/build/
