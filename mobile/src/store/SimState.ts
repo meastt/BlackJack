@@ -40,11 +40,15 @@ export const useSimState = create<SimState>((set, get) => ({
   logicErrors: 0,
   speedErrors: 0,
   evTracking: { theoreticalWin: 0, mistakesCost: 0 },
+  bankrollHistory: [1000],
 
   setRunningCount: (count) => set({ runningCount: count }),
   setTrueCountUserEstimate: (count) => set({ trueCountUserEstimate: count }),
   setTrueCountGroundTruth: (count) => set({ trueCountGroundTruth: count }),
-  setBankroll: (amount) => set({ bankroll: amount }),
+  setBankroll: (amount) => set((state) => {
+    // Add to history if changed substantially or just push?
+    return { bankroll: amount, bankrollHistory: [...state.bankrollHistory, amount] };
+  }),
   setSuspicionLevel: (level) => set({ suspicionLevel: level }),
   incrementLogicErrors: () => set((state) => ({ logicErrors: state.logicErrors + 1 })),
   incrementSpeedErrors: () => set((state) => ({ speedErrors: state.speedErrors + 1 })),
@@ -98,7 +102,13 @@ export const useSimState = create<SimState>((set, get) => ({
     }
   },
 
-  updateBankroll: (delta) => set((state) => ({ bankroll: state.bankroll + delta })),
+  updateBankroll: (delta) => set((state) => {
+    const newBankroll = state.bankroll + delta;
+    return { 
+      bankroll: newBankroll,
+      bankrollHistory: [...state.bankrollHistory, newBankroll]
+    };
+  }),
   
   resetSimState: () => set({
     runningCount: 0,
@@ -109,6 +119,7 @@ export const useSimState = create<SimState>((set, get) => ({
     logicErrors: 0,
     speedErrors: 0,
     evTracking: { theoreticalWin: 0, mistakesCost: 0 },
+    bankrollHistory: [1000],
   }),
 
   /**
