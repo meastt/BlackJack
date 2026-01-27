@@ -62,10 +62,11 @@ export const Phase2RunningCount: React.FC<{ navigation?: any }> = ({ navigation 
     const engine = useRef(new CardCountingEngine()).current;
 
     // Progress
-    const { phase2Complete, addSessionResult, updateStreak } = useProgressStore();
+    const { phase2Complete, addSessionResult, updateStreak, getPhaseProgress } = useProgressStore();
     const [score, setScore] = useState({ correct: 0, total: 0 });
-    const [startTime] = useState(Date.now());
+    const [startTime, setStartTime] = useState(Date.now());
     const [showIntro, setShowIntro] = useState(true);
+    const [sessionSummary, setSessionSummary] = useState<SessionSummary | null>(null);
 
     // Settings
     const DELAY_MS = 2000; // 2 seconds per card for now
@@ -84,6 +85,8 @@ export const Phase2RunningCount: React.FC<{ navigation?: any }> = ({ navigation 
         setRunningCount(0);
         setScore({ correct: 0, total: 0 });
         setGameState('IDLE');
+        setStartTime(Date.now()); // Reset timer
+        setSessionSummary(null);
         fadeAnim.setValue(0);
 
         // Auto start after short delay
@@ -157,8 +160,36 @@ export const Phase2RunningCount: React.FC<{ navigation?: any }> = ({ navigation 
     };
 
     const finishSession = (finalScore: { correct: number, total: number }) => {
+        const timeInSeconds = Math.floor((Date.now() - startTime) / 1000);
+        const accuracy = finalScore.total > 0 ? finalScore.correct / finalScore.total : 0;
+
+        // Save session result to progress store
+        addSessionResult('phase2', {
+            phase: 'phase2',
+            accuracy,
+            cardsCompleted: currentCardIndex + 1,
+            timeInSeconds,
+            timestamp: Date.now(),
+        });
+
+        updateStreak();
+
+        // Get updated progress
+        const progress = getPhaseProgress(2);
+        const isMastery =
+            accuracy >= MASTERY_REQUIREMENTS.PHASE_2.REQUIRED_ACCURACY &&
+            timeInSeconds <= MASTERY_REQUIREMENTS.PHASE_2.TIME_LIMIT_SECONDS;
+
+        setSessionSummary({
+            correctChecks: finalScore.correct,
+            totalChecks: finalScore.total,
+            accuracy,
+            isMastery,
+            consecutiveProgress: progress.masteryProgress,
+            phaseComplete: phase2Complete,
+        });
+
         setGameState('SUMMARY');
-        // Save progress logic here...
     };
 
     return (
@@ -205,18 +236,60 @@ export const Phase2RunningCount: React.FC<{ navigation?: any }> = ({ navigation 
                     </View>
                 )}
 
-                {gameState === 'SUMMARY' && (
+                {gameState === 'SUMMARY' && sessionSummary && (
                     <View style={styles.summaryContainer}>
-                        <Text style={styles.summaryTitle}>Session Complete</Text>
-                        <Text style={styles.summaryScore}>
-                            Actual Count: {runningCount}
+                        <Text style={styles.summaryTitle}>
+                            {sessionSummary.isMastery ? '✓ Mastery Session!' : 'Session Complete'}
                         </Text>
-                        <Text style={styles.summaryScore}>
-                            Your Check: {score.correct > 0 ? 'Correct' : 'Incorrect'}
-                        </Text>
-                        <TouchableOpacity onPress={startNewSession} style={styles.submitBtn}>
-                            <Text style={styles.submitText}>AGAIN</Text>
-                        </TouchableOpacity>
+
+                        <View style={styles.statsGrid}>
+                            <View style={styles.statItem}>
+                                <Text style={styles.statLabel}>Accuracy</Text>
+                                <Text style={[styles.statValue, sessionSummary.isMastery && styles.masteryText]}>
+                                    {Math.round(sessionSummary.accuracy * 100)}%
+                                </Text>
+                            </View>
+                            <View style={styles.statItem}>
+                                <Text style={styles.statLabel}>Time</Text>
+                                <Text style={[styles.statValue, sessionSummary.isMastery && styles.masteryText]}>
+                                    {Math.floor((Date.now() - startTime) / 1000)}s
+                                </Text>
+                            </View>
+                        </View>
+
+                        <View style={styles.progressBar}>
+                            <Text style={styles.progressLabel}>
+                                Mastery Progress: {Math.round(sessionSummary.consecutiveProgress * 100)}%
+                            </Text>
+                            <View style={styles.progressBarBg}>
+                                <View
+                                    style={[
+                                        styles.progressBarFill,
+                                        { width: `${sessionSummary.consecutiveProgress * 100}%` }
+                                    ]}
+                                />
+                            </View>
+                            <Text style={styles.progressHint}>
+                                {sessionSummary.phaseComplete
+                                    ? '🎉 Phase 2 Complete! Phase 3 Unlocked!'
+                                    : `Need ${MASTERY_REQUIREMENTS.PHASE_2.CONSECUTIVE_SESSIONS} consecutive sessions at ${MASTERY_REQUIREMENTS.PHASE_2.REQUIRED_ACCURACY * 100}% and < ${MASTERY_REQUIREMENTS.PHASE_2.TIME_LIMIT_SECONDS}s`
+                                }
+                            </Text>
+                        </View>
+
+                        <View style={styles.buttonRow}>
+                            {navigation && (
+                                <TouchableOpacity
+                                    onPress={() => navigation.goBack()}
+                                    style={[styles.submitBtn, styles.secondaryBtn]}
+                                >
+                                    <Text style={styles.submitText}>HOME</Text>
+                                </TouchableOpacity>
+                            )}
+                            <TouchableOpacity onPress={startNewSession} style={styles.submitBtn}>
+                                <Text style={styles.submitText}>AGAIN</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 )}
             </View>
@@ -323,5 +396,65 @@ const styles = StyleSheet.create({
     summaryScore: {
         fontSize: 18,
         color: colors.textSecondary,
+    },
+    statsGrid: {
+        flexDirection: 'row',
+        gap: 30,
+        marginVertical: 20,
+    },
+    statItem: {
+        alignItems: 'center',
+    },
+    statLabel: {
+        fontSize: 14,
+        color: colors.textSecondary,
+        marginBottom: 8,
+        textTransform: 'uppercase',
+        letterSpacing: 1,
+    },
+    statValue: {
+        fontSize: 32,
+        fontWeight: 'bold',
+        color: colors.textPrimary,
+    },
+    masteryText: {
+        color: colors.accentGreen,
+    },
+    progressBar: {
+        width: '100%',
+        marginVertical: 20,
+        paddingHorizontal: 20,
+    },
+    progressLabel: {
+        fontSize: 16,
+        color: colors.textPrimary,
+        marginBottom: 10,
+        textAlign: 'center',
+    },
+    progressBarBg: {
+        height: 8,
+        backgroundColor: colors.surfaceLight,
+        borderRadius: 4,
+        overflow: 'hidden',
+    },
+    progressBarFill: {
+        height: '100%',
+        backgroundColor: colors.accentGreen,
+    },
+    progressHint: {
+        fontSize: 12,
+        color: colors.textSecondary,
+        marginTop: 8,
+        textAlign: 'center',
+    },
+    buttonRow: {
+        flexDirection: 'row',
+        gap: 15,
+        marginTop: 10,
+    },
+    secondaryBtn: {
+        backgroundColor: colors.surfaceLight,
+        borderWidth: 1,
+        borderColor: colors.accentBlue,
     },
 });

@@ -1,48 +1,71 @@
-# Card Counter AI - Production Guide
+# Card Counter AI - Progressive Mastery System
 
-## 🎰 Launching the App
+**Card Counter AI** is a professional-grade training simulator designed to transition users from "Basic Strategy" to "Advantage Play" (Card Counting) by automating cognitive load. It uses a "Muscle Memory" approach to build specific skills in isolation before combining them in a chaotic casino simulator.
+
+## 🚀 Features
+
+### The Progressive Mastery System
+The app is structured into unlocked phases:
+1.  **Phase 0: Basic Strategy** - Master the fundamental decision table (Hit, Stand, Split, Double) before counting.
+2.  **Phase 1: Card Values** - Learn Hi-Lo values (+1, 0, -1) instantly.
+3.  **Phase 2: Running Count** - Keep a running tally as cards are dealt.
+4.  **Phase 3: True Count** - Normalize the Running Count based on **Decks Remaining**.
+5.  **Phase 4: Betting** - Size your bets according to the True Count advantage (Kelly Criterion).
+6.  **Phase 5: Certification** - The final exam.
+
+### Special Training Drills
+*   **⚡️ Speed Drill (Cancellation):** Identify net-zero pairs (+1/-1) instantly to reduce mental math.
+*   **🌩️ Deck Countdown:** Count down a single deck as fast as possible. Track your "Seconds Per Deck".
+*   **👁️ Discard Tray Visualizer:** Train your eye to estimate "Decks Remaining" (0.5 deck precision) for accurate True Count calculation.
+*   **🎓 Illustrious 18 (Deviations):** Master the specific scenarios where counting overrides Basic Strategy (e.g., Standing on 16 vs 10 at TC +0).
+
+### 🎰 Casino Simulator (Chaos Mode)
+Putting it all together in a realistic environment.
+*   **Distraction Engine:** Random audio/visual triggers ("Cocktails?", "Pit Boss Watching") to challenge your focus.
+*   **Heat Meter:** Tracks your "Bet Spread" volatility. If you act too aggressively, the Pit Boss gets suspicious.
+*   **Full Game Loop:** Play generic Blackjack with persistent bankroll and stats.
+
+---
+
+## 🛠 Quick Start
 
 1.  **Install Dependencies:**
     ```bash
     npm install
     ```
-    This will install dependencies for both the root workspace and nested packages (`mobile`, `shared`).
+    This installs dependencies for both `mobile` (React Native/Expo) and `shared` logic.
 
-2.  **Start the Metro Bundler:**
+2.  **Run the Mobile App:**
     ```bash
     cd mobile
     npm start
     ```
-    - Scan the QR code with **Expo Go** (Android/iOS) to run on a physical device.
-    - Press `a` to run on Android Emulator.
-    - Press `i` to run on iOS Simulator (macOS only).
+    - Scan the **QR code** with Expo Go (Android/iOS).
+    - Press `i` for iOS Simulator.
+    - Press `a` for Android Emulator.
 
-## 🏆 Pro Certification Challenge
-
-To verify the "Perfect Session" logic:
-
-1.  Navigate to the **Certification** screen via the app menu (or direct link if enabled).
-2.  Tap **"Start Challenge"**.
-3.  **Requirements:**
-    - Play through **2 Full Shoes** (approx. 200 hands).
-    - Maintain **100% Counting Accuracy** (checked at every shuffle).
-    - Maintain **>98% Decision Accuracy** (Basic Strategy + Deviations).
-    - Keep **Heat < 80%** (Avoid erratic bet spreads).
-4.  Upon completion, if criteria are met, the **"PRO CARD COUNTER"** badge will be awarded.
-
-## 🛠 Native Build Steps (Manual)
-
-For a full store release (IPA/APK):
-
-1.  **Permissions:** Ensure `VIBRATE`, `CAMERA`, and `RECORD_AUDIO` are configured in `app.json` (Done).
-2.  **EAS Build:**
+3.  **Run Tests:**
     ```bash
-    npm install -g eas-cli
-    eas build --platform all
+    npm test
     ```
-3.  **Assets:** Ensure all audio/image assets in `mobile/assets/` are optimized.
+
+---
 
 ## 📦 Project Structure
 
-- `mobile/`: React Native (Expo) application.
-- `shared/`: Core game engines (`ShoeEngine`, `RiskOfRuin`) shared via workspace.
+*   `mobile/`: React Native (Expo) application. UI, Navigation, and Drills.
+*   `shared/`: Core game logic shared across platforms.
+    *   `ShoeEngine.ts`: Manages deck composition and card dealing.
+    *   `RiskOfRuin.ts`: Analytics and probability math.
+    *   `types/`: Shared TypeScript interfaces.
+*   `docs/`: Design documents, architectural plans, and specifications.
+
+## 🏆 Certification Criteria
+To earn the **"PRO CARD COUNTER"** badge in the simulator:
+- Play **2 Full Shoes**.
+- Maintain **100% Counting Accuracy**.
+- Maintain **>98% Decision Accuracy** (Basic + Deviations).
+- Keep **Heat < 80%**.
+
+---
+*Built with React Native, Expo, and TypeScript.*

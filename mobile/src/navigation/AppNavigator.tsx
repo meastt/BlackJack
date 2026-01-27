@@ -10,7 +10,9 @@ import { DrillDiscardTray } from '../components/drills/DrillDiscardTray';
 import { DrillDeviations } from '../components/drills/DrillDeviations';
 import { Phase3TrueCount } from '../screens/GuidedLearning/Phase3TrueCount';
 import { Phase4Betting } from '../screens/GuidedLearning/Phase4Betting';
+import { Phase5Deviations } from '../screens/GuidedLearning/Phase5Deviations';
 import { SimulatorScreen } from '../screens/Simulator/SimulatorScreen';
+import { AnalyticsDashboard } from '../components/analytics/AnalyticsDashboard';
 import { colors } from '../theme/colors';
 
 const Stack = createStackNavigator();
@@ -126,6 +128,23 @@ export const AppNavigator = () => {
                     title: 'Phase 4: Betting',
                     headerTitleAlign: 'center',
                     headerShown: false,
+                }}
+            />
+            <Stack.Screen
+                name="Phase5Deviations"
+                component={Phase5Deviations}
+                options={{
+                    title: 'Phase 5: Deviations',
+                    headerTitleAlign: 'center',
+                    headerShown: false,
+                }}
+            />
+            <Stack.Screen
+                name="Analytics"
+                component={AnalyticsDashboard}
+                options={{
+                    title: 'Analytics',
+                    headerTitleAlign: 'center',
                 }}
             />
         </Stack.Navigator>

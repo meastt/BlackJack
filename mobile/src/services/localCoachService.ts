@@ -1,166 +1,153 @@
-
 import {
     CoachRequest,
     CoachResponse,
     LearningPhase,
     CountingSystem,
 } from '@card-counter-ai/shared';
+import { LocalTips } from '../utils/LocalTips';
 
-// TODO: In a real production app, you should not hardcode API keys.
-// However, for a self-contained personal app or specific use-case, this is the trade-off.
-// Ideally, fetch this from a secure remote config or user input.
-const ANTHROPIC_API_KEY = process.env.EXPO_PUBLIC_ANTHROPIC_API_KEY || '';
-const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
-
+/**
+ * Local coaching service using built-in tips
+ * No external API calls - fully self-contained
+ */
 export class LocalCoachService {
     /**
-     * Get coaching response from Claude Direct API
+     * Get coaching response using local tips
      */
     static async getCoachResponse(request: CoachRequest): Promise<CoachResponse> {
-        if (!ANTHROPIC_API_KEY) {
-            console.warn('ANTHROPIC_API_KEY is not set');
+        const { context, message } = request;
+
+        // Try to match user question to relevant tip
+        const relevantTip = this.findRelevantTip(message, context.currentPhase);
+
+        if (relevantTip) {
             return {
-                message: "I can't provide coaching right now because the API key is missing. Please check your configuration.",
-                timestamp: new Date()
-            };
-        }
-
-        const systemPrompt = this.buildSystemPrompt(request);
-        const userMessage = request.message;
-
-        try {
-            const response = await fetch(ANTHROPIC_API_URL, {
-                method: 'POST',
-                headers: {
-                    'x-api-key': ANTHROPIC_API_KEY,
-                    'anthropic-version': '2023-06-01',
-                    'content-type': 'application/json',
-                },
-                body: JSON.stringify({
-                    model: 'claude-3-5-sonnet-20241022',
-                    max_tokens: 1024,
-                    system: systemPrompt,
-                    messages: [
-                        {
-                            role: 'user',
-                            content: userMessage,
-                        },
-                    ],
-                }),
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                console.error('Anthropic API Error:', errorData);
-                throw new Error('API request failed');
-            }
-
-            const data = await response.json();
-            const responseText = data.content[0]?.text || '';
-
-            return {
-                message: responseText,
-                timestamp: new Date(),
-            };
-        } catch (error) {
-            console.error('Error calling Claude API:', error);
-            // Fallback response if offline or error
-            return {
-                message: "I'm having trouble connecting to the coaching servers right now. Please try again later.",
+                message: relevantTip.content,
                 timestamp: new Date(),
             };
         }
+
+        // Fallback: provide phase-specific guidance
+        return {
+            message: this.getPhaseGuidance(context.currentPhase),
+            timestamp: new Date(),
+        };
     }
 
     /**
      * Analyze a completed session
      */
     static async analyzeSession(userId: string, sessionId: string): Promise<CoachResponse> {
-        // Note: In local mode, we assume the 'session' data would be passed in, 
-        // or we'd fetch it from LocalStatsService. 
-        // For this implementation, we'll assume the prompt construction happens here similarly to backend.
+        // Provide general session analysis tips
+        return {
+            message: `Great work on your session!
 
-        // In a real refactor, we should pass the session data directly to this function
-        // rather than just IDs, since we are now client-side.
-        // However, to keep API signature compatible-ish, we'll stub it.
+Key areas to focus on:
+• Accuracy: Aim for 95%+ counting accuracy
+• Speed: Practice until you can count comfortably at game pace
+• Decision Making: Review any hands where you hesitated
+• Bet Sizing: Follow Kelly Criterion to manage bankroll
 
-        // TODO: Need actual session data here to analyze.
+Tap the ⓘ icons throughout the app for detailed help on specific topics.
 
-        const analysisPrompt = `Analyze this card counting practice session and provide actionable insights on:
-1. Accuracy trends
-2. Speed improvements needed
-3. Common mistakes
-4. Next steps for improvement`;
-
-        return this.getMockAnalysis(); // Fallback for now without actual session data injection
-    }
-
-    private static getMockAnalysis(): Promise<CoachResponse> {
-        return Promise.resolve({
-            message: "Great work on your session! To provide detailed analysis, I'll need to see the specific hands you played. Keep practicing your running count speed.",
+Keep practicing! Consistent practice is the key to mastery.`,
             timestamp: new Date(),
-            suggestions: ["Practice pairs", "Focus on speed", "Review true count table"]
-        });
+            suggestions: [
+                'Practice counting speed',
+                'Review basic strategy',
+                'Master true count conversion',
+                'Focus on bet sizing'
+            ]
+        };
     }
 
     /**
-     * Build system prompt based on user context
+     * Find relevant tip based on user's question
      */
-    private static buildSystemPrompt(request: CoachRequest): string {
-        const { context } = request;
+    private static findRelevantTip(message: string, phase: LearningPhase): any {
+        const lowerMessage = message.toLowerCase();
 
-        let prompt = `You are an expert card counting coach for blackjack. Your role is to teach players how to count cards effectively, from complete beginner to casino-ready.
+        // Map keywords to tip keys
+        const keywordMap: Record<string, string> = {
+            'basic strategy': 'phase0',
+            'card values': 'phase1',
+            'running count': 'phase2',
+            'true count': 'phase3',
+            'betting': 'phase4',
+            'kelly': 'phase4',
+            'deviations': 'phase5',
+            'illustrious': 'phase5',
+            'speed': 'speedDrill',
+            'countdown': 'deckCountdown',
+            'discard': 'discardTray',
+            'simulator': 'simulator',
+            'heat': 'heatMeter',
+            'legal': 'isItLegal',
+            'bankroll': 'bankrollManagement',
+            'what is': 'whatIsCardCounting',
+        };
 
-Current context:
-- Learning Phase: ${this.getPhaseDescription(context.currentPhase)}
-- Counting System: ${this.getSystemDescription(context.currentSystem)}
-`;
-
-        if (context.recentStats) {
-            prompt += `\nRecent Performance:`;
-            if (context.recentStats.runningCountAccuracy !== undefined) {
-                prompt += `\n- Running Count Accuracy: ${context.recentStats.runningCountAccuracy.toFixed(1)}%`;
-            }
-            if (context.recentStats.trueCountAccuracy !== undefined) {
-                prompt += `\n- True Count Accuracy: ${context.recentStats.trueCountAccuracy.toFixed(1)}%`;
-            }
-            if (context.recentStats.cardsPerMinute !== undefined) {
-                prompt += `\n- Speed: ${context.recentStats.cardsPerMinute.toFixed(1)} cards/minute`;
+        for (const [keyword, tipKey] of Object.entries(keywordMap)) {
+            if (lowerMessage.includes(keyword)) {
+                return LocalTips.getTip(tipKey);
             }
         }
 
-        prompt += `\n\nGuidelines:
-- Be encouraging but honest about areas needing improvement
-- Explain the "why" behind card counting concepts
-- Use clear, concise language
-- Provide actionable advice
-- Reference real casino scenarios when relevant
-- Keep responses focused and practical
+        // Phase-specific tips
+        const phaseTips: Record<LearningPhase, string> = {
+            [LearningPhase.CARD_VALUES]: 'phase1',
+            [LearningPhase.RUNNING_COUNT]: 'phase2',
+            [LearningPhase.TRUE_COUNT]: 'phase3',
+            [LearningPhase.BETTING_CORRELATION]: 'phase4',
+        };
 
-Answer the user's question with expertise and clarity.`;
-
-        return prompt;
+        return LocalTips.getTip(phaseTips[phase]);
     }
 
-    private static getPhaseDescription(phase: LearningPhase): string {
-        const descriptions = {
-            [LearningPhase.CARD_VALUES]: 'Learning card values (Hi-Lo system)',
-            [LearningPhase.RUNNING_COUNT]: 'Practicing running count maintenance',
-            [LearningPhase.TRUE_COUNT]: 'Learning true count conversion',
-            [LearningPhase.BETTING_CORRELATION]: 'Mastering bet sizing based on count',
-        };
-        return descriptions[phase] || 'Unknown phase';
-    }
+    /**
+     * Get phase-specific guidance
+     */
+    private static getPhaseGuidance(phase: LearningPhase): string {
+        const guidance: Record<LearningPhase, string> = {
+            [LearningPhase.CARD_VALUES]: `Focus on memorizing card values:
+• 2-6 = +1 (low cards)
+• 7-9 = 0 (neutral)
+• 10-A = -1 (high cards)
 
-    private static getSystemDescription(system: CountingSystem): string {
-        const descriptions = {
-            [CountingSystem.HI_LO]: 'Hi-Lo (beginner-friendly, balanced)',
-            [CountingSystem.KO]: 'Knock-Out (unbalanced, no true count)',
-            [CountingSystem.HI_OPT_I]: 'Hi-Opt I (intermediate)',
-            [CountingSystem.HI_OPT_II]: 'Hi-Opt II (advanced, multi-level)',
-            [CountingSystem.OMEGA_II]: 'Omega II (expert, highly accurate)',
-            [CountingSystem.ZEN]: 'Zen Count (advanced, balanced)',
+Practice until you can instantly identify any card's value without thinking.
+
+Tap the ⓘ icon for detailed explanations of why these values matter.`,
+
+            [LearningPhase.RUNNING_COUNT]: `Keep a running tally of all cards:
+• Start at 0 when shoe shuffles
+• Add/subtract for each card you see
+• Practice until you can count a full deck in under 60 seconds
+
+The running count tells you when the deck favors you.
+
+Tap the ⓘ icon to learn more about running count strategy.`,
+
+            [LearningPhase.TRUE_COUNT]: `Convert running count to true count:
+• TC = RC ÷ Decks Remaining
+• This adjusts for how much of the shoe is left
+• True count is what you base your bets on
+
+Practice estimating decks remaining using the discard tray.
+
+Tap the ⓘ icon for true count examples.`,
+
+            [LearningPhase.BETTING_CORRELATION]: `Size your bets based on true count:
+• TC ≤ 1: Min bet (1 unit)
+• TC +2: 2 units
+• TC +3: 3 units
+• TC +4: 4 units
+• TC +5+: Max bet (5 units)
+
+This is the Kelly Criterion - optimizes profit while managing risk.
+
+Tap the ⓘ icon for betting strategy details.`,
         };
-        return descriptions[system] || 'Unknown system';
+
+        return guidance[phase] || 'Keep practicing! Use the info icons (ⓘ) throughout the app for detailed help.';
     }
 }

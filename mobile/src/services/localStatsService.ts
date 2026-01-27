@@ -64,10 +64,11 @@ export class LocalStatsService {
      * Record a completed session
      */
     static async recordSession(userId: string, session: GameSession): Promise<UserStats> {
-        const currentStats = await this.getUserStats(userId);
+        let currentStats = await this.getUserStats(userId);
 
         if (!currentStats) {
-            throw new Error('User stats not found');
+            console.warn('Stats not found when recording session, creating default stats');
+            currentStats = this.createDefaultStats(userId);
         }
 
         // Calculate updated stats based on session performance

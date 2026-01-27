@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, Modal } from 'react-native';
 import { colors } from '../../theme/colors';
 import { Card as CardComponent } from '../Card';
 import { Card, Rank, Suit } from '@card-counter-ai/shared';
 import { HapticEngine } from '../../utils/HapticEngine';
+import { useProgressStore, MASTERY_REQUIREMENTS } from '../../store/useProgressStore';
 
 // Simplified Illustrious 18 Rule Set (Top 5 for MVP)
 // Format: { id, playerHand, dealerUp, threshold, trigger: 'TC >= X', correctMove: 'STAND', basicStrategy: 'HIT' }
@@ -68,11 +69,27 @@ export const DrillDeviations: React.FC<{ navigation: any }> = ({ navigation }) =
     const [feedback, setFeedback] = useState<'IDLE' | 'CORRECT' | 'WRONG'>('IDLE');
     const [explanation, setExplanation] = useState('');
 
+    // Progress tracking
+    const { addSessionResult, updateStreak, getPhaseProgress, phase5Complete } = useProgressStore();
+    const [sessionStartTime, setSessionStartTime] = useState(Date.now());
+    const [scenariosCompleted, setScenariosCompleted] = useState(0);
+    const [correctCount, setCorrectCount] = useState(0);
+    const [showResults, setShowResults] = useState(false);
+    const [sessionSummary, setSessionSummary] = useState<any>(null);
+
+    const SCENARIOS_PER_SESSION = MASTERY_REQUIREMENTS.PHASE_5.SCENARIOS_PER_SESSION;
+
     useEffect(() => {
         nextScenario();
     }, []);
 
     const nextScenario = () => {
+        // Check if session complete
+        if (scenariosCompleted >= SCENARIOS_PER_SESSION) {
+            finishSession();
+            return;
+        }
+
         setFeedback('IDLE');
         setExplanation('');
 
@@ -136,6 +153,46 @@ export const DrillDeviations: React.FC<{ navigation: any }> = ({ navigation }) =
         }
     };
 
+    const finishSession = () => {
+        const timeInSeconds = Math.floor((Date.now() - sessionStartTime) / 1000);
+        const accuracy = correctCount / SCENARIOS_PER_SESSION;
+
+        // Save to progress store
+        addSessionResult('phase5', {
+            phase: 'phase5',
+            accuracy,
+            cardsCompleted: SCENARIOS_PER_SESSION,
+            timeInSeconds,
+            timestamp: Date.now(),
+        });
+
+        updateStreak();
+
+        // Get updated progress
+        const progress = getPhaseProgress(5);
+        const isMastery = accuracy >= MASTERY_REQUIREMENTS.PHASE_5.REQUIRED_ACCURACY;
+
+        setSessionSummary({
+            correct: correctCount,
+            total: SCENARIOS_PER_SESSION,
+            accuracy,
+            isMastery,
+            consecutiveProgress: progress.masteryProgress,
+            phaseComplete: phase5Complete,
+        });
+
+        setShowResults(true);
+    };
+
+    const startNewSession = () => {
+        setSessionStartTime(Date.now());
+        setScenariosCompleted(0);
+        setCorrectCount(0);
+        setShowResults(false);
+        setSessionSummary(null);
+        nextScenario();
+    };
+
     const handleAction = (action: string) => {
         if (!currentScenario) return;
 
@@ -156,11 +213,15 @@ export const DrillDeviations: React.FC<{ navigation: any }> = ({ navigation }) =
             setFeedback('CORRECT');
             setExplanation('Correct! ' + (isDeviationTime ? `Deviation applies (${currentScenario.rule})` : 'Deviation does NOT apply (stick to Basic Strategy).'));
             HapticEngine.triggerSuccess();
+            setCorrectCount(prev => prev + 1);
+            setScenariosCompleted(prev => prev + 1);
             setTimeout(nextScenario, 1500);
         } else {
             setFeedback('WRONG');
             setExplanation(`Incorrect. ${isDeviationTime ? `You should deviate: ${currentScenario.rule}` : `TC is too low for deviation. Stick to Basic Strategy (${currentScenario.wrongMove}).`}`);
             HapticEngine.triggerError();
+            setScenariosCompleted(prev => prev + 1);
+            setTimeout(nextScenario, 1500);
         }
     };
 
@@ -181,6 +242,18 @@ export const DrillDeviations: React.FC<{ navigation: any }> = ({ navigation }) =
                         <Text style={styles.statLabel}>True Count</Text>
                         <Text style={[styles.statValue, currentTC >= 0 ? styles.pos : styles.neg]}>
                             {currentTC > 0 ? `+${currentTC}` : currentTC}
+                        </Text>
+                    </View>
+                    <View style={styles.statBox}>
+                        <Text style={styles.statLabel}>Progress</Text>
+                        <Text style={styles.statValue}>
+                            {scenariosCompleted}/{SCENARIOS_PER_SESSION}
+                        </Text>
+                    </View>
+                    <View style={styles.statBox}>
+                        <Text style={styles.statLabel}>Accuracy</Text>
+                        <Text style={[styles.statValue, styles.pos]}>
+                            {scenariosCompleted > 0 ? Math.round((correctCount / scenariosCompleted) * 100) : 0}%
                         </Text>
                     </View>
                 </View>
@@ -236,6 +309,75 @@ export const DrillDeviations: React.FC<{ navigation: any }> = ({ navigation }) =
                 </View>
 
             </ScrollView>
+
+            {/* Results Modal */}
+            <Modal visible={showResults} transparent animationType="fade">
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalTitle}>
+                            {sessionSummary?.isMastery ? '✓ Mastery Session!' : 'Session Complete'}
+                        </Text>
+
+                        <View style={styles.statsGrid}>
+                            <View style={styles.statItem}>
+                                <Text style={styles.modalStatLabel}>Accuracy</Text>
+                                <Text style={[styles.modalStatValue, sessionSummary?.isMastery && styles.pos]}>
+                                    {sessionSummary && Math.round(sessionSummary.accuracy * 100)}%
+                                </Text>
+                            </View>
+                            <View style={styles.statItem}>
+                                <Text style={styles.modalStatLabel}>Correct</Text>
+                                <Text style={[styles.modalStatValue, sessionSummary?.isMastery && styles.pos]}>
+                                    {sessionSummary?.correct}/{sessionSummary?.total}
+                                </Text>
+                            </View>
+                        </View>
+
+                        <View style={styles.progressBarContainer}>
+                            <Text style={styles.progressLabel}>
+                                Mastery Progress: {sessionSummary && Math.round(sessionSummary.consecutiveProgress * 100)}%
+                            </Text>
+                            <View style={styles.progressBarBg}>
+                                <View
+                                    style={[
+                                        styles.progressBarFill,
+                                        { width: `${sessionSummary ? sessionSummary.consecutiveProgress * 100 : 0}%` }
+                                    ]}
+                                />
+                            </View>
+                            <Text style={styles.progressHint}>
+                                {sessionSummary?.phaseComplete
+                                    ? '🎉 Phase 5 Complete! Ready for Certification!'
+                                    : `Need ${MASTERY_REQUIREMENTS.PHASE_5.CONSECUTIVE_SESSIONS} consecutive sessions at ${MASTERY_REQUIREMENTS.PHASE_5.REQUIRED_ACCURACY * 100}%`
+                                }
+                            </Text>
+                        </View>
+
+                        <View style={styles.buttonRow}>
+                            {navigation && (
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        setShowResults(false);
+                                        navigation.goBack();
+                                    }}
+                                    style={[styles.modalBtn, styles.secondaryBtn]}
+                                >
+                                    <Text style={styles.modalBtnText}>HOME</Text>
+                                </TouchableOpacity>
+                            )}
+                            <TouchableOpacity
+                                onPress={() => {
+                                    setShowResults(false);
+                                    startNewSession();
+                                }}
+                                style={styles.modalBtn}
+                            >
+                                <Text style={styles.modalBtnText}>AGAIN</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
         </SafeAreaView>
     );
 };
@@ -261,6 +403,8 @@ const styles = StyleSheet.create({
     },
     hud: {
         marginBottom: 30,
+        flexDirection: 'row',
+        gap: 10,
     },
     statBox: {
         alignItems: 'center',
@@ -323,4 +467,93 @@ const styles = StyleSheet.create({
     splitBtn: { backgroundColor: colors.accentBlue },
     doubleBtn: { backgroundColor: colors.accentYellow },
     insBtn: { backgroundColor: colors.surfaceLight },
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.85)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+    },
+    modalContent: {
+        backgroundColor: colors.surface,
+        borderRadius: 20,
+        padding: 30,
+        width: '100%',
+        maxWidth: 400,
+        borderWidth: 1,
+        borderColor: colors.glassBorder,
+    },
+    modalTitle: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: colors.textPrimary,
+        textAlign: 'center',
+        marginBottom: 25,
+    },
+    statsGrid: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginBottom: 25,
+    },
+    statItem: {
+        alignItems: 'center',
+    },
+    modalStatLabel: {
+        fontSize: 14,
+        color: colors.textSecondary,
+        marginBottom: 8,
+        textTransform: 'uppercase',
+        letterSpacing: 1,
+    },
+    modalStatValue: {
+        fontSize: 28,
+        fontWeight: 'bold',
+        color: colors.textPrimary,
+    },
+    progressBarContainer: {
+        marginBottom: 25,
+    },
+    progressLabel: {
+        fontSize: 16,
+        color: colors.textPrimary,
+        marginBottom: 10,
+        textAlign: 'center',
+    },
+    progressBarBg: {
+        height: 8,
+        backgroundColor: colors.surfaceLight,
+        borderRadius: 4,
+        overflow: 'hidden',
+    },
+    progressBarFill: {
+        height: '100%',
+        backgroundColor: colors.accentGreen,
+    },
+    progressHint: {
+        fontSize: 12,
+        color: colors.textSecondary,
+        marginTop: 8,
+        textAlign: 'center',
+    },
+    buttonRow: {
+        flexDirection: 'row',
+        gap: 15,
+    },
+    modalBtn: {
+        flex: 1,
+        backgroundColor: colors.accentGreen,
+        paddingVertical: 15,
+        borderRadius: 12,
+        alignItems: 'center',
+    },
+    secondaryBtn: {
+        backgroundColor: colors.surfaceLight,
+        borderWidth: 1,
+        borderColor: colors.accentBlue,
+    },
+    modalBtnText: {
+        color: colors.textPrimary,
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
 });

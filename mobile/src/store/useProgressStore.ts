@@ -28,6 +28,14 @@ interface ProgressState {
     phase1Sessions: SessionResult[];
     phase1ConsecutiveMastery: number; // Need 3 at 95%+
 
+    // Phase 2 (Running Count) progress
+    phase2Sessions: SessionResult[];
+    phase2ConsecutiveMastery: number; // Need 2 at 90%+
+
+    // Phase 5 (Deviations) progress
+    phase5Sessions: SessionResult[];
+    phase5ConsecutiveMastery: number; // Need 3 at 90%+
+
     // Overall stats
     totalXP: number;
     currentStreak: number;
@@ -58,6 +66,17 @@ export const MASTERY_REQUIREMENTS = {
         REQUIRED_ACCURACY: 0.95,
         CONSECUTIVE_SESSIONS: 3,
     },
+    PHASE_2: {
+        CARDS_PER_SESSION: 52, // Full deck
+        REQUIRED_ACCURACY: 0.90,
+        CONSECUTIVE_SESSIONS: 2,
+        TIME_LIMIT_SECONDS: 60,
+    },
+    PHASE_5: {
+        SCENARIOS_PER_SESSION: 20, // 20 deviation scenarios
+        REQUIRED_ACCURACY: 0.90,
+        CONSECUTIVE_SESSIONS: 3,
+    },
 };
 
 export const useProgressStore = create<ProgressState>()(
@@ -76,6 +95,12 @@ export const useProgressStore = create<ProgressState>()(
 
             phase1Sessions: [],
             phase1ConsecutiveMastery: 0,
+
+            phase2Sessions: [],
+            phase2ConsecutiveMastery: 0,
+
+            phase5Sessions: [],
+            phase5ConsecutiveMastery: 0,
 
             totalXP: 0,
             currentStreak: 0,
@@ -106,6 +131,35 @@ export const useProgressStore = create<ProgressState>()(
                         phase1Sessions: [...state.phase1Sessions, result],
                         phase1ConsecutiveMastery: newConsecutive,
                         phase1Complete: state.phase1Complete || isComplete,
+                        totalXP: state.totalXP + (isMastery ? 200 : 50) + (isComplete ? 500 : 0),
+                    };
+                }
+
+                if (phase === 'phase2') {
+                    const isMastery =
+                        result.accuracy >= MASTERY_REQUIREMENTS.PHASE_2.REQUIRED_ACCURACY &&
+                        result.timeInSeconds <= MASTERY_REQUIREMENTS.PHASE_2.TIME_LIMIT_SECONDS;
+
+                    const newConsecutive = isMastery ? state.phase2ConsecutiveMastery + 1 : 0;
+                    const isComplete = newConsecutive >= MASTERY_REQUIREMENTS.PHASE_2.CONSECUTIVE_SESSIONS;
+
+                    return {
+                        phase2Sessions: [...state.phase2Sessions, result],
+                        phase2ConsecutiveMastery: newConsecutive,
+                        phase2Complete: state.phase2Complete || isComplete,
+                        totalXP: state.totalXP + (isMastery ? 200 : 50) + (isComplete ? 500 : 0),
+                    };
+                }
+
+                if (phase === 'phase5') {
+                    const isMastery = result.accuracy >= MASTERY_REQUIREMENTS.PHASE_5.REQUIRED_ACCURACY;
+                    const newConsecutive = isMastery ? state.phase5ConsecutiveMastery + 1 : 0;
+                    const isComplete = newConsecutive >= MASTERY_REQUIREMENTS.PHASE_5.CONSECUTIVE_SESSIONS;
+
+                    return {
+                        phase5Sessions: [...state.phase5Sessions, result],
+                        phase5ConsecutiveMastery: newConsecutive,
+                        phase5Complete: state.phase5Complete || isComplete,
                         totalXP: state.totalXP + (isMastery ? 200 : 50) + (isComplete ? 500 : 0),
                     };
                 }
@@ -160,6 +214,10 @@ export const useProgressStore = create<ProgressState>()(
                 phase0ConsecutivePerfect: 0,
                 phase1Sessions: [],
                 phase1ConsecutiveMastery: 0,
+                phase2Sessions: [],
+                phase2ConsecutiveMastery: 0,
+                phase5Sessions: [],
+                phase5ConsecutiveMastery: 0,
                 totalXP: 0,
                 currentStreak: 0,
                 longestStreak: 0,
@@ -192,6 +250,18 @@ export const useProgressStore = create<ProgressState>()(
                     return {
                         sessions: state.phase1Sessions.length,
                         masteryProgress: state.phase1ConsecutiveMastery / MASTERY_REQUIREMENTS.PHASE_1.CONSECUTIVE_SESSIONS,
+                    };
+                }
+                if (phase === 2) {
+                    return {
+                        sessions: state.phase2Sessions.length,
+                        masteryProgress: state.phase2ConsecutiveMastery / MASTERY_REQUIREMENTS.PHASE_2.CONSECUTIVE_SESSIONS,
+                    };
+                }
+                if (phase === 5) {
+                    return {
+                        sessions: state.phase5Sessions.length,
+                        masteryProgress: state.phase5ConsecutiveMastery / MASTERY_REQUIREMENTS.PHASE_5.CONSECUTIVE_SESSIONS,
                     };
                 }
                 return { sessions: 0, masteryProgress: 0 };

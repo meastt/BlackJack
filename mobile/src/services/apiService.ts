@@ -16,7 +16,17 @@ export class ApiService {
    * Get coaching advice from AI (Direct Client Call)
    */
   static async getCoachAdvice(request: CoachRequest): Promise<CoachResponse> {
-    return LocalCoachService.getCoachResponse(request);
+    try {
+      return await LocalCoachService.getCoachResponse(request);
+    } catch (error) {
+      console.error('Failed to get coach advice:', error);
+      // Return fallback response
+      return {
+        advice: 'Unable to get coaching advice at this time. Please try again later.',
+        confidence: 0,
+        reasoning: 'Service temporarily unavailable',
+      };
+    }
   }
 
   /**
@@ -26,18 +36,49 @@ export class ApiService {
     userId: string,
     sessionId: string
   ): Promise<CoachResponse> {
-    return LocalCoachService.analyzeSession(userId, sessionId);
+    try {
+      return await LocalCoachService.analyzeSession(userId, sessionId);
+    } catch (error) {
+      console.error('Failed to analyze session:', error);
+      return {
+        advice: 'Session analysis unavailable. Continue practicing!',
+        confidence: 0,
+        reasoning: 'Analysis service temporarily unavailable',
+      };
+    }
   }
 
   /**
    * Get user statistics (Local Storage)
    */
   static async getUserStats(userId: string): Promise<UserStats> {
-    const stats = await LocalStatsService.getUserStats(userId);
-    if (!stats) {
-      throw new Error('Could not initialize stats');
+    try {
+      const stats = await LocalStatsService.getUserStats(userId);
+      if (!stats) {
+        console.warn('Stats not found, initializing default stats');
+        // Return default stats instead of throwing
+        return {
+          userId,
+          totalHands: 0,
+          totalWinnings: 0,
+          countingAccuracy: 0,
+          basicStrategyAccuracy: 0,
+          sessions: [],
+        } as UserStats;
+      }
+      return stats;
+    } catch (error) {
+      console.error('Failed to get user stats:', error);
+      // Return default stats on error
+      return {
+        userId,
+        totalHands: 0,
+        totalWinnings: 0,
+        countingAccuracy: 0,
+        basicStrategyAccuracy: 0,
+        sessions: [],
+      } as UserStats;
     }
-    return stats;
   }
 
   /**
@@ -47,7 +88,13 @@ export class ApiService {
     userId: string,
     stats: Partial<UserStats>
   ): Promise<UserStats> {
-    return LocalStatsService.updateUserStats(userId, stats);
+    try {
+      return await LocalStatsService.updateUserStats(userId, stats);
+    } catch (error) {
+      console.error('Failed to update user stats:', error);
+      // Return current stats on error
+      return await this.getUserStats(userId);
+    }
   }
 
   /**
@@ -57,7 +104,13 @@ export class ApiService {
     userId: string,
     session: GameSession
   ): Promise<UserStats> {
-    return LocalStatsService.recordSession(userId, session);
+    try {
+      return await LocalStatsService.recordSession(userId, session);
+    } catch (error) {
+      console.error('Failed to record session:', error);
+      // Return current stats on error
+      return await this.getUserStats(userId);
+    }
   }
 
   /**

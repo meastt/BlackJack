@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, Sta
 import { colors, neonGlow } from '../../theme/colors';
 import { fontStyles } from '../../theme/typography';
 import { useProgressStore } from '../../store/useProgressStore';
+import { InfoIcon } from '../../components/InfoIcon';
 import * as Haptics from 'expo-haptics';
 
 interface HomeScreenProps {
@@ -10,7 +11,7 @@ interface HomeScreenProps {
 }
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
-  const { isPhaseUnlocked, phase0Complete, phase1Complete } = useProgressStore();
+  const { isPhaseUnlocked, phase0Complete, phase1Complete, phase3Complete, phase4Complete, phase5Complete } = useProgressStore();
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={colors.background} />
@@ -53,6 +54,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
               <View style={styles.textContainer}>
                 <View style={styles.titleRow}>
                   <Text style={[styles.cardTitle, !isPhaseUnlocked(0) && styles.textLocked]}>Phase 0: Basic Strategy</Text>
+                  <InfoIcon tipKey="phase0" size={18} />
                   {phase0Complete && <Text style={styles.checkMark}>✓</Text>}
                 </View>
                 <Text style={[styles.cardDescription, !isPhaseUnlocked(0) && styles.textLocked]}>Prerequisite: Learn when to Hit, Stand, Split, or Double.</Text>
@@ -85,6 +87,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
               <View style={styles.textContainer}>
                 <View style={styles.titleRow}>
                   <Text style={[styles.cardTitle, !isPhaseUnlocked(1) && styles.textLocked]}>Phase 1: Card Values</Text>
+                  <InfoIcon tipKey="phase1" size={18} />
                   {phase1Complete && <Text style={styles.checkMark}>✓</Text>}
                 </View>
                 <Text style={[styles.cardDescription, !isPhaseUnlocked(1) && styles.textLocked]}>Learn the Hi-Lo values for every card rank.</Text>
@@ -115,7 +118,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
                 <Text style={styles.icon}>🔢</Text>
               </View>
               <View style={styles.textContainer}>
-                <Text style={[styles.cardTitle, !isPhaseUnlocked(2) && styles.textLocked]}>Phase 2: Running Count</Text>
+                <View style={styles.titleRow}>
+                  <Text style={[styles.cardTitle, !isPhaseUnlocked(2) && styles.textLocked]}>Phase 2: Running Count</Text>
+                  <InfoIcon tipKey="phase2" size={18} />
+                </View>
                 <Text style={[styles.cardDescription, !isPhaseUnlocked(2) && styles.textLocked]}>Keep the count as cards are dealt.</Text>
               </View>
               {!isPhaseUnlocked(2) && <Text style={styles.lockIcon}>🔒</Text>}
@@ -124,50 +130,102 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
 
           {/* Phase 3 - True Count */}
           <TouchableOpacity
-            style={[styles.card, styles.cardActive]}
+            style={[styles.card, isPhaseUnlocked(3) ? styles.cardActive : styles.cardLocked]}
             onPress={() => {
-              Haptics.selectionAsync();
-              navigation.navigate('Phase3TrueCount');
+              if (isPhaseUnlocked(3)) {
+                Haptics.selectionAsync();
+                navigation.navigate('Phase3TrueCount');
+              }
             }}
             activeOpacity={0.8}
+            disabled={!isPhaseUnlocked(3)}
           >
-            <View style={styles.cardGlow} />
+            {isPhaseUnlocked(3) && <View style={styles.cardGlow} />}
             <View style={styles.cardContent}>
-              <View style={[styles.iconContainer, styles.iconActive]}>
+              <View style={[styles.iconContainer, isPhaseUnlocked(3) ? styles.iconActive : styles.iconLocked]}>
                 <Text style={styles.icon}>➗</Text>
               </View>
               <View style={styles.textContainer}>
                 <View style={styles.titleRow}>
-                  <Text style={styles.cardTitle}>Phase 3: True Count</Text>
+                  <Text style={[styles.cardTitle, !isPhaseUnlocked(3) && styles.textLocked]}>Phase 3: True Count</Text>
+                  <InfoIcon tipKey="phase3" size={18} />
+                  {phase3Complete && <Text style={styles.checkMark}>✓</Text>}
                 </View>
-                <Text style={styles.cardDescription}>Adjust for remaining decks.</Text>
+                <Text style={[styles.cardDescription, !isPhaseUnlocked(3) && styles.textLocked]}>Adjust for remaining decks.</Text>
               </View>
-              <Text style={styles.arrow}>›</Text>
+              {isPhaseUnlocked(3) ? (
+                <Text style={styles.arrow}>›</Text>
+              ) : (
+                <Text style={styles.lockIcon}>🔒</Text>
+              )}
             </View>
           </TouchableOpacity>
 
-          {/* Phase 4 - Betting (Unlocked) */}
+          {/* Phase 4 - Betting */}
           <TouchableOpacity
-            style={[styles.card, styles.cardActive]}
+            style={[styles.card, isPhaseUnlocked(4) ? styles.cardActive : styles.cardLocked]}
             onPress={() => {
-              Haptics.selectionAsync();
-              navigation.navigate('Phase4Betting');
+              if (isPhaseUnlocked(4)) {
+                Haptics.selectionAsync();
+                navigation.navigate('Phase4Betting');
+              }
             }}
             activeOpacity={0.8}
+            disabled={!isPhaseUnlocked(4)}
           >
-            <View style={styles.cardGlow} />
+            {isPhaseUnlocked(4) && <View style={styles.cardGlow} />}
             <View style={styles.cardContent}>
-              <View style={[styles.iconContainer, styles.iconActive]}>
+              <View style={[styles.iconContainer, isPhaseUnlocked(4) ? styles.iconActive : styles.iconLocked]}>
                 <Text style={styles.icon}>💰</Text>
               </View>
               <View style={styles.textContainer}>
                 <View style={styles.titleRow}>
-                  <Text style={styles.cardTitle}>Phase 4: Betting</Text>
-                  <Text style={styles.checkMark}>NEW!</Text>
+                  <Text style={[styles.cardTitle, !isPhaseUnlocked(4) && styles.textLocked]}>Phase 4: Betting</Text>
+                  <InfoIcon tipKey="phase4" size={18} />
+                  {phase4Complete && <Text style={styles.checkMark}>✓</Text>}
                 </View>
-                <Text style={styles.cardDescription}>Size your bets based on the advantage.</Text>
+                <Text style={[styles.cardDescription, !isPhaseUnlocked(4) && styles.textLocked]}>Size your bets based on the advantage.</Text>
               </View>
-              <Text style={styles.arrow}>›</Text>
+              {isPhaseUnlocked(4) ? (
+                <Text style={styles.arrow}>›</Text>
+              ) : (
+                <Text style={styles.lockIcon}>🔒</Text>
+              )}
+            </View>
+          </TouchableOpacity>
+
+          {/* Phase 5 - Deviations */}
+          <TouchableOpacity
+            style={[styles.card, isPhaseUnlocked(5) ? styles.cardActive : styles.cardLocked]}
+            onPress={() => {
+              if (isPhaseUnlocked(5)) {
+                Haptics.selectionAsync();
+                navigation.navigate('Phase5Deviations');
+              }
+            }}
+            activeOpacity={0.8}
+            disabled={!isPhaseUnlocked(5)}
+          >
+            {isPhaseUnlocked(5) && <View style={styles.cardGlow} />}
+            <View style={styles.cardContent}>
+              <View style={[styles.iconContainer, isPhaseUnlocked(5) ? styles.iconActive : styles.iconLocked]}>
+                <Text style={styles.icon}>🎓</Text>
+              </View>
+              <View style={styles.textContainer}>
+                <View style={styles.titleRow}>
+                  <Text style={[styles.cardTitle, !isPhaseUnlocked(5) && styles.textLocked]}>Phase 5: Deviations</Text>
+                  <InfoIcon tipKey="phase5" size={18} />
+                  {phase5Complete && <Text style={styles.checkMark}>✓</Text>}
+                </View>
+                <Text style={[styles.cardDescription, !isPhaseUnlocked(5) && styles.textLocked]}>
+                  Master the Illustrious 18 strategy deviations.
+                </Text>
+              </View>
+              {isPhaseUnlocked(5) ? (
+                <Text style={styles.arrow}>›</Text>
+              ) : (
+                <Text style={styles.lockIcon}>🔒</Text>
+              )}
             </View>
           </TouchableOpacity>
         </View>
@@ -184,7 +242,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
               }}
               activeOpacity={0.8}
             >
-              <Text style={styles.gridIcon}>⏱️</Text>
+              <View style={styles.gridIconRow}>
+                <Text style={styles.gridIcon}>⏱️</Text>
+                <InfoIcon tipKey="speedDrill" size={14} />
+              </View>
               <Text style={styles.gridTitle}>Speed Drill</Text>
             </TouchableOpacity>
 
@@ -196,7 +257,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
               }}
               activeOpacity={0.8}
             >
-              <Text style={styles.gridIcon}>🎰</Text>
+              <View style={styles.gridIconRow}>
+                <Text style={styles.gridIcon}>🎰</Text>
+                <InfoIcon tipKey="simulator" size={14} />
+              </View>
               <Text style={styles.gridTitle}>Casino Sim</Text>
             </TouchableOpacity>
           </View>
@@ -210,7 +274,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
               }}
               activeOpacity={0.8}
             >
-              <Text style={styles.gridIcon}>⚡️</Text>
+              <View style={styles.gridIconRow}>
+                <Text style={styles.gridIcon}>⚡️</Text>
+                <InfoIcon tipKey="deckCountdown" size={14} />
+              </View>
               <Text style={styles.gridTitle}>Deck Countdown</Text>
             </TouchableOpacity>
 
@@ -222,7 +289,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
               }}
               activeOpacity={0.8}
             >
-              <Text style={styles.gridIcon}>👁️</Text>
+              <View style={styles.gridIconRow}>
+                <Text style={styles.gridIcon}>👁️</Text>
+                <InfoIcon tipKey="discardTray" size={14} />
+              </View>
               <Text style={styles.gridTitle}>Discard Eye</Text>
             </TouchableOpacity>
 
@@ -234,9 +304,31 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
               }}
               activeOpacity={0.8}
             >
-              <Text style={styles.gridIcon}>🎓</Text>
+              <View style={styles.gridIconRow}>
+                <Text style={styles.gridIcon}>🎓</Text>
+                <InfoIcon tipKey="deviations" size={14} />
+              </View>
               <Text style={styles.gridTitle}>The 18</Text>
             </TouchableOpacity>
+          </View>
+
+          <View style={[styles.grid, { marginTop: 12 }]}>
+            <TouchableOpacity
+              style={[styles.gridCard, styles.cardActive]}
+              onPress={() => {
+                Haptics.selectionAsync();
+                navigation.navigate('Analytics');
+              }}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.gridIcon}>📊</Text>
+              <Text style={styles.gridTitle}>Analytics</Text>
+            </TouchableOpacity>
+
+            <View style={[styles.gridCard, styles.cardLocked]}>
+              <Text style={styles.gridIcon}>🏆</Text>
+              <Text style={[styles.gridTitle, styles.textLocked]}>Coming Soon</Text>
+            </View>
           </View>
         </View>
 
@@ -413,9 +505,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.glassBorder,
   },
+  gridIconRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    marginBottom: 12,
+  },
   gridIcon: {
     fontSize: 36,
-    marginBottom: 12,
   },
   gridTitle: {
     fontSize: 15,

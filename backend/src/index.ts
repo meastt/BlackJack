@@ -2,6 +2,7 @@ import express, { Express } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
+import rateLimit from 'express-rate-limit';
 import { coachRouter } from './routes/coach';
 import { statsRouter } from './routes/stats';
 import { subscriptionRouter } from './routes/subscription';
@@ -13,10 +14,23 @@ dotenv.config();
 const app: Express = express();
 const PORT = process.env.PORT || 3000;
 
+// Rate limiting: prevents abuse
+const limiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: parseInt(process.env.API_RATE_LIMIT || '100'), // limit each IP to 100 requests per minute
+  message: 'Too many requests from this IP, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 // Middleware
 app.use(helmet()); // Security headers
-app.use(cors()); // Enable CORS
+app.use(cors({
+  origin: process.env.ALLOWED_ORIGINS?.split(',') || '*',
+  credentials: true
+})); // Enable CORS with origin control
 app.use(express.json()); // Parse JSON bodies
+app.use(limiter); // Apply rate limiting to all routes
 
 // Health check endpoint
 app.get('/health', (req, res) => {
