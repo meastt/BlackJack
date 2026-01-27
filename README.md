@@ -1,129 +1,48 @@
-# 🃏 Card Counter AI
+# Card Counter AI - Production Guide
 
-The only app that actually teaches you to count cards—from complete beginner to casino-ready. Progressive skill-building with AI coaching until you can hold a true count under pressure.
+## 🎰 Launching the App
 
-## ✨ Features
+1.  **Install Dependencies:**
+    ```bash
+    npm install
+    ```
+    This will install dependencies for both the root workspace and nested packages (`mobile`, `shared`).
 
-### Guided Learning Mode
-- **Phase 1: Card Values** - Learn the Hi-Lo card values (+1, 0, -1)
-- **Phase 2: Running Count** - Maintain count as cards are dealt
-- **Phase 3: True Count** - Convert running count based on decks remaining
-- **Phase 4: Betting Correlation** - Size bets based on count advantage
+2.  **Start the Metro Bundler:**
+    ```bash
+    cd mobile
+    npm start
+    ```
+    - Scan the QR code with **Expo Go** (Android/iOS) to run on a physical device.
+    - Press `a` to run on Android Emulator.
+    - Press `i` to run on iOS Simulator (macOS only).
 
-### AI Coach
-Real-time coaching powered by Claude AI to help you understand concepts and improve your technique.
+## 🏆 Pro Certification Challenge
 
-### Counting Systems
-- **Hi-Lo** - Beginner-friendly, balanced (+1/0/-1)
-- **KO** - Unbalanced, no true count conversion needed
-- **Hi-Opt I** - Intermediate, more accurate
-- **Hi-Opt II** - Advanced, multi-level
-- **Omega II** - Expert level, highest accuracy
-- **Zen** - Advanced, balanced multi-level
+To verify the "Perfect Session" logic:
 
-## 🚀 Quick Start
+1.  Navigate to the **Certification** screen via the app menu (or direct link if enabled).
+2.  Tap **"Start Challenge"**.
+3.  **Requirements:**
+    - Play through **2 Full Shoes** (approx. 200 hands).
+    - Maintain **100% Counting Accuracy** (checked at every shuffle).
+    - Maintain **>98% Decision Accuracy** (Basic Strategy + Deviations).
+    - Keep **Heat < 80%** (Avoid erratic bet spreads).
+4.  Upon completion, if criteria are met, the **"PRO CARD COUNTER"** badge will be awarded.
 
-### Prerequisites
-- Node.js 18+
-- Expo Go app on your phone (for testing)
+## 🛠 Native Build Steps (Manual)
 
-### Installation
+For a full store release (IPA/APK):
 
-```bash
-# Clone the repository
-git clone https://github.com/meastt/BlackJack.git
-cd BlackJack
+1.  **Permissions:** Ensure `VIBRATE`, `CAMERA`, and `RECORD_AUDIO` are configured in `app.json` (Done).
+2.  **EAS Build:**
+    ```bash
+    npm install -g eas-cli
+    eas build --platform all
+    ```
+3.  **Assets:** Ensure all audio/image assets in `mobile/assets/` are optimized.
 
-# Install all dependencies
-npm install
+## 📦 Project Structure
 
-# Build the shared package
-cd shared && npm run build && cd ..
-
-# Start the mobile app
-cd mobile && npx expo start
-```
-
-### Running on Device
-1. Install [Expo Go](https://expo.dev/client) on your phone
-2. Run `npx expo start` from the `/mobile` directory
-3. Scan the QR code with your phone
-
-## 📱 Tech Stack
-
-- **Framework**: React Native + Expo SDK 54
-- **Language**: TypeScript
-- **State Management**: Zustand
-- **Navigation**: React Navigation
-- **AI**: Anthropic Claude API (direct client calls)
-- **Storage**: AsyncStorage (local device storage)
-
-## 🏗️ Project Structure
-
-```
-BlackJack/
-├── mobile/              # React Native app
-│   ├── src/
-│   │   ├── components/  # Reusable UI (Button, Card)
-│   │   ├── screens/     # App screens
-│   │   ├── services/    # API services
-│   │   ├── store/       # Zustand state
-│   │   └── theme/       # Colors & typography
-│   └── App.tsx          # Entry point
-├── shared/              # Shared TypeScript package
-│   └── src/
-│       ├── types/       # Type definitions
-│       └── engine/      # Card counting logic
-└── package.json         # Root workspace config
-```
-
-## 🔧 Configuration
-
-### Environment Variables
-
-Create `mobile/.env`:
-```env
-EXPO_PUBLIC_ANTHROPIC_API_KEY=sk-ant-your-key-here
-```
-
-Get your API key from [Anthropic Console](https://console.anthropic.com/).
-
-## 📊 User Progression
-
-The app tracks:
-- Cards per minute (speed)
-- Running count accuracy
-- True count accuracy
-- Bet correlation score
-- Session performance
-
-## 🔐 Architecture
-
-This app runs **entirely on-device** with no backend server required:
-- AI coaching calls Anthropic API directly from the app
-- User stats stored locally on device via AsyncStorage
-- Card counting engine runs as pure TypeScript
-
-## 📱 Building for App Stores
-
-```bash
-cd mobile
-
-# Build for iOS
-eas build --platform ios
-
-# Build for Android
-eas build --platform android
-```
-
-## 📄 Legal Disclaimer
-
-Card counting is a legal advantage play technique. This app teaches the skill for educational purposes. Casinos are private property and may restrict players at their discretion. Play responsibly.
-
-## 📝 License
-
-MIT License
-
----
-
-**Made with ♠️ ♥️ ♣️ ♦️**
+- `mobile/`: React Native (Expo) application.
+- `shared/`: Core game engines (`ShoeEngine`, `RiskOfRuin`) shared via workspace.
