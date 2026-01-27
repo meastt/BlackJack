@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { Card as CardType, Suit, Rank } from '@card-counter-ai/shared';
-import { colors } from '../theme/colors';
+import { colors, shadows } from '../theme/colors';
 
 interface CardProps {
   card: CardType;
@@ -18,17 +18,10 @@ const suitSymbols: Record<Suit, string> = {
 };
 
 const suitColors: Record<Suit, string> = {
-  [Suit.HEARTS]: colors.accent,
-  [Suit.DIAMONDS]: colors.accent,
-  [Suit.CLUBS]: colors.accentBlue,
-  [Suit.SPADES]: colors.accentBlue,
-};
-
-const suitGlows: Record<Suit, string> = {
-  [Suit.HEARTS]: colors.glowPink,
-  [Suit.DIAMONDS]: colors.glowPink,
-  [Suit.CLUBS]: colors.glowCyan,
-  [Suit.SPADES]: colors.glowCyan,
+  [Suit.HEARTS]: colors.hearts,
+  [Suit.DIAMONDS]: colors.diamonds,
+  [Suit.CLUBS]: colors.clubs,
+  [Suit.SPADES]: colors.spades,
 };
 
 // Get numeric value for pip count
@@ -127,52 +120,36 @@ export const Card: React.FC<CardProps> = ({ card, size = 'medium', showBack = fa
   if (showBack) {
     return (
       <View style={[styles.cardOuter, { width, height }]}>
-        <View style={[styles.cardShadow, { width: width - 4, height: height - 4 }]} />
-        <BlurView intensity={40} tint="dark" style={[styles.card, styles.cardBack]}>
+        <View style={[styles.cardShadow, { width: width, height: height, top: 2, left: 2 }]} />
+        <View style={[styles.card, styles.cardBack, { width, height }]}>
           <View style={styles.cardBackInner}>
-            <Text style={styles.cardBackPattern}>♠♥♣♦</Text>
+            {/* Minimalist Logo on back - could be a simple geometric shape */}
+            <View style={styles.cardBackDiamond} />
           </View>
-        </BlurView>
+        </View>
       </View>
     );
   }
 
   const suitColor = suitColors[card.suit];
-  const suitGlow = suitGlows[card.suit];
   const suitSymbol = suitSymbols[card.suit];
   const pipCount = getPipCount(card.rank);
   const isFace = isFaceCard(card.rank);
 
   return (
     <View style={[styles.cardOuter, { width, height }]}>
-      {/* 3D Shadow layer */}
-      <View style={[styles.cardShadow, { width: width - 4, height: height - 4 }]} />
+      {/* Tactical Shadow - sharp offset */}
+      <View style={[styles.cardShadow, { width: width, height: height, top: 4, left: 2 }]} />
 
-      {/* Neon glow behind card */}
-      <View style={[styles.neonGlow, { shadowColor: suitGlow }]} />
-
-      {/* Glass card with blur */}
-      <BlurView intensity={60} tint="dark" style={[styles.card, { padding }]}>
-        {/* Glass overlay */}
-        <View style={styles.glassOverlay} />
-
-        {/* Glass highlight at top */}
-        <View style={styles.glassHighlight} />
+      {/* Card Surface - Tungsten */}
+      <View style={[styles.card, { width, height, padding }]}>
 
         {/* Top-left corner */}
         <View style={styles.cornerTopLeft}>
-          <Text style={[
-            styles.rank,
-            { fontSize, color: suitColor },
-            { textShadowColor: suitGlow, textShadowRadius: 10 }
-          ]}>
+          <Text style={[styles.rank, { fontSize, color: suitColor }]}>
             {card.rank}
           </Text>
-          <Text style={[
-            styles.cornerSuit,
-            { fontSize: suitSize, color: suitColor },
-            { textShadowColor: suitGlow, textShadowRadius: 8 }
-          ]}>
+          <Text style={[styles.cornerSuit, { fontSize: suitSize, color: suitColor }]}>
             {suitSymbol}
           </Text>
         </View>
@@ -180,48 +157,19 @@ export const Card: React.FC<CardProps> = ({ card, size = 'medium', showBack = fa
         {/* Center content */}
         <View style={styles.centerContainer}>
           {isAce(card.rank) ? (
-            // Ace - large centered suit symbol
-            <Text style={[
-              styles.aceSuit,
-              {
-                fontSize: faceSize * 1.4,
-                color: suitColor + '70',
-                textShadowColor: suitGlow,
-                textShadowOffset: { width: 0, height: 0 },
-                textShadowRadius: 15,
-              }
-            ]}>
+            <Text style={[styles.aceSuit, { fontSize: faceSize * 1.4, color: suitColor }]}>
               {suitSymbol}
             </Text>
           ) : isFace ? (
-            // Face card design
             <View style={styles.faceCardContainer}>
-              {/* Face symbol */}
-              <Text style={[
-                styles.faceSymbol,
-                {
-                  fontSize: faceSize,
-                  color: suitColor + '60',
-                  textShadowColor: 'rgba(0, 0, 0, 0.6)',
-                  textShadowOffset: { width: 1, height: 2 },
-                  textShadowRadius: 3,
-                }
-              ]}>
+              <Text style={[styles.faceSymbol, { fontSize: faceSize, color: suitColor, opacity: 0.8 }]}>
                 {getFaceSymbol(card.rank)}
               </Text>
-              {/* Decorative suit below */}
-              <Text style={[
-                styles.faceSuit,
-                {
-                  fontSize: pipSize * 1.5,
-                  color: suitColor + '40',
-                }
-              ]}>
+              <Text style={[styles.faceSuit, { fontSize: pipSize * 1.5, color: suitColor, opacity: 0.5 }]}>
                 {suitSymbol}
               </Text>
             </View>
           ) : (
-            // Pip layout for number cards
             <View style={[styles.pipContainer, { width: width - padding * 2 - 30, height: height - padding * 2 - 40 }]}>
               {getPipPositions(pipCount).map((pos, index) => (
                 <Text
@@ -230,16 +178,12 @@ export const Card: React.FC<CardProps> = ({ card, size = 'medium', showBack = fa
                     styles.pip,
                     {
                       fontSize: pipSize,
-                      color: suitColor + '70',
-                      textShadowColor: 'rgba(0, 0, 0, 0.5)',
-                      textShadowOffset: { width: 0.5, height: 1 },
-                      textShadowRadius: 1,
+                      color: suitColor,
                       top: `${pos.top * 100}%`,
                       left: `${pos.left * 100}%`,
                       transform: [
                         { translateX: -pipSize / 2 },
                         { translateY: -pipSize / 2 },
-                        // Flip bottom pips
                         ...(pos.top > 0.6 ? [{ rotate: '180deg' }] : []),
                       ],
                     }
@@ -254,22 +198,14 @@ export const Card: React.FC<CardProps> = ({ card, size = 'medium', showBack = fa
 
         {/* Bottom-right corner (rotated) */}
         <View style={styles.cornerBottomRight}>
-          <Text style={[
-            styles.rank,
-            { fontSize, color: suitColor },
-            { textShadowColor: suitGlow, textShadowRadius: 10 }
-          ]}>
+          <Text style={[styles.rank, { fontSize, color: suitColor }]}>
             {card.rank}
           </Text>
-          <Text style={[
-            styles.cornerSuit,
-            { fontSize: suitSize, color: suitColor },
-            { textShadowColor: suitGlow, textShadowRadius: 8 }
-          ]}>
+          <Text style={[styles.cornerSuit, { fontSize: suitSize, color: suitColor }]}>
             {suitSymbol}
           </Text>
         </View>
-      </BlurView>
+      </View>
     </View>
   );
 };
@@ -280,66 +216,36 @@ const styles = StyleSheet.create({
   },
   cardShadow: {
     position: 'absolute',
-    bottom: -8,
-    left: 4,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    borderRadius: 16,
-    transform: [{ skewX: '-3deg' }],
-  },
-  neonGlow: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    borderRadius: 16,
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.6,
-    shadowRadius: 20,
-    elevation: 15,
+    backgroundColor: '#000',
+    opacity: 0.4,
+    borderRadius: 8,
   },
   card: {
-    flex: 1,
-    borderRadius: 16,
-    borderWidth: 1.5,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
-    position: 'relative',
+    backgroundColor: colors.surface, // Tungsten background
+    borderRadius: 8,              // Sharper corners (Radius 8)
+    borderColor: colors.surfaceLight, // Graphite border
+    borderWidth: 1,
     overflow: 'hidden',
   },
-  glassOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(20, 20, 25, 0.3)',
-  },
-  glassHighlight: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: '35%',
-    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-    borderTopLeftRadius: 14,
-    borderTopRightRadius: 14,
-  },
   cardBack: {
-    borderColor: colors.accentPurple,
+    backgroundColor: colors.surface,
     justifyContent: 'center',
     alignItems: 'center',
+    borderColor: colors.borderActive, // Indigo border for back
+    borderWidth: 1,
   },
   cardBackInner: {
-    width: '80%',
-    height: '80%',
-    borderWidth: 2,
-    borderColor: 'rgba(168, 85, 247, 0.4)',
-    borderRadius: 10,
+    width: '100%',
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(168, 85, 247, 0.15)',
+    opacity: 0.5,
   },
-  cardBackPattern: {
-    fontSize: 18,
-    color: colors.accentPurple,
-    opacity: 0.7,
-    letterSpacing: 4,
+  cardBackDiamond: {
+    width: 20,
+    height: 20,
+    backgroundColor: colors.primary,
+    transform: [{ rotate: '45deg' }],
   },
   cornerTopLeft: {
     position: 'absolute',
@@ -355,12 +261,11 @@ const styles = StyleSheet.create({
     transform: [{ rotate: '180deg' }],
   },
   rank: {
-    fontWeight: 'bold',
-    textShadowOffset: { width: 0, height: 0 },
+    fontWeight: '700', // Bold, chiseled font
+    letterSpacing: -0.5,
   },
   cornerSuit: {
     marginTop: -4,
-    textShadowOffset: { width: 0, height: 0 },
   },
   centerContainer: {
     flex: 1,
@@ -369,14 +274,12 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
   },
-  // Number card pips
   pipContainer: {
     position: 'relative',
   },
   pip: {
     position: 'absolute',
   },
-  // Face card styles
   faceCardContainer: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -387,8 +290,5 @@ const styles = StyleSheet.create({
   faceSuit: {
     marginTop: -8,
   },
-  // Ace - large centered suit
-  aceSuit: {
-    textShadowOffset: { width: 0, height: 0 },
-  },
+  aceSuit: {},
 });

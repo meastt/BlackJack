@@ -1,51 +1,61 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
+import { View, Text, StyleSheet, Animated, Platform } from 'react-native';
 import { useSimState } from '../../store/SimState';
 import { colors } from '../../theme/colors';
 
 import { HapticEngine } from '../../utils/HapticEngine';
 
 export const HeatMeter: React.FC = () => {
+    // Access state via ref or hook if needed, for now using direct props or mock
+    // Assuming context is passed or available globally
+    // But aligning with previous file structure:
     const { suspicionLevel } = useSimState();
+
+    // Animation for smooth bar transition
     const widthAnim = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
+        Animated.timing(widthAnim, {
+            toValue: suspicionLevel,
+            duration: 800, // Slower, more deliberate "mechanical" movement
+            useNativeDriver: false
+        }).start();
+
         if (suspicionLevel > 80) {
             HapticEngine.triggerHeatWarning();
         }
-        // Animate bar width based on percentage
-        Animated.timing(widthAnim, {
-            toValue: suspicionLevel, // 0 to 100
-            duration: 500,
-            useNativeDriver: false // Width is layout property
-        }).start();
     }, [suspicionLevel]);
 
     const getBarColor = () => {
-        if (suspicionLevel < 30) return colors.accentGreen; // Low heat
-        if (suspicionLevel < 70) return '#FFA500'; // Orange/Medium
-        return colors.accentRed; // High heat
+        if (suspicionLevel < 30) return colors.success;   // Safe (Emerald)
+        if (suspicionLevel < 60) return colors.info;      // Watchful (Blue)
+        if (suspicionLevel < 85) return colors.warning;   // Suspicious (Amber)
+        return colors.error;                              // Burned (Red)
     };
 
     return (
         <View style={styles.container}>
-            <View style={styles.labelRow}>
-                <Text style={styles.label}>PIT BOSS HEAT</Text>
-                <Text style={styles.value}>{suspicionLevel}%</Text>
-            </View>
             <View style={styles.track}>
-                <Animated.View 
+                {/* Background markers for 30%, 60%, 85% thresholds */}
+                <View style={[styles.marker, { left: '30%' }]} />
+                <View style={[styles.marker, { left: '60%' }]} />
+                <View style={[styles.marker, { left: '85%' }]} />
+
+                <Animated.View
                     style={[
-                        styles.bar, 
-                        { 
+                        styles.bar,
+                        {
                             width: widthAnim.interpolate({
                                 inputRange: [0, 100],
                                 outputRange: ['0%', '100%']
                             }),
-                            backgroundColor: getBarColor() 
+                            backgroundColor: getBarColor()
                         }
-                    ]} 
+                    ]}
                 />
+            </View>
+            <View style={styles.labelRow}>
+                <Text style={styles.value}>{suspicionLevel}% DETECTED</Text>
             </View>
         </View>
     );
@@ -54,33 +64,39 @@ export const HeatMeter: React.FC = () => {
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        paddingHorizontal: 20,
-        marginVertical: 10,
+        marginVertical: 4,
     },
     labelRow: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 5,
+        justifyContent: 'flex-end',
+        marginTop: 4,
     },
-    label: {
-        color: colors.textSecondary,
-        fontSize: 12,
+    value: {
+        color: colors.textTertiary,
+        fontSize: 10,
+        fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace',
         fontWeight: 'bold',
         letterSpacing: 1,
     },
-    value: {
-        color: colors.textPrimary,
-        fontSize: 12,
-        fontWeight: 'bold',
-    },
     track: {
-        height: 10,
-        backgroundColor: colors.surfaceLight,
-        borderRadius: 5,
+        height: 6,
+        backgroundColor: colors.surface,
+        borderRadius: 2,
         overflow: 'hidden',
+        borderWidth: 1,
+        borderColor: colors.border,
+        position: 'relative',
     },
     bar: {
         height: '100%',
-        borderRadius: 5,
+        borderRadius: 1,
+    },
+    marker: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        width: 1,
+        backgroundColor: colors.border,
+        zIndex: 1,
     },
 });

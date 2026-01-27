@@ -1,81 +1,76 @@
-// Vegas Nights Theme - Neon tubing with glassmorphism
+// Protocol 21 Theme - Tactical, Precision, Stealth
 
 export const colors = {
-  // Primary palette - Vegas Neon
-  primary: '#1A1A1A',           // Dark charcoal
-  secondary: '#2D2D2D',         // Lighter charcoal
-  accent: '#FF2D7C',            // Hot pink neon
-  accentBlue: '#00D4FF',        // Electric cyan
-  accentGreen: '#00FF88',       // Neon green
-  accentPurple: '#A855F7',      // Neon purple
-  accentYellow: '#FFE500',      // Vegas gold
-  success: '#00FF88',           // Neon green
+  // Primary Brand (The Edge)
+  primary: '#6366f1',           // Electric Indigo - Main Action / Brand
+  primaryDark: '#4f46e5',       // Darker Indigo (Press state)
+  primaryLight: '#818cf8',      // Lighter Indigo (Highlight)
 
-  // Background colors
-  background: '#121212',        // Near black
-  surface: 'rgba(255, 255, 255, 0.08)',      // Glass surface
-  surfaceLight: 'rgba(255, 255, 255, 0.12)', // Lighter glass
-  surfaceDark: 'rgba(0, 0, 0, 0.4)',         // Dark glass overlay
+  // Backgrounds (The Void)
+  background: '#050505',        // Void Black - Main App Background
+  surface: '#1A1A1A',           // Tungsten - Card Surfaces, Panels
+  surfaceLight: '#262626',      // Graphite - Borders, Separators, Lighter panels
+  surfaceDark: '#0a0a0a',       // Deep overlay
 
-  // Glass effect colors
-  glassBorder: 'rgba(255, 255, 255, 0.15)',
-  glassHighlight: 'rgba(255, 255, 255, 0.1)',
+  // Text Colors
+  textPrimary: '#FFFFFF',       // Signal White
+  textSecondary: '#9ca3af',     // Muted Platinum
+  textTertiary: '#4b5563',      // Dark Grey (Subtle details)
 
-  // Text colors
-  textPrimary: '#FFFFFF',
-  textSecondary: 'rgba(255, 255, 255, 0.7)',
-  textMuted: 'rgba(255, 255, 255, 0.4)',
+  // Functional Status
+  success: '#10b981',           // Emerald (Sharp win)
+  error: '#ef4444',             // Red (Loss/Error)
+  warning: '#f59e0b',           // Amber (Push/Warning)
+  info: '#3b82f6',              // Azure (Information)
 
-  // Card suits - Neon style
-  hearts: '#FF2D7C',            // Hot pink
-  diamonds: '#FF2D7C',          // Hot pink
-  clubs: '#FFFFFF',
-  spades: '#FFFFFF',
+  // Card Suits (Stealth Deck)
+  hearts: '#f43f5e',            // Rose - Clean Red
+  diamonds: '#f43f5e',          // Rose - Clean Red
+  clubs: '#e5e5e5',             // Silver - Clean White
+  spades: '#e5e5e5',            // Silver - Clean White
 
-  // Status colors - Neon
-  correct: '#00FF88',           // Neon green
-  incorrect: '#FF2D7C',         // Hot pink
-  warning: '#FFE500',           // Vegas gold
+  // Count Indicators (Heatmap)
+  countHot: '#f43f5e',          // Rose (High count = Action)
+  countCold: '#3b82f6',         // Blue (Low count = Cold)
+  countNeutral: '#9ca3af',      // Platinum
 
-  // Count indicators - Neon
-  positiveCount: '#00FF88',     // Neon green
-  negativeCount: '#FF2D7C',     // Hot pink
-  neutralCount: '#00D4FF',      // Electric cyan
-
-  // UI elements
-  border: 'rgba(255, 255, 255, 0.1)',
-  borderGlow: 'rgba(0, 212, 255, 0.5)',
-  overlay: 'rgba(0, 0, 0, 0.8)',
-  disabled: 'rgba(255, 255, 255, 0.2)',
-
-  // Neon glow colors (for shadows/effects)
-  glowPink: 'rgba(255, 45, 124, 0.6)',
-  glowCyan: 'rgba(0, 212, 255, 0.6)',
-  glowGreen: 'rgba(0, 255, 136, 0.6)',
-  glowPurple: 'rgba(168, 85, 247, 0.6)',
+  // UI Elements
+  border: '#262626',            // Graphite
+  borderActive: '#6366f1',      // Indigo Glow
+  overlay: 'rgba(5, 5, 5, 0.85)', // Deep Void Overlay
+  disabled: 'rgba(255, 255, 255, 0.1)',
 };
 
 export const gradients = {
-  neonPink: ['#FF2D7C', '#FF6B9D'],
-  neonCyan: ['#00D4FF', '#00A3CC'],
-  neonGreen: ['#00FF88', '#00CC6A'],
-  neonPurple: ['#A855F7', '#7C3AED'],
-  darkGlass: ['rgba(30, 30, 30, 0.9)', 'rgba(20, 20, 20, 0.95)'],
+  primary: ['#6366f1', '#4f46e5'],
+  void: ['#050505', '#1a1a1a'],
+  surface: ['#1A1A1A', '#262626'],
+  danger: ['#ef4444', '#dc2626'],
+  success: ['#10b981', '#059669'],
 };
 
-// Glassmorphism style helper
-export const glassStyle = {
-  backgroundColor: colors.surface,
-  borderWidth: 1,
-  borderColor: colors.glassBorder,
-  // Note: For full glass effect, also add blur using expo-blur's BlurView
+// Tactical Shadow (Sharp, not glowing)
+export const shadows = {
+  sm: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  md: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.5,
+    shadowRadius: 6,
+    elevation: 4,
+  },
+  glow: {
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 6,
+  },
 };
 
-// Neon glow shadow helper
-export const neonGlow = (color: string) => ({
-  shadowColor: color,
-  shadowOffset: { width: 0, height: 0 },
-  shadowOpacity: 0.8,
-  shadowRadius: 10,
-  elevation: 10,
-});
