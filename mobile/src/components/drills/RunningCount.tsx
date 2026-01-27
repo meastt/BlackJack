@@ -206,7 +206,7 @@ export const Phase2RunningCount: React.FC<{ navigation?: any }> = ({ navigation 
             {/* Dealing Area */}
             <View style={styles.gameArea}>
                 {gameState === 'DEALING' && currentCardIndex >= 0 && (
-                    <Animated.View style={{ opacity: fadeAnim }}>
+                    <Animated.View style={[styles.cardContainer, { opacity: fadeAnim }]}>
                         <CardComponent card={deck[currentCardIndex]} size="large" />
                     </Animated.View>
                 )}
@@ -219,9 +219,13 @@ export const Phase2RunningCount: React.FC<{ navigation?: any }> = ({ navigation 
                     <View style={styles.checkContainer}>
                         <Text style={styles.checkTitle}>What is the running count?</Text>
                         <View style={styles.inputControls}>
-                            <TouchableOpacity onPress={() => setUserCount(c => c - 1)} style={styles.controlBtn}><Text style={styles.controlText}>-</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={() => setUserCount(c => c - 1)} style={styles.controlBtn}>
+                                <Text style={styles.controlText}>-</Text>
+                            </TouchableOpacity>
                             <Text style={styles.countDisplay}>{userCount}</Text>
-                            <TouchableOpacity onPress={() => setUserCount(c => c + 1)} style={styles.controlBtn}><Text style={styles.controlText}>+</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={() => setUserCount(c => c + 1)} style={styles.controlBtn}>
+                                <Text style={styles.controlText}>+</Text>
+                            </TouchableOpacity>
                         </View>
                         <TouchableOpacity onPress={() => handleInputCheck(userCount)} style={styles.submitBtn}>
                             <Text style={styles.submitText}>SUBMIT</Text>
@@ -231,26 +235,26 @@ export const Phase2RunningCount: React.FC<{ navigation?: any }> = ({ navigation 
 
                 {gameState === 'FEEDBACK' && (
                     <View style={styles.checkContainer}>
-                        <Text style={[styles.checkTitle, { color: colors.accentGreen }]}>✓ Correct!</Text>
-                        <Text style={styles.instructionText}>Resuming...</Text>
+                        <Text style={[styles.checkTitle, { color: colors.success }]}>✓ CORRECT</Text>
+                        <Text style={styles.instructionText}>RESUMING...</Text>
                     </View>
                 )}
 
                 {gameState === 'SUMMARY' && sessionSummary && (
                     <View style={styles.summaryContainer}>
                         <Text style={styles.summaryTitle}>
-                            {sessionSummary.isMastery ? '✓ Mastery Session!' : 'Session Complete'}
+                            {sessionSummary.isMastery ? '✓ MASTERY SESSION!' : 'SESSION COMPLETE'}
                         </Text>
 
                         <View style={styles.statsGrid}>
                             <View style={styles.statItem}>
-                                <Text style={styles.statLabel}>Accuracy</Text>
+                                <Text style={styles.statLabel}>ACCURACY</Text>
                                 <Text style={[styles.statValue, sessionSummary.isMastery && styles.masteryText]}>
                                     {Math.round(sessionSummary.accuracy * 100)}%
                                 </Text>
                             </View>
                             <View style={styles.statItem}>
-                                <Text style={styles.statLabel}>Time</Text>
+                                <Text style={styles.statLabel}>TIME</Text>
                                 <Text style={[styles.statValue, sessionSummary.isMastery && styles.masteryText]}>
                                     {Math.floor((Date.now() - startTime) / 1000)}s
                                 </Text>
@@ -259,7 +263,7 @@ export const Phase2RunningCount: React.FC<{ navigation?: any }> = ({ navigation 
 
                         <View style={styles.progressBar}>
                             <Text style={styles.progressLabel}>
-                                Mastery Progress: {Math.round(sessionSummary.consecutiveProgress * 100)}%
+                                MASTERY PROGRESS: {Math.round(sessionSummary.consecutiveProgress * 100)}%
                             </Text>
                             <View style={styles.progressBarBg}>
                                 <View
@@ -271,8 +275,8 @@ export const Phase2RunningCount: React.FC<{ navigation?: any }> = ({ navigation 
                             </View>
                             <Text style={styles.progressHint}>
                                 {sessionSummary.phaseComplete
-                                    ? '🎉 Phase 2 Complete! Phase 3 Unlocked!'
-                                    : `Need ${MASTERY_REQUIREMENTS.PHASE_2.CONSECUTIVE_SESSIONS} consecutive sessions at ${MASTERY_REQUIREMENTS.PHASE_2.REQUIRED_ACCURACY * 100}% and < ${MASTERY_REQUIREMENTS.PHASE_2.TIME_LIMIT_SECONDS}s`
+                                    ? '🏆 PHASE 2 COMPLETE! PHASE 3 UNLOCKED!'
+                                    : `NEED ${MASTERY_REQUIREMENTS.PHASE_2.CONSECUTIVE_SESSIONS} SESSIONS AT ${MASTERY_REQUIREMENTS.PHASE_2.REQUIRED_ACCURACY * 100}% AND < ${MASTERY_REQUIREMENTS.PHASE_2.TIME_LIMIT_SECONDS}S`
                                 }
                             </Text>
                         </View>
@@ -283,7 +287,7 @@ export const Phase2RunningCount: React.FC<{ navigation?: any }> = ({ navigation 
                                     onPress={() => navigation.goBack()}
                                     style={[styles.submitBtn, styles.secondaryBtn]}
                                 >
-                                    <Text style={styles.submitText}>HOME</Text>
+                                    <Text style={[styles.submitText, styles.secondaryBtnText]}>HOME</Text>
                                 </TouchableOpacity>
                             )}
                             <TouchableOpacity onPress={startNewSession} style={styles.submitBtn}>
@@ -309,152 +313,212 @@ const styles = StyleSheet.create({
         backgroundColor: colors.background,
     },
     header: {
-        padding: 20,
+        paddingVertical: 24,
         alignItems: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor: colors.border,
     },
     phaseTitle: {
         color: colors.textSecondary,
         textTransform: 'uppercase',
-        letterSpacing: 2,
-        marginBottom: 10,
+        letterSpacing: 4,
+        fontSize: 10,
+        fontWeight: '900',
+        marginBottom: 12,
     },
     countBadge: {
-        backgroundColor: colors.surfaceLight,
-        padding: 5,
-        borderRadius: 5,
+        backgroundColor: colors.surface,
+        paddingHorizontal: 10,
+        paddingVertical: 4,
+        borderRadius: 2,
+        borderWidth: 1,
+        borderColor: colors.border,
     },
     debugText: {
-        color: colors.textMuted,
-        fontSize: 12,
+        color: colors.textTertiary,
+        fontSize: 10,
+        fontWeight: '800',
+        letterSpacing: 1,
     },
     gameArea: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        paddingHorizontal: 24,
+    },
+    cardContainer: {
+        shadowColor: colors.primary,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.2,
+        shadowRadius: 30,
+        elevation: 10,
     },
     instructionText: {
-        ...fontStyles.h2,
-        color: colors.textPrimary,
+        fontSize: 14,
+        fontWeight: '900',
+        color: colors.textSecondary,
+        letterSpacing: 2,
+        textTransform: 'uppercase',
     },
     checkContainer: {
         alignItems: 'center',
         width: '100%',
-        padding: 20,
+        paddingVertical: 32,
     },
     checkTitle: {
-        ...fontStyles.h3,
-        color: colors.textPrimary,
-        marginBottom: 30,
+        fontSize: 14,
+        fontWeight: '900',
+        color: colors.textSecondary,
+        marginBottom: 40,
+        letterSpacing: 2,
+        textTransform: 'uppercase',
+        textAlign: 'center',
     },
     inputControls: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 40,
-        gap: 20,
+        marginBottom: 48,
+        gap: 24,
     },
     controlBtn: {
-        width: 60,
-        height: 60,
-        borderRadius: 30,
-        backgroundColor: colors.surfaceLight,
+        width: 64,
+        height: 64,
+        borderRadius: 4,
+        backgroundColor: colors.surface,
         justifyContent: 'center',
         alignItems: 'center',
         borderWidth: 1,
-        borderColor: colors.accentBlue,
+        borderColor: colors.primary,
+        shadowColor: colors.primary,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.2,
+        shadowRadius: 10,
     },
     controlText: {
-        fontSize: 30,
-        color: colors.accentBlue,
+        fontSize: 32,
+        color: colors.primary,
+        fontWeight: '900',
     },
     countDisplay: {
-        fontSize: 48,
-        fontWeight: 'bold',
-        color: colors.textPrimary,
-        width: 100,
+        fontSize: 64,
+        fontWeight: '900',
+        color: '#FFFFFF',
+        width: 120,
         textAlign: 'center',
+        fontVariant: ['tabular-nums'],
     },
     submitBtn: {
-        backgroundColor: colors.accentGreen,
-        paddingVertical: 15,
-        paddingHorizontal: 40,
-        borderRadius: 25,
+        backgroundColor: colors.primary,
+        paddingVertical: 18,
+        paddingHorizontal: 48,
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: colors.primary,
+        shadowColor: colors.primary,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 8,
     },
     submitText: {
-        color: colors.background, // dark text on green
-        fontWeight: 'bold',
-        fontSize: 18,
+        color: '#FFFFFF',
+        fontWeight: '900',
+        fontSize: 14,
+        letterSpacing: 2,
+        textTransform: 'uppercase',
     },
     summaryContainer: {
-        alignItems: 'center',
-        gap: 20,
+        width: '100%',
+        backgroundColor: colors.surface,
+        borderRadius: 4,
+        padding: 32,
+        borderWidth: 1,
+        borderColor: colors.primary,
+        shadowColor: colors.primary,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.2,
+        shadowRadius: 20,
+        gap: 24,
     },
     summaryTitle: {
-        fontSize: 24,
+        fontSize: 20,
         color: colors.textPrimary,
-        fontWeight: 'bold',
-    },
-    summaryScore: {
-        fontSize: 18,
-        color: colors.textSecondary,
+        fontWeight: '900',
+        textAlign: 'center',
+        letterSpacing: 2,
+        textTransform: 'uppercase',
     },
     statsGrid: {
         flexDirection: 'row',
-        gap: 30,
-        marginVertical: 20,
+        gap: 24,
+        justifyContent: 'space-between',
     },
     statItem: {
+        flex: 1,
         alignItems: 'center',
+        backgroundColor: 'rgba(255, 255, 255, 0.02)',
+        paddingVertical: 16,
+        borderRadius: 2,
+        borderWidth: 1,
+        borderColor: 'rgba(255, 255, 255, 0.05)',
     },
     statLabel: {
-        fontSize: 14,
-        color: colors.textSecondary,
+        fontSize: 9,
+        color: colors.textTertiary,
         marginBottom: 8,
         textTransform: 'uppercase',
-        letterSpacing: 1,
+        letterSpacing: 2,
+        fontWeight: '800',
     },
     statValue: {
         fontSize: 32,
-        fontWeight: 'bold',
-        color: colors.textPrimary,
+        fontWeight: '900',
+        color: '#FFFFFF',
+        fontVariant: ['tabular-nums'],
     },
     masteryText: {
-        color: colors.accentGreen,
+        color: colors.success,
     },
     progressBar: {
         width: '100%',
-        marginVertical: 20,
-        paddingHorizontal: 20,
+        marginVertical: 12,
     },
     progressLabel: {
-        fontSize: 16,
-        color: colors.textPrimary,
-        marginBottom: 10,
+        fontSize: 10,
+        color: colors.textTertiary,
+        marginBottom: 12,
         textAlign: 'center',
+        fontWeight: '800',
+        letterSpacing: 1.5,
     },
     progressBarBg: {
-        height: 8,
-        backgroundColor: colors.surfaceLight,
-        borderRadius: 4,
+        height: 4,
+        backgroundColor: colors.surfaceDark,
+        borderRadius: 2,
         overflow: 'hidden',
     },
     progressBarFill: {
         height: '100%',
-        backgroundColor: colors.accentGreen,
+        backgroundColor: colors.success,
     },
     progressHint: {
-        fontSize: 12,
-        color: colors.textSecondary,
-        marginTop: 8,
+        fontSize: 10,
+        color: colors.textTertiary,
+        marginTop: 12,
         textAlign: 'center',
+        fontWeight: '600',
+        lineHeight: 16,
     },
     buttonRow: {
         flexDirection: 'row',
-        gap: 15,
-        marginTop: 10,
+        gap: 16,
+        marginTop: 8,
     },
     secondaryBtn: {
-        backgroundColor: colors.surfaceLight,
-        borderWidth: 1,
-        borderColor: colors.accentBlue,
+        backgroundColor: colors.surface,
+        borderColor: colors.border,
+        shadowOpacity: 0,
+    },
+    secondaryBtnText: {
+        color: colors.textSecondary,
     },
 });

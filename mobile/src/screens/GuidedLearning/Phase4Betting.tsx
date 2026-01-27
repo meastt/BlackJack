@@ -55,9 +55,9 @@ export const Phase4Betting: React.FC<{ navigation: any }> = ({ navigation }) => 
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                    <Text style={styles.backText}>← Back</Text>
+                    <Text style={styles.backText}>←</Text>
                 </TouchableOpacity>
-                <Text style={styles.title}>Phase 4: Betting</Text>
+                <Text style={styles.title}>PHASE 4: BETTING</Text>
             </View>
 
             <View style={styles.content}>
@@ -74,13 +74,13 @@ export const Phase4Betting: React.FC<{ navigation: any }> = ({ navigation }) => 
                     <Text style={[styles.scenarioValue, trueCount > 0 ? styles.pos : styles.neutral]}>
                         {trueCount > 0 ? `+${trueCount}` : trueCount}
                     </Text>
-                    <Text style={styles.instruction}>How many units shoud you bet?</Text>
+                    <Text style={styles.instruction}>Identify correct bet size</Text>
                 </View>
 
                 {/* Feedback */}
                 <View style={styles.feedbackContainer}>
-                    {feedback === 'CORRECT' && <Text style={[styles.feedbackText, styles.pos]}>Perfect! Bet {lastAnswer} units.</Text>}
-                    {feedback === 'WRONG' && <Text style={[styles.feedbackText, styles.neg]}>Too {lastAnswer > 1 ? 'low' : 'high'}. Bet {lastAnswer} units.</Text>}
+                    {feedback === 'CORRECT' && <Text style={[styles.feedbackText, styles.pos]}>CORRECT: {lastAnswer} UNITS</Text>}
+                    {feedback === 'WRONG' && <Text style={[styles.feedbackText, styles.neg]}>INCORRECT: {lastAnswer} UNITS</Text>}
                 </View>
 
                 {/* Controls */}
@@ -110,8 +110,7 @@ const BetButton = ({ units, label, onPress, disabled }: { units: number, label?:
         onPress={onPress}
         disabled={disabled}
     >
-        <Text style={styles.betBtnText}>{label || `${units} Unit${units > 1 ? 's' : ''}`}</Text>
-        <Text style={styles.betSubtext}>{disabled ? '(Coming Soon)' : ''}</Text>
+        <Text style={styles.betBtnText}>{label || `${units} UNIT${units > 1 ? 'S' : ''}`}</Text>
     </TouchableOpacity>
 );
 
@@ -123,107 +122,132 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 20,
+        padding: 24,
         borderBottomWidth: 1,
-        borderBottomColor: colors.glassBorder,
+        borderBottomColor: colors.border,
+        backgroundColor: colors.surface,
     },
-    backButton: { marginRight: 20 },
-    backText: { color: colors.accentBlue, fontSize: 16 },
-    title: { color: colors.textPrimary, fontSize: 20, fontWeight: 'bold' },
+    backButton: {
+        width: 40,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 12,
+    },
+    backText: {
+        color: colors.primary,
+        fontSize: 24,
+        fontWeight: '300',
+    },
+    title: {
+        color: '#FFFFFF',
+        fontSize: 14,
+        fontWeight: '900',
+        letterSpacing: 2,
+    },
     content: {
         flex: 1,
-        padding: 20,
+        padding: 24,
         alignItems: 'center',
         justifyContent: 'center',
     },
     streakContainer: {
         alignItems: 'center',
-        marginBottom: 40,
+        marginBottom: 48,
     },
     streakLabel: {
-        color: colors.textSecondary,
-        fontSize: 12,
+        color: colors.textTertiary,
+        fontSize: 10,
         letterSpacing: 2,
-        fontWeight: 'bold',
+        fontWeight: '900',
+        marginBottom: 8,
     },
     streakValue: {
         color: colors.textPrimary,
-        fontSize: 36,
-        fontWeight: 'bold',
+        fontSize: 48,
+        fontWeight: '900',
+        fontVariant: ['tabular-nums'],
     },
     streakHot: {
-        color: colors.accent,
-        textShadowColor: colors.glowPink,
+        color: colors.primary,
+        textShadowColor: colors.primary,
         textShadowRadius: 10,
     },
     scenarioBox: {
         alignItems: 'center',
-        marginBottom: 40,
+        marginBottom: 32,
         width: '100%',
-        padding: 30,
-        backgroundColor: colors.surfaceLight,
-        borderRadius: 20,
+        padding: 40,
+        backgroundColor: colors.surface,
+        borderRadius: 4,
         borderWidth: 1,
-        borderColor: colors.glassBorder,
+        borderColor: colors.border,
+        shadowColor: colors.primary,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.1,
+        shadowRadius: 20,
     },
     scenarioLabel: {
-        color: colors.textMuted,
-        marginBottom: 10,
-        fontSize: 14,
-        fontWeight: 'bold',
+        color: colors.textTertiary,
+        marginBottom: 16,
+        fontSize: 12,
+        fontWeight: '900',
+        letterSpacing: 2,
     },
     scenarioValue: {
-        fontSize: 64,
-        fontWeight: 'bold',
-        marginBottom: 20,
+        fontSize: 72,
+        fontWeight: '900',
+        marginBottom: 24,
+        fontVariant: ['tabular-nums'],
     },
     instruction: {
         color: colors.textSecondary,
-        fontSize: 18,
+        fontSize: 12,
+        fontWeight: '700',
+        textTransform: 'uppercase',
+        letterSpacing: 1.5,
     },
-    pos: { color: colors.accentGreen },
-    neg: { color: colors.incorrect },
+    pos: { color: colors.success },
+    neg: { color: colors.error },
     neutral: { color: colors.textPrimary },
     feedbackContainer: {
-        height: 40,
-        marginBottom: 20,
+        height: 60,
+        marginBottom: 24,
+        justifyContent: 'center',
     },
     feedbackText: {
-        fontSize: 18,
-        fontWeight: 'bold',
+        fontSize: 16,
+        fontWeight: '900',
+        letterSpacing: 2,
+        textAlign: 'center',
     },
     controls: {
         width: '100%',
-        gap: 15,
+        gap: 16,
     },
     row: {
         flexDirection: 'row',
-        gap: 15,
+        gap: 16,
         justifyContent: 'center',
     },
     betBtn: {
         flex: 1,
-        backgroundColor: colors.surface,
-        borderWidth: 1,
-        borderColor: colors.accentBlue,
-        padding: 20,
-        borderRadius: 16,
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        borderColor: colors.primary,
+        paddingVertical: 24,
+        borderRadius: 4,
         alignItems: 'center',
-        minHeight: 80,
         justifyContent: 'center',
     },
     btnDisabled: {
         borderColor: colors.border,
-        opacity: 0.5,
+        opacity: 0.3,
     },
     betBtnText: {
-        color: colors.textPrimary,
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    betSubtext: {
-        color: colors.textSecondary,
-        fontSize: 10,
-        marginTop: 4,
+        color: colors.primary,
+        fontSize: 14,
+        fontWeight: '900',
+        letterSpacing: 1.5,
     }
 });

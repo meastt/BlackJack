@@ -100,10 +100,13 @@ export const Phase3TrueCount: React.FC<{ navigation: any }> = ({ navigation }) =
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                    <Text style={styles.backText}>← Back</Text>
+                    <Text style={styles.backText}>←</Text>
                 </TouchableOpacity>
-                <Text style={styles.title}>True Count Drill</Text>
-                <Text style={styles.streak}>Streak: {streak}</Text>
+                <Text style={styles.title}>TRUE COUNT DRILL</Text>
+                <View style={styles.streakBadge}>
+                    <Text style={styles.streakLabel}>STREAK</Text>
+                    <Text style={styles.streakValue}>{streak}</Text>
+                </View>
             </View>
 
             <View style={styles.content}>
@@ -138,8 +141,8 @@ export const Phase3TrueCount: React.FC<{ navigation: any }> = ({ navigation }) =
 
                 {/* Feedback Area */}
                 <View style={styles.feedbackContainer}>
-                    {feedback === 'CORRECT' && <Text style={[styles.feedback, styles.pos]}>Correct!</Text>}
-                    {feedback === 'WRONG' && <Text style={[styles.feedback, styles.neg]}>Try Again</Text>}
+                    {feedback === 'CORRECT' && <Text style={[styles.feedback, styles.pos]}>CORRECT</Text>}
+                    {feedback === 'WRONG' && <Text style={[styles.feedback, styles.neg]}>TRY AGAIN</Text>}
                 </View>
 
                 {/* Input Grid */}
@@ -168,29 +171,51 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: 20,
+        padding: 24,
         borderBottomWidth: 1,
-        borderBottomColor: colors.glassBorder,
+        borderBottomColor: colors.border,
+        backgroundColor: colors.surface,
     },
     backButton: {
-        padding: 8,
+        width: 40,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     backText: {
-        color: colors.accentBlue,
-        fontSize: 16,
+        color: colors.primary,
+        fontSize: 24,
+        fontWeight: '300',
     },
     title: {
-        color: colors.textPrimary,
-        fontSize: 18,
-        fontWeight: 'bold',
+        color: '#FFFFFF',
+        fontSize: 14,
+        fontWeight: '900',
+        letterSpacing: 2,
     },
-    streak: {
-        color: colors.accentGreen,
-        fontWeight: 'bold',
+    streakBadge: {
+        alignItems: 'center',
+        backgroundColor: 'rgba(99, 102, 241, 0.05)',
+        paddingHorizontal: 12,
+        paddingVertical: 4,
+        borderRadius: 2,
+        borderWidth: 1,
+        borderColor: colors.border,
+    },
+    streakLabel: {
+        fontSize: 8,
+        color: colors.textTertiary,
+        fontWeight: '900',
+        letterSpacing: 1,
+    },
+    streakValue: {
+        fontSize: 16,
+        color: colors.primary,
+        fontWeight: '900',
     },
     content: {
         flex: 1,
-        padding: 20,
+        padding: 24,
         alignItems: 'center',
     },
     visualRow: {
@@ -198,8 +223,13 @@ const styles = StyleSheet.create({
         width: '100%',
         justifyContent: 'space-around',
         alignItems: 'center',
-        marginBottom: 30,
+        marginBottom: 40,
         marginTop: 20,
+        backgroundColor: colors.surface,
+        paddingVertical: 32,
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: colors.border,
     },
     statBox: {
         alignItems: 'center',
@@ -210,57 +240,66 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     statLabel: {
-        color: colors.textSecondary,
-        fontSize: 14,
-        marginTop: 10,
+        color: colors.textTertiary,
+        fontSize: 10,
+        fontWeight: '800',
+        textTransform: 'uppercase',
+        letterSpacing: 1.5,
+        marginBottom: 8,
     },
     statValue: {
-        fontSize: 48,
-        fontWeight: 'bold',
+        fontSize: 56,
+        fontWeight: '900',
+        fontVariant: ['tabular-nums'],
     },
     divider: {
         width: 1,
-        height: 60,
-        backgroundColor: colors.glassBorder,
+        height: 80,
+        backgroundColor: colors.border,
     },
     equation: {
         fontSize: 18,
-        color: colors.textMuted,
-        marginBottom: 40,
+        color: colors.textSecondary,
+        marginBottom: 48,
         fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace',
+        letterSpacing: 1,
     },
     feedbackContainer: {
-        height: 40,
+        height: 60,
         marginBottom: 20,
+        justifyContent: 'center',
     },
     feedback: {
         fontSize: 24,
-        fontWeight: 'bold',
+        fontWeight: '900',
+        letterSpacing: 4,
+        textAlign: 'center',
     },
-    pos: { color: colors.accentGreen },
-    neg: { color: colors.incorrect },
+    pos: { color: colors.success },
+    neg: { color: colors.error },
     neutral: { color: colors.textPrimary },
 
     grid: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        gap: 20,
+        gap: 16,
         justifyContent: 'center',
         width: '100%',
     },
     optionBtn: {
-        width: '40%',
-        height: 80,
-        backgroundColor: colors.surfaceLight,
-        borderRadius: 16,
+        width: '45%',
+        height: 100,
+        backgroundColor: 'transparent',
+        borderRadius: 4,
         justifyContent: 'center',
         alignItems: 'center',
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: colors.border,
     },
     btnText: {
-        fontSize: 32,
-        fontWeight: 'bold',
-        color: colors.textPrimary,
+        fontSize: 36,
+        fontWeight: '900',
+        color: colors.primary,
+        fontVariant: ['tabular-nums'],
     },
 });

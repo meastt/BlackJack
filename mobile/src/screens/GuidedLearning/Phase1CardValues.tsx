@@ -162,14 +162,14 @@ export const Phase1CardValues: React.FC<{ navigation?: any }> = ({ navigation })
         <View style={styles.statItem}>
           <Text style={styles.statLabel}>PROGRESS</Text>
           <Text style={styles.statValue}>
-            <Text style={styles.neonCyan}>{score.total}</Text>
+            <Text style={styles.textPrimary}>{score.total}</Text>
             <Text style={styles.statDivider}>/{CARDS_PER_SESSION}</Text>
           </Text>
         </View>
         <View style={styles.statDividerVertical} />
         <View style={styles.statItem}>
           <Text style={styles.statLabel}>ACCURACY</Text>
-          <Text style={[styles.statValue, accuracy >= 95 ? styles.neonGreen : styles.neonCyan]}>
+          <Text style={[styles.statValue, accuracy >= 95 ? styles.textSuccess : styles.textPrimary]}>
             {accuracy.toFixed(0)}%
           </Text>
         </View>
@@ -195,7 +195,7 @@ export const Phase1CardValues: React.FC<{ navigation?: any }> = ({ navigation })
           ]}>
             <Text style={[
               styles.feedbackText,
-              isCorrect ? styles.neonGreen : styles.neonPink
+              isCorrect ? styles.textSuccess : styles.textError
             ]}>
               {isCorrect ? '✓ CORRECT' : '✗ INCORRECT'}
             </Text>
@@ -215,13 +215,13 @@ export const Phase1CardValues: React.FC<{ navigation?: any }> = ({ navigation })
             style={[
               styles.answerButton,
               styles.answerButtonNegative,
-              userAnswer === -1 && styles.answerButtonSelectedPink,
+              userAnswer === -1 && styles.answerButtonSelectedError,
             ]}
             onPress={() => handleAnswer(-1)}
             disabled={userAnswer !== null}
             activeOpacity={0.7}
           >
-            <Text style={[styles.answerButtonText, styles.neonPink]}>-1</Text>
+            <Text style={[styles.answerButtonText, styles.textError]}>-1</Text>
             <Text style={styles.answerButtonSubtext}>10 J Q K A</Text>
           </TouchableOpacity>
 
@@ -229,13 +229,13 @@ export const Phase1CardValues: React.FC<{ navigation?: any }> = ({ navigation })
             style={[
               styles.answerButton,
               styles.answerButtonNeutral,
-              userAnswer === 0 && styles.answerButtonSelectedCyan,
+              userAnswer === 0 && styles.answerButtonSelectedPrimary,
             ]}
             onPress={() => handleAnswer(0)}
             disabled={userAnswer !== null}
             activeOpacity={0.7}
           >
-            <Text style={[styles.answerButtonText, styles.neonCyan]}>0</Text>
+            <Text style={[styles.answerButtonText, styles.textPrimary]}>0</Text>
             <Text style={styles.answerButtonSubtext}>7 8 9</Text>
           </TouchableOpacity>
 
@@ -243,13 +243,13 @@ export const Phase1CardValues: React.FC<{ navigation?: any }> = ({ navigation })
             style={[
               styles.answerButton,
               styles.answerButtonPositive,
-              userAnswer === 1 && styles.answerButtonSelectedGreen,
+              userAnswer === 1 && styles.answerButtonSelectedSuccess,
             ]}
             onPress={() => handleAnswer(1)}
             disabled={userAnswer !== null}
             activeOpacity={0.7}
           >
-            <Text style={[styles.answerButtonText, styles.neonGreen]}>+1</Text>
+            <Text style={[styles.answerButtonText, styles.textSuccess]}>+1</Text>
             <Text style={styles.answerButtonSubtext}>2 3 4 5 6</Text>
           </TouchableOpacity>
         </View>
@@ -278,7 +278,7 @@ export const Phase1CardValues: React.FC<{ navigation?: any }> = ({ navigation })
                     <Text style={styles.summaryLabel}>Accuracy</Text>
                     <Text style={[
                       styles.summaryValue,
-                      summary.isMastery ? styles.neonGreen : styles.neonPink
+                      summary.isMastery ? styles.textSuccess : styles.textError
                     ]}>
                       {(summary.accuracy * 100).toFixed(1)}%
                     </Text>
@@ -356,132 +356,126 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   progressBarContainer: {
-    height: 3,
+    height: 4,
     backgroundColor: colors.surface,
   },
   progressBar: {
     height: '100%',
-    backgroundColor: colors.accentBlue,
+    backgroundColor: colors.primary,
   },
   statsBar: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 16,
-    paddingHorizontal: 20,
+    paddingVertical: 20,
     backgroundColor: colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: colors.glassBorder,
+    borderBottomColor: colors.border,
   },
   statItem: {
     alignItems: 'center',
-    paddingHorizontal: 30,
+    paddingHorizontal: 40,
   },
   statLabel: {
-    fontSize: 11,
-    color: colors.textMuted,
-    marginBottom: 4,
-    letterSpacing: 1.5,
-    fontWeight: '600',
+    fontSize: 10,
+    color: colors.textTertiary,
+    marginBottom: 6,
+    letterSpacing: 2,
+    fontWeight: '900',
   },
   statValue: {
-    fontSize: 24,
+    fontSize: 26,
     color: colors.textPrimary,
-    fontWeight: 'bold',
+    fontWeight: '900',
+    fontVariant: ['tabular-nums'],
   },
   statDivider: {
-    color: colors.textMuted,
+    color: colors.textTertiary,
+    fontWeight: 'normal',
+    fontSize: 14,
   },
   statDividerVertical: {
     width: 1,
     height: 30,
-    backgroundColor: colors.glassBorder,
+    backgroundColor: colors.border,
   },
-  neonPink: {
-    color: colors.accent,
-    textShadowColor: colors.glowPink,
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 8,
-  },
-  neonCyan: {
-    color: colors.accentBlue,
-    textShadowColor: colors.glowCyan,
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 8,
-  },
-  neonGreen: {
-    color: colors.accentGreen,
-    textShadowColor: colors.glowGreen,
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 8,
-  },
+  textPrimary: { color: colors.primary },
+  textSuccess: { color: colors.success },
+  textError: { color: colors.error },
   content: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
     alignItems: 'center',
     justifyContent: 'center',
   },
   instruction: {
-    ...fontStyles.h3,
+    fontSize: 14,
+    fontWeight: '900',
     color: colors.textSecondary,
-    marginBottom: 24,
+    marginBottom: 32,
     textAlign: 'center',
+    letterSpacing: 2,
+    textTransform: 'uppercase',
   },
   cardContainer: {
-    marginVertical: 20,
+    marginVertical: 24,
   },
   cardGlow: {
-    shadowColor: colors.accentBlue,
+    shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.4,
-    shadowRadius: 20,
+    shadowOpacity: 0.2,
+    shadowRadius: 30,
     elevation: 10,
   },
   feedback: {
-    paddingVertical: 12,
-    paddingHorizontal: 28,
-    borderRadius: 12,
-    marginTop: 20,
+    paddingVertical: 14,
+    paddingHorizontal: 32,
+    borderRadius: 2,
+    marginTop: 24,
     alignItems: 'center',
-    minWidth: 160,
+    minWidth: 180,
     backgroundColor: colors.surface,
     borderWidth: 1,
+    borderColor: colors.border,
   },
   feedbackSpacer: {
-    height: 72,
-    marginTop: 20,
+    height: 80,
+    marginTop: 24,
   },
   feedbackCorrect: {
-    borderColor: colors.accentGreen,
-    shadowColor: colors.glowGreen,
+    borderColor: colors.success,
+    shadowColor: colors.success,
     shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.5,
+    shadowOpacity: 0.3,
     shadowRadius: 10,
   },
   feedbackIncorrect: {
-    borderColor: colors.accent,
-    shadowColor: colors.glowPink,
+    borderColor: colors.error,
+    shadowColor: colors.error,
     shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.5,
+    shadowOpacity: 0.3,
     shadowRadius: 10,
   },
   feedbackText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    letterSpacing: 1,
+    fontSize: 15,
+    fontWeight: '900',
+    letterSpacing: 2,
   },
   feedbackValue: {
-    ...fontStyles.caption,
-    color: colors.textSecondary,
-    marginTop: 4,
+    fontSize: 11,
+    fontWeight: '700',
+    color: colors.textTertiary,
+    marginTop: 6,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
   answerSection: {
-    paddingHorizontal: 16,
-    paddingVertical: 24,
-    paddingBottom: 40,
+    paddingHorizontal: 20,
+    paddingVertical: 32,
+    paddingBottom: 48,
     backgroundColor: colors.surface,
     borderTopWidth: 1,
-    borderTopColor: colors.glassBorder,
+    borderTopColor: colors.border,
   },
   answerButtons: {
     flexDirection: 'row',
@@ -489,196 +483,219 @@ const styles = StyleSheet.create({
   },
   answerButton: {
     flex: 1,
-    paddingVertical: 18,
-    paddingHorizontal: 8,
-    borderRadius: 16,
+    paddingVertical: 20,
+    borderRadius: 4,
     alignItems: 'center',
     borderWidth: 2,
-    backgroundColor: colors.surfaceDark,
+    backgroundColor: 'transparent',
+    borderColor: colors.border,
   },
   answerButtonNegative: {
-    borderColor: `${colors.accent}60`,
+    borderColor: colors.border,
   },
   answerButtonNeutral: {
-    borderColor: `${colors.accentBlue}60`,
+    borderColor: colors.border,
   },
   answerButtonPositive: {
-    borderColor: `${colors.accentGreen}60`,
+    borderColor: colors.border,
   },
-  answerButtonSelectedPink: {
-    borderColor: colors.accent,
-    backgroundColor: `${colors.accent}20`,
-    shadowColor: colors.glowPink,
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.6,
-    shadowRadius: 10,
+  answerButtonSelectedError: {
+    borderColor: colors.error,
+    backgroundColor: 'rgba(239, 68, 68, 0.05)',
   },
-  answerButtonSelectedCyan: {
-    borderColor: colors.accentBlue,
-    backgroundColor: `${colors.accentBlue}20`,
-    shadowColor: colors.glowCyan,
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.6,
-    shadowRadius: 10,
+  answerButtonSelectedPrimary: {
+    borderColor: colors.primary,
+    backgroundColor: 'rgba(99, 102, 241, 0.05)',
   },
-  answerButtonSelectedGreen: {
-    borderColor: colors.accentGreen,
-    backgroundColor: `${colors.accentGreen}20`,
-    shadowColor: colors.glowGreen,
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.6,
-    shadowRadius: 10,
+  answerButtonSelectedSuccess: {
+    borderColor: colors.success,
+    backgroundColor: 'rgba(16, 185, 129, 0.05)',
   },
   answerButtonText: {
-    fontSize: 28,
-    fontWeight: 'bold',
+    fontSize: 32,
+    fontWeight: '900',
+    fontVariant: ['tabular-nums'],
   },
   answerButtonSubtext: {
-    fontSize: 11,
-    color: colors.textMuted,
-    marginTop: 6,
-    letterSpacing: 2,
+    fontSize: 9,
+    color: colors.textTertiary,
+    marginTop: 8,
+    letterSpacing: 1.5,
+    fontWeight: '800',
   },
-  // Modal styles
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.85)',
+    backgroundColor: colors.overlay,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    padding: 24,
   },
   modalContent: {
-    backgroundColor: colors.secondary,
-    borderRadius: 20,
-    padding: 24,
+    backgroundColor: colors.background,
+    borderRadius: 4,
+    padding: 32,
     width: '100%',
-    maxWidth: 340,
+    maxWidth: 360,
     borderWidth: 1,
-    borderColor: colors.glassBorder,
+    borderColor: colors.primary,
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.2,
+    shadowRadius: 20,
   },
   modalTitle: {
-    ...fontStyles.h2,
+    fontSize: 22,
+    fontWeight: '900',
     color: colors.textPrimary,
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: 24,
+    textTransform: 'uppercase',
+    letterSpacing: 2,
   },
   summaryStats: {
-    marginBottom: 20,
+    marginBottom: 24,
   },
   summaryRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 8,
+    paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: colors.glassBorder,
+    borderBottomColor: colors.border,
   },
   summaryLabel: {
-    ...fontStyles.body,
+    fontSize: 12,
+    fontWeight: '800',
     color: colors.textSecondary,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
   summaryValue: {
-    ...fontStyles.body,
+    fontSize: 16,
     color: colors.textPrimary,
-    fontWeight: 'bold',
+    fontWeight: '900',
+    fontVariant: ['tabular-nums'],
   },
   masteryBadge: {
-    backgroundColor: `${colors.accentGreen}20`,
+    backgroundColor: 'rgba(16, 185, 129, 0.1)',
     borderWidth: 1,
-    borderColor: colors.accentGreen,
-    borderRadius: 12,
+    borderColor: colors.success,
+    borderRadius: 2,
     padding: 16,
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  masteryText: {
-    color: colors.accentGreen,
-    fontWeight: 'bold',
-    fontSize: 18,
-  },
-  masterySubtext: {
-    color: colors.textSecondary,
-    marginTop: 4,
-  },
-  retryBadge: {
-    backgroundColor: `${colors.accent}20`,
-    borderWidth: 1,
-    borderColor: colors.accent,
-    borderRadius: 12,
-    padding: 16,
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  retryText: {
-    color: colors.accent,
-    fontWeight: '600',
-  },
-  phaseProgress: {
     alignItems: 'center',
     marginBottom: 20,
   },
-  phaseProgressLabel: {
+  masteryText: {
+    color: colors.success,
+    fontWeight: '900',
+    fontSize: 16,
+    letterSpacing: 1,
+  },
+  masterySubtext: {
     color: colors.textSecondary,
-    marginBottom: 8,
+    fontSize: 11,
+    marginTop: 4,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+  },
+  retryBadge: {
+    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+    borderWidth: 1,
+    borderColor: colors.error,
+    borderRadius: 2,
+    padding: 16,
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  retryText: {
+    color: colors.error,
+    fontWeight: '900',
+    fontSize: 14,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+  },
+  phaseProgress: {
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  phaseProgressLabel: {
+    color: colors.textTertiary,
+    fontSize: 10,
+    fontWeight: '800',
+    marginBottom: 12,
+    textTransform: 'uppercase',
+    letterSpacing: 1.5,
   },
   phaseProgressDots: {
     flexDirection: 'row',
-    gap: 8,
+    gap: 10,
   },
   progressDot: {
-    width: 16,
-    height: 16,
-    borderRadius: 8,
-    backgroundColor: colors.surface,
-    borderWidth: 2,
-    borderColor: colors.glassBorder,
+    width: 12,
+    height: 12,
+    borderRadius: 2,
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   progressDotFilled: {
-    backgroundColor: colors.accentGreen,
-    borderColor: colors.accentGreen,
+    backgroundColor: colors.success,
+    borderColor: colors.success,
   },
   completeBadge: {
-    backgroundColor: `${colors.accentYellow}20`,
+    backgroundColor: 'rgba(245, 158, 11, 0.1)',
     borderWidth: 2,
-    borderColor: colors.accentYellow,
-    borderRadius: 12,
-    padding: 16,
+    borderColor: colors.warning,
+    borderRadius: 2,
+    padding: 20,
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 20,
   },
   completeText: {
-    color: colors.accentYellow,
-    fontWeight: 'bold',
+    color: colors.warning,
+    fontWeight: '900',
     fontSize: 20,
+    letterSpacing: 2,
   },
   completeSubtext: {
     color: colors.textSecondary,
-    marginTop: 4,
+    fontSize: 12,
+    marginTop: 6,
+    fontWeight: '700',
+    textTransform: 'uppercase',
   },
   modalButtons: {
     flexDirection: 'row',
     gap: 12,
+    marginTop: 8,
   },
   modalButtonSecondary: {
     flex: 1,
     padding: 16,
-    borderRadius: 12,
+    borderRadius: 4,
     borderWidth: 1,
-    borderColor: colors.glassBorder,
+    borderColor: colors.border,
     alignItems: 'center',
+    backgroundColor: colors.surface,
   },
   modalButtonSecondaryText: {
     color: colors.textSecondary,
-    fontWeight: '600',
+    fontWeight: '900',
+    fontSize: 12,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
   modalButtonPrimary: {
     flex: 1,
     padding: 16,
-    borderRadius: 12,
-    backgroundColor: colors.accentBlue,
+    borderRadius: 4,
+    backgroundColor: colors.primary,
     alignItems: 'center',
   },
   modalButtonPrimaryText: {
-    color: colors.textPrimary,
-    fontWeight: '600',
+    color: '#FFFFFF',
+    fontWeight: '900',
+    fontSize: 12,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
 });

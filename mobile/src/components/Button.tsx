@@ -65,26 +65,36 @@ export const Button: React.FC<ButtonProps> = ({
 
 const styles = StyleSheet.create({
   button: {
-    borderRadius: 8,
+    borderRadius: 4, // Sharp Protocol 21 corners
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
+    borderWidth: 1,
+    borderColor: 'transparent',
   },
 
   // Variants
   button_primary: {
     backgroundColor: colors.primary,
+    borderColor: colors.primary,
   },
   button_secondary: {
-    backgroundColor: colors.secondary,
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
   },
   button_accent: {
-    backgroundColor: colors.accent,
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.5,
+    shadowRadius: 10,
+    elevation: 6,
   },
   button_outline: {
     backgroundColor: 'transparent',
-    borderWidth: 2,
-    borderColor: colors.accent,
+    borderWidth: 1,
+    borderColor: colors.primary,
   },
 
   // Sizes
@@ -107,29 +117,32 @@ const styles = StyleSheet.create({
   text: {
     ...fontStyles.button,
     color: colors.textPrimary,
+    textTransform: 'uppercase', // Tactical HUD style
+    letterSpacing: 1.5,
+    fontWeight: '700',
   },
   text_outline: {
-    color: colors.accent,
+    color: colors.primary,
   },
   text_primary: {
-    color: colors.textPrimary,
+    color: '#FFFFFF',
   },
   text_secondary: {
-    color: colors.textPrimary,
+    color: colors.textSecondary,
   },
   text_accent: {
-    color: colors.textPrimary,
+    color: '#FFFFFF',
   },
   text_small: {
-    fontSize: 14,
+    fontSize: 12,
   },
   text_medium: {
-    fontSize: 16,
+    fontSize: 14,
   },
   text_large: {
-    fontSize: 18,
+    fontSize: 16,
   },
   textDisabled: {
-    color: colors.textMuted,
+    color: colors.textTertiary,
   },
 });

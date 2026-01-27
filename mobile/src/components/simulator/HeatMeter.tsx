@@ -13,6 +13,7 @@ export const HeatMeter: React.FC = () => {
 
     // Animation for smooth bar transition
     const widthAnim = useRef(new Animated.Value(0)).current;
+    const lastHapticLevel = useRef(0);
 
     useEffect(() => {
         Animated.timing(widthAnim, {
@@ -21,8 +22,17 @@ export const HeatMeter: React.FC = () => {
             useNativeDriver: false
         }).start();
 
-        if (suspicionLevel > 80) {
-            HapticEngine.triggerHeatWarning();
+        // Haptic Feedback Logic:
+        // 1. Trigger when first crossing 80
+        // 2. Trigger if level increases by 5+ while above 80
+        if (suspicionLevel >= 80) {
+            if (lastHapticLevel.current < 80 || suspicionLevel >= lastHapticLevel.current + 5) {
+                HapticEngine.triggerHeatWarning();
+                lastHapticLevel.current = suspicionLevel;
+            }
+        } else if (suspicionLevel < 80) {
+            // Reset state if we drop below danger zone
+            lastHapticLevel.current = suspicionLevel;
         }
     }, [suspicionLevel]);
 

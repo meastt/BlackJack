@@ -229,9 +229,9 @@ export const DrillDeviations: React.FC<{ navigation: any }> = ({ navigation }) =
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                    <Text style={styles.backText}>← Back</Text>
+                    <Text style={styles.backText}>←</Text>
                 </TouchableOpacity>
-                <Text style={styles.title}>Illustrious 18</Text>
+                <Text style={styles.title}>ILLUSTRIOUS 18</Text>
             </View>
 
             <ScrollView contentContainerStyle={styles.content}>
@@ -239,19 +239,21 @@ export const DrillDeviations: React.FC<{ navigation: any }> = ({ navigation }) =
                 {/* HUD */}
                 <View style={styles.hud}>
                     <View style={styles.statBox}>
-                        <Text style={styles.statLabel}>True Count</Text>
+                        <Text style={styles.statLabel}>TRUE COUNT</Text>
                         <Text style={[styles.statValue, currentTC >= 0 ? styles.pos : styles.neg]}>
                             {currentTC > 0 ? `+${currentTC}` : currentTC}
                         </Text>
                     </View>
+                    <View style={styles.statDividerVertical} />
                     <View style={styles.statBox}>
-                        <Text style={styles.statLabel}>Progress</Text>
+                        <Text style={styles.statLabel}>PROGRESS</Text>
                         <Text style={styles.statValue}>
                             {scenariosCompleted}/{SCENARIOS_PER_SESSION}
                         </Text>
                     </View>
+                    <View style={styles.statDividerVertical} />
                     <View style={styles.statBox}>
-                        <Text style={styles.statLabel}>Accuracy</Text>
+                        <Text style={styles.statLabel}>ACCURACY</Text>
                         <Text style={[styles.statValue, styles.pos]}>
                             {scenariosCompleted > 0 ? Math.round((correctCount / scenariosCompleted) * 100) : 0}%
                         </Text>
@@ -277,9 +279,9 @@ export const DrillDeviations: React.FC<{ navigation: any }> = ({ navigation }) =
 
                 {/* Feedback */}
                 <View style={styles.feedbackContainer}>
-                    {feedback === 'CORRECT' && <Text style={[styles.feedbackText, styles.pos]}>{explanation}</Text>}
-                    {feedback === 'WRONG' && <Text style={[styles.feedbackText, styles.neg]}>{explanation}</Text>}
-                    {feedback === 'IDLE' && <Text style={styles.instruction}>What is the correct move?</Text>}
+                    {feedback === 'CORRECT' && <Text style={[styles.feedbackText, styles.pos]}>{explanation.toUpperCase()}</Text>}
+                    {feedback === 'WRONG' && <Text style={[styles.feedbackText, styles.neg]}>{explanation.toUpperCase()}</Text>}
+                    {feedback === 'IDLE' && <Text style={styles.instruction}>SELECT CORRECT MOVE</Text>}
                 </View>
 
                 {/* Controls */}
@@ -315,18 +317,18 @@ export const DrillDeviations: React.FC<{ navigation: any }> = ({ navigation }) =
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContent}>
                         <Text style={styles.modalTitle}>
-                            {sessionSummary?.isMastery ? '✓ Mastery Session!' : 'Session Complete'}
+                            {sessionSummary?.isMastery ? '✓ MASTERY SESSION!' : 'SESSION COMPLETE'}
                         </Text>
 
                         <View style={styles.statsGrid}>
                             <View style={styles.statItem}>
-                                <Text style={styles.modalStatLabel}>Accuracy</Text>
+                                <Text style={styles.modalStatLabel}>ACCURACY</Text>
                                 <Text style={[styles.modalStatValue, sessionSummary?.isMastery && styles.pos]}>
                                     {sessionSummary && Math.round(sessionSummary.accuracy * 100)}%
                                 </Text>
                             </View>
                             <View style={styles.statItem}>
-                                <Text style={styles.modalStatLabel}>Correct</Text>
+                                <Text style={styles.modalStatLabel}>CORRECT</Text>
                                 <Text style={[styles.modalStatValue, sessionSummary?.isMastery && styles.pos]}>
                                     {sessionSummary?.correct}/{sessionSummary?.total}
                                 </Text>
@@ -335,7 +337,7 @@ export const DrillDeviations: React.FC<{ navigation: any }> = ({ navigation }) =
 
                         <View style={styles.progressBarContainer}>
                             <Text style={styles.progressLabel}>
-                                Mastery Progress: {sessionSummary && Math.round(sessionSummary.consecutiveProgress * 100)}%
+                                MASTERY PROGRESS: {sessionSummary && Math.round(sessionSummary.consecutiveProgress * 100)}%
                             </Text>
                             <View style={styles.progressBarBg}>
                                 <View
@@ -347,8 +349,8 @@ export const DrillDeviations: React.FC<{ navigation: any }> = ({ navigation }) =
                             </View>
                             <Text style={styles.progressHint}>
                                 {sessionSummary?.phaseComplete
-                                    ? '🎉 Phase 5 Complete! Ready for Certification!'
-                                    : `Need ${MASTERY_REQUIREMENTS.PHASE_5.CONSECUTIVE_SESSIONS} consecutive sessions at ${MASTERY_REQUIREMENTS.PHASE_5.REQUIRED_ACCURACY * 100}%`
+                                    ? '🎉 PHASE 5 COMPLETE! READY FOR CERTIFICATION!'
+                                    : `NEED ${MASTERY_REQUIREMENTS.PHASE_5.CONSECUTIVE_SESSIONS} CONSECUTIVE SESSIONS AT ${MASTERY_REQUIREMENTS.PHASE_5.REQUIRED_ACCURACY * 100}%`
                                 }
                             </Text>
                         </View>
@@ -390,170 +392,240 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 20,
+        padding: 24,
         borderBottomWidth: 1,
-        borderBottomColor: colors.glassBorder,
+        borderBottomColor: colors.border,
+        backgroundColor: colors.surface,
     },
-    backButton: { marginRight: 20 },
-    backText: { color: colors.accentBlue, fontSize: 16 },
-    title: { color: colors.textPrimary, fontSize: 20, fontWeight: 'bold' },
+    backButton: {
+        width: 40,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 12,
+    },
+    backText: {
+        color: colors.primary,
+        fontSize: 24,
+        fontWeight: '300',
+    },
+    title: {
+        color: '#FFFFFF',
+        fontSize: 14,
+        fontWeight: '900',
+        letterSpacing: 2,
+    },
     content: {
-        padding: 20,
+        padding: 24,
         alignItems: 'center',
     },
     hud: {
-        marginBottom: 30,
+        marginBottom: 32,
         flexDirection: 'row',
-        gap: 10,
+        alignItems: 'center',
+        backgroundColor: colors.surface,
+        padding: 24,
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: colors.border,
+        width: '100%',
+        justifyContent: 'space-around',
     },
     statBox: {
         alignItems: 'center',
-        backgroundColor: colors.surfaceLight,
-        padding: 15,
-        borderRadius: 12,
-        minWidth: 100,
+        minWidth: 80,
     },
-    statLabel: { color: colors.textSecondary, marginBottom: 5 },
-    statValue: { fontSize: 32, fontWeight: 'bold' },
-    pos: { color: colors.accentGreen },
-    neg: { color: colors.incorrect }, // Assuming this exists now
+    statLabel: {
+        color: colors.textTertiary,
+        fontSize: 9,
+        fontWeight: '900',
+        letterSpacing: 1.5,
+        marginBottom: 6,
+    },
+    statValue: {
+        fontSize: 26,
+        fontWeight: '900',
+        color: '#FFFFFF',
+        fontVariant: ['tabular-nums'],
+    },
+    statDividerVertical: {
+        width: 1,
+        height: 30,
+        backgroundColor: colors.border,
+    },
+    pos: { color: colors.success },
+    neg: { color: colors.error },
     table: {
         alignItems: 'center',
-        marginBottom: 30,
+        marginBottom: 32,
         width: '100%',
+        padding: 24,
+        backgroundColor: 'rgba(255, 255, 255, 0.02)',
+        borderRadius: 4,
     },
-    label: { color: colors.textMuted, marginBottom: 10 },
+    label: {
+        color: colors.textTertiary,
+        marginBottom: 12,
+        fontSize: 10,
+        fontWeight: '900',
+        letterSpacing: 2,
+        textTransform: 'uppercase',
+    },
     cardRow: {
         flexDirection: 'row',
-        gap: 10,
+        gap: 12,
     },
     feedbackContainer: {
-        minHeight: 60,
-        marginBottom: 20,
+        minHeight: 80,
+        marginBottom: 24,
         alignItems: 'center',
+        justifyContent: 'center',
         paddingHorizontal: 20,
     },
     feedbackText: {
-        fontSize: 16,
-        fontWeight: 'bold',
+        fontSize: 14,
+        fontWeight: '900',
         textAlign: 'center',
+        letterSpacing: 1.5,
     },
     instruction: {
         color: colors.textSecondary,
-        fontSize: 16,
+        fontSize: 12,
+        fontWeight: '900',
+        letterSpacing: 2,
     },
     controls: {
         width: '100%',
-        gap: 10,
+        gap: 12,
     },
     row: {
         flexDirection: 'row',
-        gap: 10,
+        gap: 12,
     },
     btn: {
         flex: 1,
-        padding: 15,
-        borderRadius: 8,
+        paddingVertical: 18,
+        borderRadius: 4,
         alignItems: 'center',
-        borderWidth: 1,
-        borderColor: 'rgba(255,255,255,0.1)',
+        borderWidth: 2,
+        borderColor: colors.border,
+        backgroundColor: 'transparent',
     },
     btnText: {
-        color: '#FFF',
-        fontWeight: 'bold',
+        color: '#FFFFFF',
+        fontWeight: '900',
+        fontSize: 13,
+        letterSpacing: 1,
     },
-    hitBtn: { backgroundColor: colors.accentGreen },
-    standBtn: { backgroundColor: colors.incorrect }, // Fallback
-    splitBtn: { backgroundColor: colors.accentBlue },
-    doubleBtn: { backgroundColor: colors.accentYellow },
-    insBtn: { backgroundColor: colors.surfaceLight },
+    hitBtn: { borderColor: colors.success },
+    standBtn: { borderColor: colors.error },
+    splitBtn: { borderColor: colors.primary },
+    doubleBtn: { borderColor: colors.warning },
+    insBtn: {
+        borderColor: colors.primary,
+        paddingVertical: 14,
+    },
     modalOverlay: {
         flex: 1,
-        backgroundColor: 'rgba(0,0,0,0.85)',
+        backgroundColor: colors.overlay,
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 20,
+        padding: 24,
     },
     modalContent: {
-        backgroundColor: colors.surface,
-        borderRadius: 20,
-        padding: 30,
+        backgroundColor: colors.background,
+        borderRadius: 4,
+        padding: 32,
         width: '100%',
-        maxWidth: 400,
+        maxWidth: 360,
         borderWidth: 1,
-        borderColor: colors.glassBorder,
+        borderColor: colors.primary,
+        shadowColor: colors.primary,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.2,
+        shadowRadius: 20,
     },
     modalTitle: {
-        fontSize: 24,
-        fontWeight: 'bold',
+        fontSize: 22,
+        fontWeight: '900',
         color: colors.textPrimary,
         textAlign: 'center',
-        marginBottom: 25,
+        marginBottom: 24,
+        textTransform: 'uppercase',
+        letterSpacing: 2,
     },
     statsGrid: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        marginBottom: 25,
+        marginBottom: 24,
     },
     statItem: {
         alignItems: 'center',
     },
     modalStatLabel: {
-        fontSize: 14,
-        color: colors.textSecondary,
+        fontSize: 10,
+        color: colors.textTertiary,
         marginBottom: 8,
         textTransform: 'uppercase',
-        letterSpacing: 1,
+        letterSpacing: 1.5,
+        fontWeight: '800',
     },
     modalStatValue: {
-        fontSize: 28,
-        fontWeight: 'bold',
+        fontSize: 32,
+        fontWeight: '900',
         color: colors.textPrimary,
+        fontVariant: ['tabular-nums'],
     },
     progressBarContainer: {
-        marginBottom: 25,
+        marginBottom: 24,
     },
     progressLabel: {
-        fontSize: 16,
+        fontSize: 11,
         color: colors.textPrimary,
-        marginBottom: 10,
+        marginBottom: 12,
         textAlign: 'center',
+        fontWeight: '800',
+        letterSpacing: 1,
     },
     progressBarBg: {
-        height: 8,
-        backgroundColor: colors.surfaceLight,
-        borderRadius: 4,
+        height: 6,
+        backgroundColor: colors.surfaceDark,
+        borderRadius: 2,
         overflow: 'hidden',
     },
     progressBarFill: {
         height: '100%',
-        backgroundColor: colors.accentGreen,
+        backgroundColor: colors.success,
     },
     progressHint: {
-        fontSize: 12,
+        fontSize: 10,
         color: colors.textSecondary,
-        marginTop: 8,
+        marginTop: 12,
         textAlign: 'center',
+        lineHeight: 16,
+        fontWeight: '600',
     },
     buttonRow: {
         flexDirection: 'row',
-        gap: 15,
+        gap: 16,
     },
     modalBtn: {
         flex: 1,
-        backgroundColor: colors.accentGreen,
-        paddingVertical: 15,
-        borderRadius: 12,
+        backgroundColor: colors.primary,
+        paddingVertical: 16,
+        borderRadius: 4,
         alignItems: 'center',
     },
     secondaryBtn: {
-        backgroundColor: colors.surfaceLight,
+        backgroundColor: colors.surface,
         borderWidth: 1,
-        borderColor: colors.accentBlue,
+        borderColor: colors.border,
     },
     modalBtnText: {
-        color: colors.textPrimary,
-        fontWeight: 'bold',
-        fontSize: 16,
+        color: '#FFFFFF',
+        fontWeight: '900',
+        fontSize: 13,
+        letterSpacing: 1.5,
+        textTransform: 'uppercase',
     },
 });

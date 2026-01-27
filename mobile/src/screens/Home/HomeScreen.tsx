@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, StatusBar, Image } from 'react-native';
-import { colors, neonGlow } from '../../theme/colors';
+import { colors } from '../../theme/colors';
 import { fontStyles } from '../../theme/typography';
 import { useProgressStore } from '../../store/useProgressStore';
 import { InfoIcon } from '../../components/InfoIcon';
@@ -12,326 +12,129 @@ interface HomeScreenProps {
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   const { isPhaseUnlocked, phase0Complete, phase1Complete, phase3Complete, phase4Complete, phase5Complete } = useProgressStore();
+
+  const renderPhaseCard = (phase: number, title: string, description: string, emoji: string, screen: string, isComplete: boolean) => {
+    const unlocked = isPhaseUnlocked(phase);
+    return (
+      <TouchableOpacity
+        style={[styles.card, unlocked ? styles.cardActive : styles.cardLocked]}
+        onPress={() => {
+          if (unlocked) {
+            Haptics.selectionAsync();
+            navigation.navigate(screen);
+          }
+        }}
+        activeOpacity={0.8}
+        disabled={!unlocked}
+      >
+        <View style={styles.cardContent}>
+          <View style={[styles.iconContainer, unlocked ? styles.iconActive : styles.iconLocked]}>
+            <Text style={styles.icon}>{unlocked ? emoji : '🔒'}</Text>
+          </View>
+          <View style={styles.textContainer}>
+            <View style={styles.titleRow}>
+              <Text style={[styles.cardTitle, !unlocked && styles.textLocked]} numberOfLines={1}>
+                PHASE {phase}: {title}
+              </Text>
+              {isComplete && (
+                <View style={styles.completeBadge}>
+                  <Text style={styles.completeText}>COMPLETED</Text>
+                </View>
+              )}
+            </View>
+            <Text style={[styles.cardDescription, !unlocked && styles.textLocked]}>{description}</Text>
+          </View>
+          {unlocked && (
+            <View style={styles.arrowContainer}>
+              <Text style={styles.arrow}>›</Text>
+            </View>
+          )}
+        </View>
+        {unlocked && <View style={styles.cardGlowLine} />}
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={colors.background} />
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        {/* Header with neon glow effect */}
+      <StatusBar barStyle="light-content" />
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        {/* Tactical Header */}
         <View style={styles.header}>
-          <Image
-            source={require('../../../assets/icon.png')}
-            style={styles.logo}
-          />
-          <Text style={styles.headerTitle}>
-            <Text style={styles.neonPink}>Card</Text>
-            <Text style={styles.neonCyan}> Counter</Text>
-            <Text style={styles.neonGreen}> AI</Text>
-          </Text>
-          <Text style={styles.headerSubtitle}>Master the art of advantage play</Text>
+          <View style={styles.logoContainer}>
+            <Image
+              source={require('../../../assets/icon.png')}
+              style={styles.logo}
+            />
+          </View>
+          <View style={styles.headerTextCol}>
+            <Text style={styles.headerTitle}>PROTOCOL <Text style={styles.highlight}>21</Text></Text>
+            <Text style={styles.headerSubtitle}>ADVANTAGE PLAY INTERFACE // v1.0.4</Text>
+          </View>
         </View>
 
-        {/* Guided Learning Section */}
+        {/* Training Modules */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Guided Learning</Text>
+          <View style={styles.sectionHeader}>
+            <View style={styles.sectionIndicator} />
+            <Text style={styles.sectionTitle}>TRAINING_MODULES</Text>
+          </View>
 
-          {/* Phase 0 - Basic Strategy */}
-          <TouchableOpacity
-            style={[styles.card, isPhaseUnlocked(0) ? styles.cardActive : styles.cardLocked]}
-            onPress={() => {
-              if (isPhaseUnlocked(0)) {
-                Haptics.selectionAsync();
-                navigation.navigate('Phase0BasicStrategy');
-              }
-            }}
-            activeOpacity={0.8}
-            disabled={!isPhaseUnlocked(0)}
-          >
-            {isPhaseUnlocked(0) && <View style={styles.cardGlow} />}
-            <View style={styles.cardContent}>
-              <View style={[styles.iconContainer, isPhaseUnlocked(0) ? styles.iconZero : styles.iconLocked]}>
-                <Text style={styles.icon}>🧠</Text>
-              </View>
-              <View style={styles.textContainer}>
-                <View style={styles.titleRow}>
-                  <Text style={[styles.cardTitle, !isPhaseUnlocked(0) && styles.textLocked]}>Phase 0: Basic Strategy</Text>
-                  <InfoIcon tipKey="phase0" size={18} />
-                  {phase0Complete && <Text style={styles.checkMark}>✓</Text>}
-                </View>
-                <Text style={[styles.cardDescription, !isPhaseUnlocked(0) && styles.textLocked]}>Prerequisite: Learn when to Hit, Stand, Split, or Double.</Text>
-              </View>
-              {isPhaseUnlocked(0) ? (
-                <Text style={styles.arrow}>›</Text>
-              ) : (
-                <Text style={styles.lockIcon}>🔒</Text>
-              )}
-            </View>
-          </TouchableOpacity>
-
-          {/* Phase 1 - Card Values */}
-          <TouchableOpacity
-            style={[styles.card, isPhaseUnlocked(1) ? styles.cardActive : styles.cardLocked]}
-            onPress={() => {
-              if (isPhaseUnlocked(1)) {
-                Haptics.selectionAsync();
-                navigation.navigate('Phase1CardValues');
-              }
-            }}
-            activeOpacity={0.8}
-            disabled={!isPhaseUnlocked(1)}
-          >
-            {isPhaseUnlocked(1) && <View style={styles.cardGlow} />}
-            <View style={styles.cardContent}>
-              <View style={[styles.iconContainer, isPhaseUnlocked(1) ? styles.iconActive : styles.iconLocked]}>
-                <Text style={styles.icon}>🎴</Text>
-              </View>
-              <View style={styles.textContainer}>
-                <View style={styles.titleRow}>
-                  <Text style={[styles.cardTitle, !isPhaseUnlocked(1) && styles.textLocked]}>Phase 1: Card Values</Text>
-                  <InfoIcon tipKey="phase1" size={18} />
-                  {phase1Complete && <Text style={styles.checkMark}>✓</Text>}
-                </View>
-                <Text style={[styles.cardDescription, !isPhaseUnlocked(1) && styles.textLocked]}>Learn the Hi-Lo values for every card rank.</Text>
-              </View>
-              {isPhaseUnlocked(1) ? (
-                <Text style={styles.arrow}>›</Text>
-              ) : (
-                <Text style={styles.lockIcon}>🔒</Text>
-              )}
-            </View>
-          </TouchableOpacity>
-
-          {/* Phase 2 - Running Count */}
-          <TouchableOpacity
-            style={[styles.card, isPhaseUnlocked(2) ? styles.cardActive : styles.cardLocked]}
-            onPress={() => {
-              if (isPhaseUnlocked(2)) {
-                Haptics.selectionAsync();
-                navigation.navigate('Phase2RunningCount');
-              }
-            }}
-            activeOpacity={0.8}
-            disabled={!isPhaseUnlocked(2)}
-          >
-            {isPhaseUnlocked(2) && <View style={styles.cardGlow} />}
-            <View style={styles.cardContent}>
-              <View style={[styles.iconContainer, isPhaseUnlocked(2) ? styles.iconActive : styles.iconLocked]}>
-                <Text style={styles.icon}>🔢</Text>
-              </View>
-              <View style={styles.textContainer}>
-                <View style={styles.titleRow}>
-                  <Text style={[styles.cardTitle, !isPhaseUnlocked(2) && styles.textLocked]}>Phase 2: Running Count</Text>
-                  <InfoIcon tipKey="phase2" size={18} />
-                </View>
-                <Text style={[styles.cardDescription, !isPhaseUnlocked(2) && styles.textLocked]}>Keep the count as cards are dealt.</Text>
-              </View>
-              {!isPhaseUnlocked(2) && <Text style={styles.lockIcon}>🔒</Text>}
-            </View>
-          </TouchableOpacity>
-
-          {/* Phase 3 - True Count */}
-          <TouchableOpacity
-            style={[styles.card, isPhaseUnlocked(3) ? styles.cardActive : styles.cardLocked]}
-            onPress={() => {
-              if (isPhaseUnlocked(3)) {
-                Haptics.selectionAsync();
-                navigation.navigate('Phase3TrueCount');
-              }
-            }}
-            activeOpacity={0.8}
-            disabled={!isPhaseUnlocked(3)}
-          >
-            {isPhaseUnlocked(3) && <View style={styles.cardGlow} />}
-            <View style={styles.cardContent}>
-              <View style={[styles.iconContainer, isPhaseUnlocked(3) ? styles.iconActive : styles.iconLocked]}>
-                <Text style={styles.icon}>➗</Text>
-              </View>
-              <View style={styles.textContainer}>
-                <View style={styles.titleRow}>
-                  <Text style={[styles.cardTitle, !isPhaseUnlocked(3) && styles.textLocked]}>Phase 3: True Count</Text>
-                  <InfoIcon tipKey="phase3" size={18} />
-                  {phase3Complete && <Text style={styles.checkMark}>✓</Text>}
-                </View>
-                <Text style={[styles.cardDescription, !isPhaseUnlocked(3) && styles.textLocked]}>Adjust for remaining decks.</Text>
-              </View>
-              {isPhaseUnlocked(3) ? (
-                <Text style={styles.arrow}>›</Text>
-              ) : (
-                <Text style={styles.lockIcon}>🔒</Text>
-              )}
-            </View>
-          </TouchableOpacity>
-
-          {/* Phase 4 - Betting */}
-          <TouchableOpacity
-            style={[styles.card, isPhaseUnlocked(4) ? styles.cardActive : styles.cardLocked]}
-            onPress={() => {
-              if (isPhaseUnlocked(4)) {
-                Haptics.selectionAsync();
-                navigation.navigate('Phase4Betting');
-              }
-            }}
-            activeOpacity={0.8}
-            disabled={!isPhaseUnlocked(4)}
-          >
-            {isPhaseUnlocked(4) && <View style={styles.cardGlow} />}
-            <View style={styles.cardContent}>
-              <View style={[styles.iconContainer, isPhaseUnlocked(4) ? styles.iconActive : styles.iconLocked]}>
-                <Text style={styles.icon}>💰</Text>
-              </View>
-              <View style={styles.textContainer}>
-                <View style={styles.titleRow}>
-                  <Text style={[styles.cardTitle, !isPhaseUnlocked(4) && styles.textLocked]}>Phase 4: Betting</Text>
-                  <InfoIcon tipKey="phase4" size={18} />
-                  {phase4Complete && <Text style={styles.checkMark}>✓</Text>}
-                </View>
-                <Text style={[styles.cardDescription, !isPhaseUnlocked(4) && styles.textLocked]}>Size your bets based on the advantage.</Text>
-              </View>
-              {isPhaseUnlocked(4) ? (
-                <Text style={styles.arrow}>›</Text>
-              ) : (
-                <Text style={styles.lockIcon}>🔒</Text>
-              )}
-            </View>
-          </TouchableOpacity>
-
-          {/* Phase 5 - Deviations */}
-          <TouchableOpacity
-            style={[styles.card, isPhaseUnlocked(5) ? styles.cardActive : styles.cardLocked]}
-            onPress={() => {
-              if (isPhaseUnlocked(5)) {
-                Haptics.selectionAsync();
-                navigation.navigate('Phase5Deviations');
-              }
-            }}
-            activeOpacity={0.8}
-            disabled={!isPhaseUnlocked(5)}
-          >
-            {isPhaseUnlocked(5) && <View style={styles.cardGlow} />}
-            <View style={styles.cardContent}>
-              <View style={[styles.iconContainer, isPhaseUnlocked(5) ? styles.iconActive : styles.iconLocked]}>
-                <Text style={styles.icon}>🎓</Text>
-              </View>
-              <View style={styles.textContainer}>
-                <View style={styles.titleRow}>
-                  <Text style={[styles.cardTitle, !isPhaseUnlocked(5) && styles.textLocked]}>Phase 5: Deviations</Text>
-                  <InfoIcon tipKey="phase5" size={18} />
-                  {phase5Complete && <Text style={styles.checkMark}>✓</Text>}
-                </View>
-                <Text style={[styles.cardDescription, !isPhaseUnlocked(5) && styles.textLocked]}>
-                  Master the Illustrious 18 strategy deviations.
-                </Text>
-              </View>
-              {isPhaseUnlocked(5) ? (
-                <Text style={styles.arrow}>›</Text>
-              ) : (
-                <Text style={styles.lockIcon}>🔒</Text>
-              )}
-            </View>
-          </TouchableOpacity>
+          {renderPhaseCard(0, 'BASIC STRATEGY', 'Master the fundamental math of the game.', '🧠', 'Phase0BasicStrategy', phase0Complete)}
+          {renderPhaseCard(1, 'CARD VALUES', 'Internalize Hi-Lo values for every rank.', '🃏', 'Phase1CardValues', phase1Complete)}
+          {renderPhaseCard(2, 'RUNNING COUNT', 'Maintain accuracy under simulated pressure.', '🔢', 'Phase2RunningCount', false)}
+          {renderPhaseCard(3, 'TRUE COUNT', 'Adjust for deck density and penetration.', '➗', 'Phase3TrueCount', phase3Complete)}
+          {renderPhaseCard(4, 'BETTING', 'Optimize bet sizing with Kelly Criterion.', '💰', 'Phase4Betting', phase4Complete)}
+          {renderPhaseCard(5, 'DEVIATIONS', 'Master the Illustrious 18 index plays.', '🎓', 'Phase5Deviations', phase5Complete)}
         </View>
 
-        {/* Practice & Tools Section */}
+        {/* Tactical Tools */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Practice & Tools</Text>
+          <View style={styles.sectionHeader}>
+            <View style={[styles.sectionIndicator, { backgroundColor: colors.primary }]} />
+            <Text style={styles.sectionTitle}>TACTICAL_TOOLS</Text>
+          </View>
+
           <View style={styles.grid}>
             <TouchableOpacity
-              style={[styles.gridCard, styles.cardActive]}
-              onPress={() => {
-                Haptics.selectionAsync();
-                navigation.navigate('DrillCancellation');
-              }}
-              activeOpacity={0.8}
-            >
-              <View style={styles.gridIconRow}>
-                <Text style={styles.gridIcon}>⏱️</Text>
-                <InfoIcon tipKey="speedDrill" size={14} />
-              </View>
-              <Text style={styles.gridTitle}>Speed Drill</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[styles.gridCard, styles.cardActive]}
+              style={[styles.gridCard, styles.gridCardActive]}
               onPress={() => {
                 Haptics.selectionAsync();
                 navigation.navigate('Simulator');
               }}
-              activeOpacity={0.8}
             >
-              <View style={styles.gridIconRow}>
+              <View style={styles.gridCardInner}>
                 <Text style={styles.gridIcon}>🎰</Text>
-                <InfoIcon tipKey="simulator" size={14} />
+                <Text style={styles.gridTitle}>SIMULATOR</Text>
+                <View style={[styles.gridTag, styles.tagActive]}>
+                  <Text style={styles.gridTagText}>OPERATIONAL</Text>
+                </View>
               </View>
-              <Text style={styles.gridTitle}>Casino Sim</Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={[styles.grid, { marginTop: 12 }]}>
-            <TouchableOpacity
-              style={[styles.gridCard, styles.cardActive]}
-              onPress={() => {
-                Haptics.selectionAsync();
-                navigation.navigate('DrillDeckCountdown');
-              }}
-              activeOpacity={0.8}
-            >
-              <View style={styles.gridIconRow}>
-                <Text style={styles.gridIcon}>⚡️</Text>
-                <InfoIcon tipKey="deckCountdown" size={14} />
-              </View>
-              <Text style={styles.gridTitle}>Deck Countdown</Text>
+              <View style={styles.gridGlow} />
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.gridCard, styles.cardActive]}
-              onPress={() => {
-                Haptics.selectionAsync();
-                navigation.navigate('DrillDiscardTray');
-              }}
-              activeOpacity={0.8}
-            >
-              <View style={styles.gridIconRow}>
-                <Text style={styles.gridIcon}>👁️</Text>
-                <InfoIcon tipKey="discardTray" size={14} />
-              </View>
-              <Text style={styles.gridTitle}>Discard Eye</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[styles.gridCard, styles.cardActive]}
-              onPress={() => {
-                Haptics.selectionAsync();
-                navigation.navigate('DrillDeviations');
-              }}
-              activeOpacity={0.8}
-            >
-              <View style={styles.gridIconRow}>
-                <Text style={styles.gridIcon}>🎓</Text>
-                <InfoIcon tipKey="deviations" size={14} />
-              </View>
-              <Text style={styles.gridTitle}>The 18</Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={[styles.grid, { marginTop: 12 }]}>
-            <TouchableOpacity
-              style={[styles.gridCard, styles.cardActive]}
+              style={[styles.gridCard, styles.gridCardLocked]}
               onPress={() => {
                 Haptics.selectionAsync();
                 navigation.navigate('Analytics');
               }}
-              activeOpacity={0.8}
             >
-              <Text style={styles.gridIcon}>📊</Text>
-              <Text style={styles.gridTitle}>Analytics</Text>
+              <View style={styles.gridCardInner}>
+                <Text style={styles.gridIcon}>📊</Text>
+                <Text style={styles.gridTitle}>ANALYTICS</Text>
+                <View style={[styles.gridTag, styles.tagLocked]}>
+                  <Text style={styles.gridTagText}>ENCRYPTED</Text>
+                </View>
+              </View>
             </TouchableOpacity>
-
-            <View style={[styles.gridCard, styles.cardLocked]}>
-              <Text style={styles.gridIcon}>🏆</Text>
-              <Text style={[styles.gridTitle, styles.textLocked]}>Coming Soon</Text>
-            </View>
           </View>
         </View>
 
+        <View style={styles.terminal}>
+          <Text style={styles.terminalText}>// SYSTEM READY</Text>
+          <Text style={styles.terminalText}>// CONNECTING TO TABLE_E4...</Text>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -343,86 +146,94 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   scrollContent: {
-    padding: 20,
-    paddingBottom: 40,
+    padding: 24,
+    paddingBottom: 60,
   },
   header: {
-    marginTop: 20,
-    marginBottom: 36,
-    alignItems: 'center', // Center everything in header
+    marginTop: 10,
+    marginBottom: 40,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  logoContainer: {
+    width: 64,
+    height: 64,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: 2,
+    marginRight: 20,
+    backgroundColor: colors.surface,
   },
   logo: {
-    width: 80,
-    height: 80,
-    marginBottom: 16,
-    borderRadius: 16, // Optional rounding
+    width: '100%',
+    height: '100%',
+    borderRadius: 6,
+  },
+  headerTextCol: {
+    flex: 1,
   },
   headerTitle: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    marginBottom: 8,
+    fontSize: 26,
+    fontWeight: '900',
+    color: '#FFFFFF',
+    letterSpacing: 4,
   },
-  neonPink: {
-    color: colors.accent,
-    textShadowColor: colors.glowPink,
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 10,
-  },
-  neonCyan: {
-    color: colors.accentBlue,
-    textShadowColor: colors.glowCyan,
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 10,
-  },
-  neonGreen: {
-    color: colors.accentGreen,
-    textShadowColor: colors.glowGreen,
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 10,
+  highlight: {
+    color: colors.primary,
   },
   headerSubtitle: {
-    fontSize: 16,
-    color: colors.textSecondary,
+    fontSize: 9,
+    color: colors.textTertiary,
+    letterSpacing: 2,
+    marginTop: 6,
+    fontWeight: '800',
   },
   section: {
-    marginBottom: 32,
+    marginBottom: 40,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  sectionIndicator: {
+    width: 3,
+    height: 16,
+    backgroundColor: colors.primary,
+    marginRight: 12,
   },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 12,
+    fontWeight: '900',
     color: colors.textSecondary,
-    marginBottom: 16,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
+    letterSpacing: 2,
   },
-  // Glass card base
   card: {
     backgroundColor: colors.surface,
-    borderRadius: 16,
+    borderRadius: 2,
     marginBottom: 12,
-    padding: 16,
+    padding: 20,
     borderWidth: 1,
-    borderColor: colors.glassBorder,
+    borderColor: colors.border,
+    position: 'relative',
     overflow: 'hidden',
   },
   cardActive: {
-    borderColor: colors.accentBlue,
-    shadowColor: colors.glowCyan,
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.5,
-    shadowRadius: 12,
-    elevation: 8,
+    borderColor: colors.border,
   },
   cardLocked: {
-    opacity: 0.5,
+    opacity: 0.35,
+    backgroundColor: 'transparent',
+    borderStyle: 'dashed',
   },
-  cardGlow: {
+  cardGlowLine: {
     position: 'absolute',
-    top: 0,
     left: 0,
-    right: 0,
-    height: 1,
-    backgroundColor: colors.glassHighlight,
+    top: 0,
+    bottom: 0,
+    width: 2,
+    backgroundColor: colors.primary,
   },
   cardContent: {
     flexDirection: 'row',
@@ -431,94 +242,158 @@ const styles = StyleSheet.create({
   iconContainer: {
     width: 48,
     height: 48,
-    borderRadius: 12,
+    borderRadius: 2,
     backgroundColor: colors.surfaceLight,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 16,
+    marginRight: 18,
     borderWidth: 1,
-    borderColor: colors.glassBorder,
+    borderColor: colors.border,
   },
   iconActive: {
-    backgroundColor: `${colors.accentBlue}20`,
-    borderColor: colors.accentBlue,
+    borderColor: colors.primary,
+    backgroundColor: 'rgba(99, 102, 241, 0.05)',
   },
   iconLocked: {
-    backgroundColor: colors.surfaceLight,
-  },
-  iconZero: {
-    backgroundColor: `${colors.accent}20`,
-    borderColor: colors.accent,
-  },
-  titleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  checkMark: {
-    color: colors.accentGreen,
-    fontWeight: 'bold',
-    fontSize: 16,
-    marginBottom: 4,
+    backgroundColor: 'transparent',
+    borderColor: colors.border,
   },
   icon: {
-    fontSize: 24,
+    fontSize: 22,
   },
   textContainer: {
     flex: 1,
   },
-  cardTitle: {
-    fontSize: 17,
-    fontWeight: '600',
-    color: colors.textPrimary,
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 4,
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  cardTitle: {
+    fontSize: 13,
+    fontWeight: '900',
+    color: '#FFFFFF',
+    letterSpacing: 1.5,
+    flexShrink: 1,
+    marginRight: 8,
+  },
+  completeBadge: {
+    marginLeft: 6,
+    backgroundColor: 'rgba(16, 185, 129, 0.15)',
+    paddingHorizontal: 4,
+    paddingVertical: 1,
+    borderWidth: 1,
+    borderColor: `${colors.success}40`,
+    borderRadius: 2,
+  },
+  completeText: {
+    color: colors.success,
+    fontWeight: '900',
+    fontSize: 7,
+    letterSpacing: 0.5,
   },
   cardDescription: {
-    fontSize: 14,
+    fontSize: 11,
     color: colors.textSecondary,
-    lineHeight: 20,
+    lineHeight: 16,
+    fontWeight: '500',
   },
   textLocked: {
-    color: colors.textMuted,
+    color: colors.textTertiary,
+  },
+  arrowContainer: {
+    width: 24,
+    height: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   arrow: {
-    fontSize: 28,
-    color: colors.accentBlue,
+    fontSize: 22,
+    color: colors.primary,
     fontWeight: '300',
-    marginLeft: 8,
-  },
-  lockIcon: {
-    fontSize: 18,
-    marginLeft: 8,
-    opacity: 0.5,
   },
   grid: {
     flexDirection: 'row',
-    gap: 12,
+    gap: 16,
   },
   gridCard: {
     flex: 1,
+    height: 140,
     backgroundColor: colors.surface,
-    borderRadius: 16,
-    padding: 24,
-    alignItems: 'center',
+    borderRadius: 2,
     borderWidth: 1,
-    borderColor: colors.glassBorder,
-  },
-  gridIconRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    borderColor: colors.border,
     justifyContent: 'center',
-    gap: 6,
-    marginBottom: 12,
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  gridCardActive: {
+    borderColor: colors.primary,
+    backgroundColor: '#0a0a0a',
+  },
+  gridCardLocked: {
+    opacity: 0.4,
+    borderStyle: 'dashed',
+  },
+  gridCardInner: {
+    alignItems: 'center',
+    zIndex: 2,
+  },
+  gridGlow: {
+    position: 'absolute',
+    bottom: -40,
+    width: '100%',
+    height: 80,
+    backgroundColor: colors.primary,
+    opacity: 0.1,
+    borderRadius: 100,
+    transform: [{ scaleX: 2 }],
   },
   gridIcon: {
-    fontSize: 36,
+    fontSize: 28,
+    marginBottom: 10,
   },
   gridTitle: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: colors.textPrimary,
+    fontSize: 10,
+    fontWeight: '900',
+    color: '#FFFFFF',
     textAlign: 'center',
+    letterSpacing: 2,
   },
+  gridTag: {
+    marginTop: 10,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 2,
+    borderWidth: 1,
+  },
+  tagActive: {
+    backgroundColor: `${colors.primary}20`,
+    borderColor: colors.primary,
+  },
+  tagLocked: {
+    backgroundColor: 'transparent',
+    borderColor: colors.border,
+  },
+  gridTagText: {
+    color: '#FFFFFF',
+    fontSize: 8,
+    fontWeight: '900',
+    letterSpacing: 1.5,
+  },
+  terminal: {
+    marginTop: 20,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+    paddingTop: 20,
+  },
+  terminalText: {
+    color: colors.textTertiary,
+    fontSize: 10,
+    fontFamily: 'Courier', // If available, otherwise it defaults
+    marginBottom: 4,
+    letterSpacing: 1,
+  }
 });

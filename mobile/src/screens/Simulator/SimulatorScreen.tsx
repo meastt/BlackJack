@@ -847,14 +847,14 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
                             style={[styles.actionBtn, styles.hitBtn]}
                             onPress={handleHit}
                         >
-                            <Text style={styles.actionBtnText}>HIT</Text>
+                            <Text style={[styles.actionBtnText, styles.hitBtnText]}>HIT</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
                             style={[styles.actionBtn, styles.standBtn]}
                             onPress={handleStand}
                         >
-                            <Text style={styles.actionBtnText}>STAND</Text>
+                            <Text style={[styles.actionBtnText, styles.standBtnText]}>STAND</Text>
                         </TouchableOpacity>
 
                         {!isSplitHand && BlackjackGameEngine.canDouble(playerHand, bankroll >= currentBet) && (
@@ -862,7 +862,7 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
                                 style={[styles.actionBtn, styles.doubleBtn]}
                                 onPress={handleDouble}
                             >
-                                <Text style={styles.actionBtnText}>DOUBLE</Text>
+                                <Text style={[styles.actionBtnText, styles.doubleBtnText]}>DOUBLE</Text>
                             </TouchableOpacity>
                         )}
 
@@ -871,7 +871,7 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
                                 style={[styles.actionBtn, styles.splitBtn]}
                                 onPress={handleSplit}
                             >
-                                <Text style={styles.actionBtnText}>SPLIT</Text>
+                                <Text style={[styles.actionBtnText, styles.splitBtnText]}>SPLIT</Text>
                             </TouchableOpacity>
                         )}
                     </View>
@@ -1146,12 +1146,16 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(99, 102, 241, 0.1)',
     },
     betAmountContainer: {
-        backgroundColor: colors.background,
+        backgroundColor: colors.surface,
         paddingVertical: 12,
         paddingHorizontal: 24,
         borderRadius: 4,
         borderWidth: 1,
         borderColor: colors.primary,
+        shadowColor: colors.primary,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.3,
+        shadowRadius: 10,
     },
     betAmount: {
         color: colors.primary,
@@ -1196,21 +1200,41 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
     },
     hitBtn: {
-        backgroundColor: colors.success,
+        backgroundColor: 'transparent',
         borderColor: colors.success,
+        shadowColor: colors.success,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.3,
+        shadowRadius: 10,
     },
+    hitBtnText: { color: colors.success },
     standBtn: {
-        backgroundColor: colors.error, // Red for Stop/Stand
+        backgroundColor: 'transparent',
         borderColor: colors.error,
+        shadowColor: colors.error,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.3,
+        shadowRadius: 10,
     },
+    standBtnText: { color: colors.error },
     doubleBtn: {
-        backgroundColor: colors.primary,
+        backgroundColor: 'transparent',
         borderColor: colors.primary,
+        shadowColor: colors.primary,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.3,
+        shadowRadius: 10,
     },
+    doubleBtnText: { color: colors.primary },
     splitBtn: {
-        backgroundColor: colors.warning,
+        backgroundColor: 'transparent',
         borderColor: colors.warning,
+        shadowColor: colors.warning,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.3,
+        shadowRadius: 10,
     },
+    splitBtnText: { color: colors.warning },
     splitHandContainer: {
         marginBottom: 20,
         padding: 16,

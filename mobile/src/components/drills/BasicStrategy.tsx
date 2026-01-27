@@ -20,6 +20,7 @@ import { generateScenario, Action, Scenario } from '../../utils/basicStrategy';
 import { BlurView } from 'expo-blur';
 import * as Haptics from 'expo-haptics';
 import { PhaseIntroModal } from '../../components/PhaseIntroModal';
+import { HapticEngine } from '../../utils/HapticEngine';
 
 const { width } = Dimensions.get('window');
 const CARDS_PER_SESSION = MASTERY_REQUIREMENTS.PHASE_0.CARDS_PER_SESSION;
@@ -27,13 +28,13 @@ const CARDS_PER_SESSION = MASTERY_REQUIREMENTS.PHASE_0.CARDS_PER_SESSION;
 const triggerHaptic = (type: 'success' | 'error' | 'selection') => {
     switch (type) {
         case 'success':
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+            HapticEngine.triggerSuccess();
             break;
         case 'error':
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+            HapticEngine.triggerError();
             break;
         case 'selection':
-            Haptics.selectionAsync();
+            HapticEngine.triggerSelection();
             break;
     }
 };
@@ -182,10 +183,10 @@ const CheatsheetModal: React.FC<{ visible: boolean; onClose: () => void }> = ({ 
                     </View>
 
                     <View style={styles.legendContainer}>
-                        <LegendItem color={colors.accentGreen} label="Hit" char="H" />
-                        <LegendItem color={colors.accent} label="Stand" char="S" />
-                        <LegendItem color={colors.accentBlue} label="Double" char="D" />
-                        <LegendItem color={colors.accentPurple} label="Split" char="P" />
+                        <LegendItem color={colors.success} label="Hit" char="H" />
+                        <LegendItem color={colors.error} label="Stand" char="S" />
+                        <LegendItem color={colors.primary} label="Double" char="D" />
+                        <LegendItem color={colors.warning} label="Split" char="P" />
                     </View>
 
                     <ScrollView style={styles.csContent}>
@@ -482,7 +483,7 @@ export const Phase0BasicStrategy: React.FC<{ navigation?: any }> = ({ navigation
                         onPress={() => handleAnswer('HIT')}
                         disabled={userAnswer !== null}
                     >
-                        <Text style={styles.actionButtonText}>HIT</Text>
+                        <Text style={[styles.actionButtonText, styles.hitText]}>HIT</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -494,7 +495,7 @@ export const Phase0BasicStrategy: React.FC<{ navigation?: any }> = ({ navigation
                         onPress={() => handleAnswer('STAND')}
                         disabled={userAnswer !== null}
                     >
-                        <Text style={styles.actionButtonText}>STAND</Text>
+                        <Text style={[styles.actionButtonText, styles.standText]}>STAND</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.buttonRow}>
@@ -507,7 +508,7 @@ export const Phase0BasicStrategy: React.FC<{ navigation?: any }> = ({ navigation
                         onPress={() => handleAnswer('DOUBLE')}
                         disabled={userAnswer !== null}
                     >
-                        <Text style={styles.actionButtonText}>DOUBLE</Text>
+                        <Text style={[styles.actionButtonText, styles.doubleText]}>DOUBLE</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -520,7 +521,11 @@ export const Phase0BasicStrategy: React.FC<{ navigation?: any }> = ({ navigation
                         onPress={() => handleAnswer('SPLIT')}
                         disabled={userAnswer !== null || scenario.type !== 'PAIR'}
                     >
-                        <Text style={[styles.actionButtonText, scenario.type !== 'PAIR' && styles.disabledButtonText]}>SPLIT</Text>
+                        <Text style={[
+                            styles.actionButtonText,
+                            styles.splitText,
+                            scenario.type !== 'PAIR' && styles.disabledButtonText
+                        ]}>SPLIT</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -635,7 +640,7 @@ const styles = StyleSheet.create({
     },
     progressBar: {
         height: '100%',
-        backgroundColor: colors.accentBlue,
+        backgroundColor: colors.primary,
     },
     statsBar: {
         flexDirection: 'row',
@@ -645,7 +650,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         backgroundColor: colors.surface,
         borderBottomWidth: 1,
-        borderBottomColor: colors.glassBorder,
+        borderBottomColor: colors.border,
     },
     statItem: {
         alignItems: 'center',
@@ -653,7 +658,7 @@ const styles = StyleSheet.create({
     },
     statLabel: {
         fontSize: 10,
-        color: colors.textMuted,
+        color: colors.textTertiary,
         marginBottom: 4,
         letterSpacing: 1.5,
         fontWeight: '600',
@@ -664,13 +669,13 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     statDivider: {
-        color: colors.textMuted,
+        color: colors.textTertiary,
         fontSize: 14,
     },
     statDividerVertical: {
         width: 1,
         height: 24,
-        backgroundColor: colors.glassBorder,
+        backgroundColor: colors.border,
     },
 
     // Cheatsheet Button
@@ -685,7 +690,7 @@ const styles = StyleSheet.create({
         borderColor: 'rgba(255, 255, 255, 0.2)',
     },
     cheatsheetIcon: {
-        color: colors.accentBlue,
+        color: colors.primary,
         fontWeight: 'bold',
         fontSize: 16,
         marginRight: 6,
@@ -697,20 +702,20 @@ const styles = StyleSheet.create({
     },
 
     neonCyan: {
-        color: colors.accentBlue,
-        textShadowColor: colors.glowCyan,
+        color: colors.primary,
+        textShadowColor: colors.primary,
         textShadowOffset: { width: 0, height: 0 },
         textShadowRadius: 8,
     },
     neonGreen: {
-        color: colors.accentGreen,
-        textShadowColor: colors.glowGreen,
+        color: colors.success,
+        textShadowColor: colors.success,
         textShadowOffset: { width: 0, height: 0 },
         textShadowRadius: 8,
     },
     neonPink: {
         color: colors.accent,
-        textShadowColor: colors.glowPink,
+        textShadowColor: colors.error,
         textShadowOffset: { width: 0, height: 0 },
         textShadowRadius: 8,
     },
@@ -741,7 +746,7 @@ const styles = StyleSheet.create({
     },
     areaLabel: {
         ...fontStyles.caption,
-        color: colors.textMuted,
+        color: colors.textTertiary,
         letterSpacing: 2,
         marginBottom: 0,
     },
@@ -751,7 +756,7 @@ const styles = StyleSheet.create({
         paddingVertical: 2,
         borderRadius: 8,
         borderWidth: 1,
-        borderColor: colors.glassBorder,
+        borderColor: colors.border,
     },
     valueText: {
         color: colors.textPrimary,
@@ -765,7 +770,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
     },
     cardGlow: {
-        shadowColor: colors.accentBlue,
+        shadowColor: colors.primary,
         shadowOffset: { width: 0, height: 0 },
         shadowOpacity: 0.3,
         shadowRadius: 10,
@@ -798,15 +803,15 @@ const styles = StyleSheet.create({
         height: 0, // No spacer needed if absolute
     },
     feedbackCorrect: {
-        borderColor: colors.accentGreen,
-        shadowColor: colors.glowGreen,
+        borderColor: colors.success,
+        shadowColor: colors.success,
         shadowOffset: { width: 0, height: 0 },
         shadowOpacity: 0.3,
         shadowRadius: 10,
     },
     feedbackIncorrect: {
-        borderColor: colors.accent,
-        shadowColor: colors.glowPink,
+        borderColor: colors.error,
+        shadowColor: colors.error,
         shadowOffset: { width: 0, height: 0 },
         shadowOpacity: 0.3,
         shadowRadius: 10,
@@ -814,7 +819,7 @@ const styles = StyleSheet.create({
     feedbackText: {
         fontSize: 16,
         fontWeight: 'bold',
-        letterSpacing: 1,
+        letterSpacing: 2,
         marginBottom: 4,
     },
     feedbackValue: {
@@ -825,7 +830,7 @@ const styles = StyleSheet.create({
     },
     correctActionText: {
         ...fontStyles.caption,
-        color: colors.accentGreen,
+        color: colors.success,
         marginTop: 4,
         fontWeight: 'bold',
     },
@@ -835,7 +840,7 @@ const styles = StyleSheet.create({
         paddingBottom: 30,
         backgroundColor: colors.surface,
         borderTopWidth: 1,
-        borderTopColor: colors.glassBorder,
+        borderTopColor: colors.border,
         gap: 12,
     },
     buttonRow: {
@@ -844,39 +849,58 @@ const styles = StyleSheet.create({
     },
     actionButton: {
         flex: 1,
-        paddingVertical: 16,
-        borderRadius: 14,
+        paddingVertical: 18,
+        borderRadius: 4,
         alignItems: 'center',
-        borderWidth: 1,
-        backgroundColor: colors.surfaceDark,
+        borderWidth: 2,
+        backgroundColor: 'transparent',
     },
     hitButton: {
-        borderColor: colors.accentGreen,
+        borderColor: colors.success,
+        shadowColor: colors.success,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.3,
+        shadowRadius: 10,
     },
     standButton: {
-        borderColor: colors.accent,
+        borderColor: colors.error,
+        shadowColor: colors.error,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.3,
+        shadowRadius: 10,
     },
     doubleButton: {
-        borderColor: colors.accentBlue,
+        borderColor: colors.primary,
+        shadowColor: colors.primary,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.3,
+        shadowRadius: 10,
     },
     splitButton: {
-        borderColor: colors.accentPurple,
+        borderColor: colors.warning,
+        shadowColor: colors.warning,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.3,
+        shadowRadius: 10,
     },
     disabledButton: {
-        opacity: 0.3,
-        borderColor: colors.textMuted,
+        opacity: 0.5,
+        borderColor: colors.border,
     },
     selectedButton: {
         backgroundColor: 'rgba(255,255,255,0.1)',
     },
     actionButtonText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: colors.textPrimary,
-        letterSpacing: 1,
+        fontSize: 13,
+        fontWeight: '900',
+        letterSpacing: 2,
     },
+    hitText: { color: colors.success },
+    standText: { color: colors.error },
+    doubleText: { color: colors.primary },
+    splitText: { color: colors.warning },
     disabledButtonText: {
-        color: colors.textMuted,
+        color: colors.textSecondary,
     },
 
     // Modal styles (shared mostly)
@@ -888,19 +912,22 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     modalContent: {
-        backgroundColor: colors.secondary,
-        borderRadius: 20,
+        backgroundColor: colors.surface,
+        borderRadius: 4,
         padding: 24,
         width: '100%',
         maxWidth: 340,
         borderWidth: 1,
-        borderColor: colors.glassBorder,
+        borderColor: colors.border,
     },
     modalTitle: {
-        ...fontStyles.h2,
+        fontSize: 18,
+        fontWeight: '900',
         color: colors.textPrimary,
         textAlign: 'center',
-        marginBottom: 20,
+        marginBottom: 24,
+        letterSpacing: 2,
+        textTransform: 'uppercase',
     },
     summaryStats: {
         marginBottom: 20,
@@ -910,7 +937,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingVertical: 8,
         borderBottomWidth: 1,
-        borderBottomColor: colors.glassBorder,
+        borderBottomColor: colors.border,
     },
     summaryLabel: {
         ...fontStyles.body,
@@ -922,16 +949,16 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     masteryBadge: {
-        backgroundColor: `${colors.accentGreen}20`,
+        backgroundColor: `${colors.success}20`,
         borderWidth: 1,
-        borderColor: colors.accentGreen,
+        borderColor: colors.success,
         borderRadius: 12,
         padding: 16,
         alignItems: 'center',
         marginBottom: 16,
     },
     masteryText: {
-        color: colors.accentGreen,
+        color: colors.success,
         fontWeight: 'bold',
         fontSize: 18,
     },
@@ -970,23 +997,23 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         backgroundColor: colors.surface,
         borderWidth: 2,
-        borderColor: colors.glassBorder,
+        borderColor: colors.border,
     },
     progressDotFilled: {
-        backgroundColor: colors.accentGreen,
-        borderColor: colors.accentGreen,
+        backgroundColor: colors.success,
+        borderColor: colors.success,
     },
     completeBadge: {
-        backgroundColor: `${colors.accentYellow}20`,
+        backgroundColor: `${colors.info}20`,
         borderWidth: 2,
-        borderColor: colors.accentYellow,
+        borderColor: colors.info,
         borderRadius: 12,
         padding: 16,
         alignItems: 'center',
         marginBottom: 16,
     },
     completeText: {
-        color: colors.accentYellow,
+        color: colors.info,
         fontWeight: 'bold',
         fontSize: 20,
     },
@@ -1003,7 +1030,7 @@ const styles = StyleSheet.create({
         padding: 16,
         borderRadius: 12,
         borderWidth: 1,
-        borderColor: colors.glassBorder,
+        borderColor: colors.border,
         alignItems: 'center',
     },
     modalButtonSecondaryText: {
@@ -1014,7 +1041,7 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 16,
         borderRadius: 12,
-        backgroundColor: colors.accentBlue,
+        backgroundColor: colors.primary,
         alignItems: 'center',
     },
     modalButtonPrimaryText: {
@@ -1024,13 +1051,13 @@ const styles = StyleSheet.create({
 
     // CS Styles
     csContainer: {
-        backgroundColor: colors.secondary,
+        backgroundColor: colors.surface,
         borderRadius: 20,
         width: '95%',
         height: '80%',
         maxWidth: 500,
         borderWidth: 1,
-        borderColor: colors.glassBorder,
+        borderColor: colors.border,
         overflow: 'hidden',
     },
     csHeader: {
@@ -1039,7 +1066,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 16,
         borderBottomWidth: 1,
-        borderBottomColor: colors.glassBorder,
+        borderBottomColor: colors.border,
         backgroundColor: 'rgba(0,0,0,0.2)',
     },
     csTitle: {
@@ -1069,7 +1096,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         padding: 12,
         borderBottomWidth: 1,
-        borderBottomColor: colors.glassBorder,
+        borderBottomColor: colors.border,
         backgroundColor: colors.surface,
     },
     legendItem: {
@@ -1098,7 +1125,7 @@ const styles = StyleSheet.create({
     gridHeaderRow: {
         flexDirection: 'row',
         borderBottomWidth: 1,
-        borderBottomColor: colors.glassBorder,
+        borderBottomColor: colors.border,
         backgroundColor: 'rgba(255,255,255,0.05)',
         paddingVertical: 10,
     },
@@ -1127,7 +1154,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(255,255,255,0.02)',
         alignItems: 'flex-start',
         paddingLeft: 12,
-        borderRightColor: colors.glassBorder,
+        borderRightColor: colors.border,
     },
     gridTextLabel: {
         fontSize: 13,
@@ -1141,19 +1168,19 @@ const styles = StyleSheet.create({
     },
     // Backgrounds for Actions
     bgHit: {
-        backgroundColor: `${colors.accentGreen}90`,
+        backgroundColor: `${colors.success}90`,
     },
     bgStand: {
         backgroundColor: `${colors.accent}90`,
     },
     bgDouble: {
-        backgroundColor: `${colors.accentBlue}90`,
+        backgroundColor: `${colors.primary}90`,
     },
     bgSplit: {
-        backgroundColor: `${colors.accentPurple}90`,
+        backgroundColor: `${colors.warning}90`,
     },
     bgDoubleStand: {
-        backgroundColor: `${colors.accentBlue}50`, // Dashed? Or just indicate double
+        backgroundColor: `${colors.primary}50`, // Dashed? Or just indicate double
         // For simplicity, just use double color but maybe text indicates 'Ds'?
         // In this simplified view, we just show Double color. The text 'D' or 'Is' handles it.
     },
@@ -1173,8 +1200,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: colors.textPrimary,
     },
-    actionHit: { color: colors.accentGreen },
-    actionStand: { color: colors.accent },
-    actionDouble: { color: colors.accentBlue },
-    actionSplit: { color: colors.accentPurple },
+    actionHit: { color: colors.success },
+    actionStand: { color: colors.error },
+    actionDouble: { color: colors.primary },
+    actionSplit: { color: colors.warning },
 });

@@ -110,10 +110,10 @@ export const DistractionLayer: React.FC<{ isActive: boolean }> = ({ isActive }) 
 // Helpers
 const getStyleForType = (type: DistractionType) => {
     switch (type) {
-        case 'WAITRESS': return { borderColor: colors.accentYellow };
-        case 'DEALER': return { borderColor: colors.accentBlue };
-        case 'PIT_BOSS': return { borderColor: colors.accent, backgroundColor: 'rgba(50,0,0,0.9)' };
-        default: return { borderColor: colors.border };
+        case 'WAITRESS': return { borderColor: colors.warning, shadowColor: colors.warning };
+        case 'DEALER': return { borderColor: colors.info, shadowColor: colors.info };
+        case 'PIT_BOSS': return { borderColor: colors.error, backgroundColor: 'rgba(20,0,0,0.95)', shadowColor: colors.error };
+        default: return { borderColor: colors.border, shadowColor: '#000' };
     }
 };
 
@@ -130,7 +130,7 @@ const getIconForType = (type: DistractionType) => {
 const styles = StyleSheet.create({
     container: {
         position: 'absolute',
-        top: 100, // Positioned near top where dealer would be
+        top: 100,
         left: 20,
         right: 20,
         alignItems: 'center',
@@ -138,40 +138,45 @@ const styles = StyleSheet.create({
     },
     popup: {
         flexDirection: 'row',
-        backgroundColor: 'rgba(20, 20, 20, 0.95)',
-        padding: 15,
-        borderRadius: 16,
-        borderWidth: 2,
+        backgroundColor: colors.background,
+        padding: 16,
+        borderRadius: 4,
+        borderWidth: 1,
         alignItems: 'center',
         width: '100%',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.5,
-        shadowRadius: 10,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.4,
+        shadowRadius: 15,
         elevation: 10,
     },
     icon: {
-        fontSize: 32,
-        marginRight: 15,
+        fontSize: 28,
+        marginRight: 16,
     },
     textContainer: {
         flex: 1,
     },
     message: {
         color: colors.textPrimary,
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: 'bold',
+        textTransform: 'uppercase',
+        letterSpacing: 1,
     },
     actionButton: {
-        backgroundColor: 'rgba(255,255,255,0.1)',
-        paddingVertical: 8,
-        paddingHorizontal: 12,
-        borderRadius: 8,
-        marginLeft: 10,
+        backgroundColor: 'rgba(255,255,255,0.05)',
+        paddingVertical: 10,
+        paddingHorizontal: 16,
+        borderRadius: 4,
+        marginLeft: 12,
+        borderWidth: 1,
+        borderColor: colors.border,
     },
     actionText: {
-        color: colors.accentBlue,
+        color: colors.primary,
         fontWeight: 'bold',
-        fontSize: 14,
+        fontSize: 12,
+        textTransform: 'uppercase',
+        letterSpacing: 1,
     }
 });

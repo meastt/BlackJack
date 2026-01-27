@@ -3,8 +3,15 @@
 export const colors = {
   // Primary Brand (The Edge)
   primary: '#6366f1',           // Electric Indigo - Main Action / Brand
-  primaryDark: '#4f46e5',       // Darker Indigo (Press state)
-  primaryLight: '#818cf8',      // Lighter Indigo (Highlight)
+  primaryDark: '#4338ca',       // Darker Indigo (Press state)
+  primaryLight: '#a5b4fc',      // Lighter Indigo (Highlight)
+
+  // Tactical Accents (High-Vibrancy for buttons/status)
+  accent: '#6366f1',            // Indigo primary
+  accentCyan: '#06b6d4',        // Cyber Blue
+  accentRose: '#f43f5e',        // Rose Red
+  accentEmerald: '#10b981',     // Emerald Green
+  accentAmber: '#f59e0b',       // Amber Warning
 
   // Backgrounds (The Void)
   background: '#050505',        // Void Black - Main App Background
@@ -37,6 +44,7 @@ export const colors = {
   // UI Elements
   border: '#262626',            // Graphite
   borderActive: '#6366f1',      // Indigo Glow
+  glassBorder: 'rgba(255, 255, 255, 0.1)',
   overlay: 'rgba(5, 5, 5, 0.85)', // Deep Void Overlay
   disabled: 'rgba(255, 255, 255, 0.1)',
 };
