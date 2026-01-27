@@ -123,30 +123,51 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           </TouchableOpacity>
 
           {/* Phase 3 - True Count */}
-          <TouchableOpacity style={[styles.card, styles.cardLocked]} disabled>
+          <TouchableOpacity
+            style={[styles.card, styles.cardActive]}
+            onPress={() => {
+              Haptics.selectionAsync();
+              navigation.navigate('Phase3TrueCount');
+            }}
+            activeOpacity={0.8}
+          >
+            <View style={styles.cardGlow} />
             <View style={styles.cardContent}>
-              <View style={[styles.iconContainer, styles.iconLocked]}>
+              <View style={[styles.iconContainer, styles.iconActive]}>
                 <Text style={styles.icon}>➗</Text>
               </View>
               <View style={styles.textContainer}>
-                <Text style={[styles.cardTitle, styles.textLocked]}>Phase 3: True Count</Text>
-                <Text style={[styles.cardDescription, styles.textLocked]}>Adjust for remaining decks.</Text>
+                <View style={styles.titleRow}>
+                  <Text style={styles.cardTitle}>Phase 3: True Count</Text>
+                </View>
+                <Text style={styles.cardDescription}>Adjust for remaining decks.</Text>
               </View>
-              <Text style={styles.lockIcon}>🔒</Text>
+              <Text style={styles.arrow}>›</Text>
             </View>
           </TouchableOpacity>
 
-          {/* Phase 4 - Betting */}
-          <TouchableOpacity style={[styles.card, styles.cardLocked]} disabled>
+          {/* Phase 4 - Betting (Unlocked) */}
+          <TouchableOpacity
+            style={[styles.card, styles.cardActive]}
+            onPress={() => {
+              Haptics.selectionAsync();
+              navigation.navigate('Phase4Betting');
+            }}
+            activeOpacity={0.8}
+          >
+            <View style={styles.cardGlow} />
             <View style={styles.cardContent}>
-              <View style={[styles.iconContainer, styles.iconLocked]}>
+              <View style={[styles.iconContainer, styles.iconActive]}>
                 <Text style={styles.icon}>💰</Text>
               </View>
               <View style={styles.textContainer}>
-                <Text style={[styles.cardTitle, styles.textLocked]}>Phase 4: Betting</Text>
-                <Text style={[styles.cardDescription, styles.textLocked]}>Size your bets based on the advantage.</Text>
+                <View style={styles.titleRow}>
+                  <Text style={styles.cardTitle}>Phase 4: Betting</Text>
+                  <Text style={styles.checkMark}>NEW!</Text>
+                </View>
+                <Text style={styles.cardDescription}>Size your bets based on the advantage.</Text>
               </View>
-              <Text style={styles.lockIcon}>🔒</Text>
+              <Text style={styles.arrow}>›</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -155,13 +176,66 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Practice & Tools</Text>
           <View style={styles.grid}>
-            <TouchableOpacity style={[styles.gridCard, styles.cardLocked]} disabled>
+            <TouchableOpacity
+              style={[styles.gridCard, styles.cardActive]}
+              onPress={() => {
+                Haptics.selectionAsync();
+                navigation.navigate('DrillCancellation');
+              }}
+              activeOpacity={0.8}
+            >
               <Text style={styles.gridIcon}>⏱️</Text>
-              <Text style={[styles.gridTitle, styles.textLocked]}>Speed Drill</Text>
+              <Text style={styles.gridTitle}>Speed Drill</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.gridCard, styles.cardLocked]} disabled>
+
+            <TouchableOpacity
+              style={[styles.gridCard, styles.cardActive]}
+              onPress={() => {
+                Haptics.selectionAsync();
+                navigation.navigate('Simulator');
+              }}
+              activeOpacity={0.8}
+            >
               <Text style={styles.gridIcon}>🎰</Text>
-              <Text style={[styles.gridTitle, styles.textLocked]}>Casino Sim</Text>
+              <Text style={styles.gridTitle}>Casino Sim</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={[styles.grid, { marginTop: 12 }]}>
+            <TouchableOpacity
+              style={[styles.gridCard, styles.cardActive]}
+              onPress={() => {
+                Haptics.selectionAsync();
+                navigation.navigate('DrillDeckCountdown');
+              }}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.gridIcon}>⚡️</Text>
+              <Text style={styles.gridTitle}>Deck Countdown</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.gridCard, styles.cardActive]}
+              onPress={() => {
+                Haptics.selectionAsync();
+                navigation.navigate('DrillDiscardTray');
+              }}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.gridIcon}>👁️</Text>
+              <Text style={styles.gridTitle}>Discard Eye</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.gridCard, styles.cardActive]}
+              onPress={() => {
+                Haptics.selectionAsync();
+                navigation.navigate('DrillDeviations');
+              }}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.gridIcon}>🎓</Text>
+              <Text style={styles.gridTitle}>The 18</Text>
             </TouchableOpacity>
           </View>
         </View>

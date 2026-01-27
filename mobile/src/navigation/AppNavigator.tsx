@@ -2,8 +2,15 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { HomeScreen } from '../screens/Home/HomeScreen';
 import { Phase1CardValues } from '../screens/GuidedLearning/Phase1CardValues';
-import { Phase0BasicStrategy } from '../screens/GuidedLearning/Phase0BasicStrategy';
-import { Phase2RunningCount } from '../screens/GuidedLearning/Phase2RunningCount';
+import { Phase0BasicStrategy } from '../components/drills/BasicStrategy';
+import { Phase2RunningCount } from '../components/drills/RunningCount';
+import { Cancellation } from '../components/drills/Cancellation';
+import { DeckCountdown } from '../components/drills/DeckCountdown';
+import { DrillDiscardTray } from '../components/drills/DrillDiscardTray';
+import { DrillDeviations } from '../components/drills/DrillDeviations';
+import { Phase3TrueCount } from '../screens/GuidedLearning/Phase3TrueCount';
+import { Phase4Betting } from '../screens/GuidedLearning/Phase4Betting';
+import { SimulatorScreen } from '../screens/Simulator/SimulatorScreen';
 import { colors } from '../theme/colors';
 
 const Stack = createStackNavigator();
@@ -57,6 +64,68 @@ export const AppNavigator = () => {
                 options={{
                     title: 'Running Count',
                     headerTitleAlign: 'center',
+                }}
+            />
+            <Stack.Screen
+                name="DrillCancellation"
+                component={Cancellation}
+                options={{
+                    title: 'Speed Drill',
+                    headerTitleAlign: 'center',
+                }}
+            />
+            <Stack.Screen
+                name="DrillDeckCountdown"
+                component={DeckCountdown}
+                options={{
+                    title: 'Deck Countdown',
+                    headerTitleAlign: 'center',
+                    headerShown: false, // We use custom header in component
+                }}
+            />
+            <Stack.Screen
+                name="DrillDiscardTray"
+                component={DrillDiscardTray}
+                options={{
+                    title: 'Discard Estimation',
+                    headerTitleAlign: 'center',
+                    headerShown: false,
+                }}
+            />
+            <Stack.Screen
+                name="DrillDeviations"
+                component={DrillDeviations}
+                options={{
+                    title: 'Illustrious 18',
+                    headerTitleAlign: 'center',
+                    headerShown: false,
+                }}
+            />
+            <Stack.Screen
+                name="Simulator"
+                component={SimulatorScreen}
+                options={{
+                    title: 'Casino Simulator',
+                    headerTitleAlign: 'center',
+                    headerShown: false,
+                }}
+            />
+            <Stack.Screen
+                name="Phase3TrueCount"
+                component={Phase3TrueCount}
+                options={{
+                    title: 'Phase 3: True Count',
+                    headerTitleAlign: 'center',
+                    headerShown: false,
+                }}
+            />
+            <Stack.Screen
+                name="Phase4Betting"
+                component={Phase4Betting}
+                options={{
+                    title: 'Phase 4: Betting',
+                    headerTitleAlign: 'center',
+                    headerShown: false,
                 }}
             />
         </Stack.Navigator>
