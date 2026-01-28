@@ -5,11 +5,13 @@
   "private": true,
   "workspaces": [
     "mobile",
-    "shared"
+    "shared",
+    "web"
   ],
   "scripts": {
     "start": "cd mobile && npm start",
     "build:shared": "cd shared && npm run build",
+    "postinstall": "npm run build:shared",
     "setup": "npm install && npm run build:shared"
   },
   "repository": {
