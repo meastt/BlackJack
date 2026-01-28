@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import blogPosts from "@/data/blog-posts.json";
 
@@ -78,6 +79,21 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
     const paragraphs = content.split("\n\n");
     return paragraphs.map((paragraph, index) => {
+      // Check for images
+      const imageMatch = paragraph.match(/^!\[(.*?)\]\((.*?)\)$/);
+      if (imageMatch) {
+        return (
+          <div key={index} className="relative w-full aspect-video rounded-xl overflow-hidden my-12 border border-surface-border">
+            <Image 
+              src={imageMatch[2]} 
+              alt={imageMatch[1]} 
+              fill 
+              className="object-cover"
+            />
+          </div>
+        );
+      }
+
       if (paragraph.startsWith("## ")) {
         return (
           <h2 key={index} className="text-2xl font-bold mt-16 mb-6 text-gradient-gold">
