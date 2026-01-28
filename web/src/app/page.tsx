@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import systems from "@/data/systems.json";
 import drills from "@/data/drills.json";
 import { FAQSchema, SoftwareApplicationSchema } from "@/components/seo";
