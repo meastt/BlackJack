@@ -51,6 +51,7 @@ export const metadata: Metadata = {
     images: [
       {
         url: `${BASE_URL}/protocol-21-hero1.webp`,
+        url: `${BASE_URL}/images/protocol-21-hero1.webp`,
         width: 1200,
         height: 630,
         alt: "Protocol 21 Blackjack Card Counting App",
@@ -58,6 +59,7 @@ export const metadata: Metadata = {
       },
       {
         url: `${BASE_URL}/best-guide-to-blackjack-card-couting-apps-FI.webp`,
+        url: `${BASE_URL}/images/best-guide-to-blackjack-card-couting-apps-FI.webp`,
         width: 1200,
         height: 630,
         alt: "Best Guide to Blackjack Card Counting Apps",
@@ -70,6 +72,7 @@ export const metadata: Metadata = {
     title: "Protocol 21: Best Blackjack Card Counting App",
     description: "Master card counting with Protocol 21. Learn Hi-Lo, KO, Omega II. Casino-grade drills for iOS & Android.",
     images: [`${BASE_URL}/protocol-21-hero1.webp`],
+    images: [`${BASE_URL}/images/protocol-21-hero1.webp`],
     creator: "@protocol21app",
   },
   robots: {

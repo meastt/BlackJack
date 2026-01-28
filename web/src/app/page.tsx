@@ -1,11 +1,42 @@
 import Link from "next/link";
-import Image from "next/image";
 import systems from "@/data/systems.json";
 import drills from "@/data/drills.json";
+import { FAQSchema, SoftwareApplicationSchema } from "@/components/seo";
+
+const faqs = [
+  {
+    question: "What is card counting and is it legal?",
+    answer: "Card counting is a legal blackjack strategy that involves tracking the ratio of high to low cards remaining in the deck. It's not cheating—it's using your brain to gain a mathematical edge. While legal, casinos may ask skilled counters to leave as they're private businesses.",
+  },
+  {
+    question: "Which card counting system should I learn first?",
+    answer: "We recommend starting with the Hi-Lo system. It's the most widely used, well-documented, and offers an excellent balance of simplicity and effectiveness. Once you've mastered Hi-Lo, you can explore more advanced systems like Omega II or Wong Halves.",
+  },
+  {
+    question: "How long does it take to learn card counting?",
+    answer: "With consistent daily practice using Protocol 21, most users develop basic Hi-Lo proficiency in 2-4 weeks. Achieving casino-ready speed and accuracy (counting at 1+ cards per second with 99% accuracy) typically takes 2-3 months.",
+  },
+  {
+    question: "Is Protocol 21 really free?",
+    answer: "Yes! Protocol 21 is free to download with core features including Hi-Lo training, basic drills, and shoe simulation. Pro features like advanced systems and detailed analytics are available with an optional subscription.",
+  },
+  {
+    question: "What's the difference between running count and true count?",
+    answer: "Running count is your cumulative total of high/low cards seen. True count normalizes this by dividing by decks remaining (Running Count ÷ Decks Remaining). True count is essential for accurate betting in multi-deck games.",
+  },
+  {
+    question: "Can I practice card counting on my phone?",
+    answer: "Absolutely! Protocol 21 is available for both iOS and Android. Mobile practice lets you train during commutes, breaks, or whenever you have a few minutes. Consistent daily practice is key to building automatic counting skills.",
+  },
+];
 
 export default function Home() {
   return (
     <main className="min-h-screen">
+      <FAQSchema items={faqs} />
+      <SoftwareApplicationSchema platform="iOS" />
+      <SoftwareApplicationSchema platform="Android" />
+
       {/* Hero Section */}
       <section className="hero">
         <div className="container text-center relative z-10">
@@ -158,24 +189,37 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {drills.map((drill) => (
-              <div key={drill.slug} className="card">
+              <Link href={`/drills/${drill.slug}`} key={drill.slug} className="card group">
                 <div className="w-12 h-12 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center mb-4">
                   <svg className="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
                 </div>
 
-                <h3 className="text-lg font-bold mb-2">{drill.drill_name}</h3>
+                <h3 className="text-lg font-bold mb-2 group-hover:text-primary transition-colors">{drill.drill_name}</h3>
 
                 <p className="text-text-secondary text-sm mb-4">
                   Target: <span className="text-accent font-medium">{drill.target_skill}</span>
                 </p>
 
-                <p className="text-sm text-text-muted italic">
+                <p className="text-sm text-text-muted italic mb-4">
                   &ldquo;{drill.pain_point}&rdquo;
                 </p>
-              </div>
+
+                <div className="flex items-center text-primary text-sm font-semibold mt-auto">
+                  Start Drill
+                  <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </div>
+              </Link>
             ))}
+          </div>
+
+          <div className="text-center mt-8">
+            <Link href="/drills" className="btn btn-outline">
+              View All Practice Drills
+            </Link>
           </div>
         </div>
       </section>
@@ -204,7 +248,7 @@ export default function Home() {
                 Start your journey to consistent profits today.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/download/ios" className="btn btn-primary px-8">
+                <Link href="/download" className="btn btn-primary px-8">
                   Download Now — It&apos;s Free
                 </Link>
                 <Link href="/blog" className="btn btn-outline px-8">
@@ -216,22 +260,136 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Built for Serious Players Section */}
+      <section className="section bg-surface">
+        <div className="container">
+          <div className="section-header">
+            <h2 className="section-title">
+              <span className="text-gradient-gold">Built for Serious Players</span>
+            </h2>
+            <p className="section-subtitle">
+              Protocol 21 isn&apos;t another blackjack game. It&apos;s a professional-grade training system
+              designed by advantage players, for advantage players.
+            </p>
+          </div>
+
+          <div className="max-w-2xl mx-auto">
+            <ul className="space-y-4 mb-8">
+              <li className="flex items-center justify-center gap-3">
+                <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span className="text-text-secondary">Casino-accurate dealing speeds</span>
+              </li>
+              <li className="flex items-center justify-center gap-3">
+                <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span className="text-text-secondary">Background noise simulation</span>
+              </li>
+              <li className="flex items-center justify-center gap-3">
+                <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span className="text-text-secondary">Detailed accuracy analytics</span>
+              </li>
+            </ul>
+            <div className="text-center">
+              <Link href="/download" className="btn btn-primary">
+                Get Protocol 21 Free
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="section">
+        <div className="container">
+          <div className="section-header">
+            <h2 className="section-title">
+              <span className="text-gradient">Frequently Asked Questions</span>
+            </h2>
+            <p className="section-subtitle">
+              Common questions about card counting and Protocol 21.
+            </p>
+          </div>
+
+          <div className="max-w-3xl mx-auto">
+            <div className="space-y-4">
+              {faqs.map((faq, index) => (
+                <details key={index} className="card group">
+                  <summary className="flex justify-between items-center cursor-pointer list-none">
+                    <h3 className="text-lg font-semibold pr-4">{faq.question}</h3>
+                    <svg className="w-5 h-5 text-text-muted group-open:rotate-180 transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </summary>
+                  <p className="text-text-secondary mt-4 leading-relaxed">
+                    {faq.answer}
+                  </p>
+                </details>
+              ))}
+            </div>
+
+            <div className="text-center mt-8">
+              <p className="text-text-muted mb-4">Have more questions?</p>
+              <Link href="/blog" className="text-primary hover:underline">
+                Read our comprehensive guides
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="footer">
         <div className="container">
-          <p className="footer-brand mb-2">
-            &copy; {new Date().getFullYear()} Protocol 21. All rights reserved.
-          </p>
-          <p className="footer-brand">
-            Built by fellow degens in the desert at{" "}
-            <a href="https://techridgeseo.com" target="_blank" rel="noopener noreferrer">
-              TechRidgeSEO
-            </a>
-          </p>
-          <div className="footer-links">
-            <Link href="/privacy">Privacy Policy</Link>
-            <Link href="/terms">Terms of Service</Link>
-            <Link href="/blog">Blog</Link>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 text-left">
+            <div>
+              <h4 className="font-bold mb-4 text-white">Protocol 21</h4>
+              <p className="text-text-muted text-sm">
+                The best blackjack card counting trainer for iOS and Android.
+              </p>
+            </div>
+            <div>
+              <h4 className="font-bold mb-4 text-white">Card Counting Systems</h4>
+              <ul className="space-y-2 text-sm">
+                <li><Link href="/systems/hi-lo-card-counting-app" className="text-text-muted hover:text-primary">Hi-Lo System</Link></li>
+                <li><Link href="/systems/ko-card-counting-app" className="text-text-muted hover:text-primary">KO System</Link></li>
+                <li><Link href="/systems/omega-ii-card-counting-app" className="text-text-muted hover:text-primary">Omega II</Link></li>
+                <li><Link href="/systems" className="text-primary hover:underline">View All Systems</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-bold mb-4 text-white">Practice Drills</h4>
+              <ul className="space-y-2 text-sm">
+                <li><Link href="/drills/blackjack-true-count-practice" className="text-text-muted hover:text-primary">True Count</Link></li>
+                <li><Link href="/drills/deck-estimation-drills" className="text-text-muted hover:text-primary">Deck Estimation</Link></li>
+                <li><Link href="/drills/card-counting-speed-drills" className="text-text-muted hover:text-primary">Speed Counting</Link></li>
+                <li><Link href="/drills" className="text-primary hover:underline">View All Drills</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-bold mb-4 text-white">Resources</h4>
+              <ul className="space-y-2 text-sm">
+                <li><Link href="/blog" className="text-text-muted hover:text-primary">Blog</Link></li>
+                <li><Link href="/download" className="text-text-muted hover:text-primary">Download App</Link></li>
+                <li><Link href="/privacy" className="text-text-muted hover:text-primary">Privacy Policy</Link></li>
+                <li><Link href="/terms" className="text-text-muted hover:text-primary">Terms of Service</Link></li>
+              </ul>
+            </div>
+          </div>
+          <div className="border-t border-surface-border pt-8 text-center">
+            <p className="footer-brand mb-2">
+              &copy; {new Date().getFullYear()} Protocol 21. All rights reserved.
+            </p>
+            <p className="footer-brand">
+              Built by fellow degens in the desert at{" "}
+              <a href="https://techridgeseo.com" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                TechRidgeSEO
+              </a>
+            </p>
           </div>
         </div>
       </footer>
