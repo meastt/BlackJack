@@ -1,32 +1,122 @@
 [
-  {
-    "slug": "how-does-card-counting-work-in-blackjack",
-    "title": "How Does Card Counting Work in Blackjack?",
-    "description": "Learn the fundamentals of card counting in blackjack. Understand how advantage players track cards to gain an edge over the casino.",
-    "date": "2026-01-28",
-    "author": "Protocol 21 Team",
-    "category": "Fundamentals",
-    "readTime": "8 min read",
-    "content": "Card counting is a blackjack strategy that allows players to track the ratio of high to low cards remaining in the deck. When the deck is rich in high cards (10s, face cards, and Aces), the player has an advantage. When it's rich in low cards, the house has an advantage.\n\n## The Basic Concept\n\nAt its core, card counting works by assigning point values to cards as they're dealt. In the popular Hi-Lo system:\n\n- Cards 2-6 = +1\n- Cards 7-9 = 0\n- Cards 10-A = -1\n\nAs cards are dealt, you keep a running count by adding or subtracting based on each card you see.\n\n## Why It Works\n\nBlackjack is unique among casino games because previous hands affect future outcomes. Unlike roulette where each spin is independent, in blackjack, cards that have been dealt cannot appear again until the deck is reshuffled.\n\n## Getting Started\n\nThe best way to learn card counting is through consistent practice. Protocol 21 offers dedicated drills to help you master the Hi-Lo system and other counting methods at casino speed."
-  },
-  {
-    "slug": "hi-lo-card-counting-system-complete-guide",
-    "title": "Hi-Lo Card Counting System: Complete Guide for Beginners",
-    "description": "Master the Hi-Lo card counting system with our comprehensive guide. Perfect for beginners looking to learn the most popular counting method.",
-    "date": "2026-01-25",
-    "author": "Protocol 21 Team",
-    "category": "Systems",
-    "readTime": "12 min read",
-    "content": "The Hi-Lo system is the most widely used card counting method in blackjack. Developed by Harvey Dubner in 1963 and later refined by Stanford Wong, it offers an excellent balance of simplicity and effectiveness.\n\n## Card Values\n\nIn Hi-Lo, every card is assigned a value:\n\n- **Low cards (2-6):** +1\n- **Neutral cards (7-9):** 0\n- **High cards (10, J, Q, K, A):** -1\n\n## Running Count vs. True Count\n\nThe running count is your cumulative total. But in multi-deck games, you need to calculate the true count by dividing your running count by the number of decks remaining.\n\n## Betting Strategy\n\nIncrease your bets when the true count is positive (+2 or higher) and decrease when it's negative. A positive count means the remaining deck is rich in 10s and Aces, giving you the edge."
-  },
-  {
-    "slug": "best-card-counting-apps-for-practice",
-    "title": "Best Card Counting Apps for Practice in 2026",
-    "description": "Discover the top card counting trainer apps for iOS and Android. Compare features and find the best app to sharpen your blackjack skills.",
-    "date": "2026-01-20",
-    "author": "Protocol 21 Team",
-    "category": "Reviews",
-    "readTime": "6 min read",
-    "content": "Whether you're a beginner learning the basics or an experienced counter looking to improve your speed, having the right practice app makes all the difference.\n\n## What to Look For\n\nA good card counting trainer should offer:\n\n- Multiple counting systems\n- Speed drills and accuracy tracking\n- Realistic casino simulation\n- Progress tracking over time\n\n## Why Protocol 21\n\nProtocol 21 was built by advantage players for advantage players. Unlike basic flashcard apps, it offers casino-grade drills that simulate real playing conditions, including distractions and dealer speed variations."
-  }
+    {
+        "slug": "how-does-card-counting-work-in-blackjack",
+        "title": "How Does Card Counting Work in Blackjack?",
+        "description": "Learn the fundamentals of card counting in blackjack. Understand how advantage players track cards to gain an edge over the casino.",
+        "date": "2026-01-28",
+        "author": "Protocol 21 Team",
+        "category": "Fundamentals",
+        "readTime": "8 min read",
+        "content": "Card counting is a blackjack strategy that allows players to track the ratio of high to low cards remaining in the deck. When the deck is rich in high cards (10s, face cards, and Aces), the player has an advantage. When it's rich in low cards, the house has an advantage.\n\n## The Basic Concept\n\nAt its core, card counting works by assigning point values to cards as they're dealt. In the popular Hi-Lo system:\n\n- Cards 2-6 = +1\n- Cards 7-9 = 0\n- Cards 10-A = -1\n\nAs cards are dealt, you keep a running count by adding or subtracting based on each card you see.\n\n## Why It Works\n\nBlackjack is unique among casino games because previous hands affect future outcomes. Unlike roulette where each spin is independent, in blackjack, cards that have been dealt cannot appear again until the deck is reshuffled.\n\n## Getting Started\n\nThe best way to learn card counting is through consistent practice. Protocol 21 offers dedicated drills to help you master the Hi-Lo system and other counting methods at casino speed."
+    },
+    {
+        "slug": "hi-lo-card-counting-system-complete-guide",
+        "title": "Hi-Lo Card Counting System: Complete Guide for Beginners",
+        "description": "Master the Hi-Lo card counting system with our comprehensive guide. Perfect for beginners looking to learn the most popular counting method.",
+        "date": "2026-01-25",
+        "author": "Protocol 21 Team",
+        "category": "Systems",
+        "readTime": "12 min read",
+        "content": "The Hi-Lo system is the most widely used card counting method in blackjack. Developed by Harvey Dubner in 1963 and later refined by Stanford Wong, it offers an excellent balance of simplicity and effectiveness.\n\n## Card Values\n\nIn Hi-Lo, every card is assigned a value:\n\n- **Low cards (2-6):** +1\n- **Neutral cards (7-9):** 0\n- **High cards (10, J, Q, K, A):** -1\n\n## Running Count vs. True Count\n\nThe running count is your cumulative total. But in multi-deck games, you need to calculate the true count by dividing your running count by the number of decks remaining.\n\n## Betting Strategy\n\nIncrease your bets when the true count is positive (+2 or higher) and decrease when it's negative. A positive count means the remaining deck is rich in 10s and Aces, giving you the edge."
+    },
+    {
+        "slug": "best-card-counting-apps-for-practice",
+        "title": "Best Card Counting Apps for Practice in 2026",
+        "description": "Discover the top card counting trainer apps for iOS and Android. Compare features and find the best app to sharpen your blackjack skills.",
+        "date": "2026-01-20",
+        "author": "Protocol 21 Team",
+        "category": "Reviews",
+        "readTime": "6 min read",
+        "content": "Whether you're a beginner learning the basics or an experienced counter looking to improve your speed, having the right practice app makes all the difference.\n\n## What to Look For\n\nA good card counting trainer should offer:\n\n- Multiple counting systems\n- Speed drills and accuracy tracking\n- Realistic casino simulation\n- Progress tracking over time\n\n## Why Protocol 21\n\nProtocol 21 was built by advantage players for advantage players. Unlike basic flashcard apps, it offers casino-grade drills that simulate real playing conditions, including distractions and dealer speed variations."
+    },
+    {
+        "slug": "hi-lo-card-counting-app",
+        "title": "Hi-Lo Card Counting App | Protocol 21 Blackjack Trainer",
+        "description": "Master the famous Hi-Lo card counting system. Protocol 21 provides the specific +1/-1 drills you need to learn Hi-Lo for iOS and Android.",
+        "date": "2026-01-28",
+        "author": "Protocol 21 Team",
+        "category": "Systems",
+        "readTime": "5 min read",
+        "content": "You want to learn the Hi-Lo system, the gold standard of card counting. But let's be honest: **keeping the running count during fast deals** is where most players fall apart. It's easy at home with a single deck, but in a noisy casino with cards flying? That's a different story.\n\n## The Solution\n\nProtocol 21 is the only app that includes a dedicated **Hi-Lo preset** out of the box. We handle the **Balanced** counting logic automatically, so you don't have to fiddle with settings. The app knows exactly which cards cancel each other out and tracks your accuracy to the millisecond.\n\n## How to Practice Hi-Lo\n\nDon't just memorize the chart. Use this 3-step routine in Protocol 21 to master the system:\n\n- **Step 1: Learn Values.** Use the 'Value Recognition' mode. The app flashes cards, and you swipe up (+1), down (-1), or tap (0). Do this until you can react instantly without thinking.\n- **Step 2: Slow Drills.** Switch to 'Running Count' mode. Set the speed to 50%. Focus on accuracy over speed. If you miss a count, the app alerts you immediately.\n- **Step 3: Casino Speed.** Crank the speed up to 'Dealer' mode. Add background noise in the settings. This simulates the pressure of a real table.\n\n## Master Hi-Lo Today\n\nStop guessing and start counting. Protocol 21 is the tool you need.\n\n[Download Protocol 21 to master Hi-Lo today](/download/ios)"
+    },
+    {
+        "slug": "ko-card-counting-app",
+        "title": "KO (Knock-Out) Blackjack System App & Trainer",
+        "description": "Learn the Knock-Out (KO) system without the math. Protocol 21 is the best app for unbalanced counting systems on mobile.",
+        "date": "2026-01-28",
+        "author": "Protocol 21 Team",
+        "category": "Systems",
+        "readTime": "5 min read",
+        "content": "The Knock-Out (KO) system is brilliant because it removes the hardest part of card counting: **converting to true count**. But even with a simplified system, you can lose your edge if you lose the running count.\n\n## The Solution\n\nProtocol 21 is the premier tool for unbalanced systems like KO. Unlike other apps that force you to calculate true counts, Protocol 21's **KO preset** respects the **Unbalanced** nature of the system. It knows the pivot points and betting correlations, allowing you to train exactly as you would play.\n\n## How to Practice KO\n\nTo become lethal with KO, follow this Protocol 21 routine:\n\n- **Step 1: The Initial Count.** KO doesn't start at 0. Use our 'Setup' feature to practice starting your count at the correct negative number based on the number of decks.\n- **Step 2: Pivot Point Drills.** The 'Key Count' mode drills you on identifying when to raise your bet. We simulate long shoes so you get used to the count drifting upwards.\n- **Step 3: Speed Runs.** KO is about speed. Use the 'Speed Drill' to push your recognition time to under 0.8 seconds per card.\n\n## Start Winning with KO\n\nSimplify your game and maximize your edge.\n\n[Download Protocol 21 to master KO today](/download/ios)"
+    },
+    {
+        "slug": "omega-ii-card-counting-app",
+        "title": "Omega II Card Counting Trainer | Advanced Blackjack App",
+        "description": "Practice the complex Omega II system with Protocol 21. Our advanced mode supports Level 2 values and Ace side-counts.",
+        "date": "2026-01-28",
+        "author": "Protocol 21 Team",
+        "category": "Systems",
+        "readTime": "6 min read",
+        "content": "You're stepping up to the big leagues. Omega II is a powerhouse system, but it comes with a steep cost: **memorizing the complex Level 2 card values**. Mixing up a +2 with a +1 destroys your EV instantly.\n\n## The Solution\n\nProtocol 21 allows you to configure a custom **Omega II preset**. Crucially, our app supports **Ace Side Counts**, a feature almost no other mobile trainer offers. We handle the complex **Balanced** logic so you can focus on the mental gymnastics.\n\n## How to Practice Omega II\n\nMastering Omega II requires a disciplined approach:\n\n- **Step 1: Level 2 Values.** Use the 'Flashcard' mode specifically for Level 2 values. Drill 2s, 3s, and 7s until the values +1 and +2 are automatic.\n- **Step 2: Ace Tracking.** Enable the 'Side Count' overlay. Practice keeping the main count in your head while tapping a separate button for Aces. It's like patting your head and rubbing your stomach.\n- **Step 3: Endurance.** Omega II is mentally draining. Play full 6-deck shoes in the app to build the mental stamina required for a real session.\n\n## Master Omega II Today\n\nDon't let the complexity scare you. With the right tool, you can master it.\n\n[Download Protocol 21 to master Omega II today](/download/ios)"
+    },
+    {
+        "slug": "zen-count-blackjack-app",
+        "title": "Zen Count Blackjack Trainer App",
+        "description": "The Zen Count requires precision. Use Protocol 21's custom drills to master this powerful Level 2 balanced system.",
+        "date": "2026-01-28",
+        "author": "Protocol 21 Team",
+        "category": "Systems",
+        "readTime": "6 min read",
+        "content": "The Zen Count is a favorite among pros for its high efficiency. But the challenge is obvious: **maintaining speed with multi-value cards**. When a hand has a 4, 6, and 9, the math gets tricky fast.\n\n## The Solution\n\nProtocol 21 is the only app that has a dedicated preset for **Zen Count**. It handles the **Balanced** logic automatically. We've tuned the drill engine to recognize the specific rhythm of the Zen Count, giving you feedback that matches the system's complexity.\n\n## How to Practice Zen Count\n\nHere is your path to Zen mastery:\n\n- **Step 1: Value Grouping.** Learn to see pairs. A 4 (+2) and a 10 (-2) cancel out. Use our 'Cancellation' drill to spot these patterns instantly.\n- **Step 2: Slow Drills.** Start at 40% speed. Accuracy is paramount with Level 2 systems. Do not speed up until you are 100% accurate over 5 shoes.\n- **Step 3: Casino Speed.** Once you have the accuracy, turn up the heat. Challenge yourself to keep the Zen Count at 1 card per second.\n\n## Master Zen Count Today\n\nEfficiency wins games. Train with the best.\n\n[Download Protocol 21 to master Zen Count today](/download/ios)"
+    },
+    {
+        "slug": "red-7-card-counting-app",
+        "title": "Red 7 Card Counting App | Learn Unbalanced Counting",
+        "description": "Learn Arnold Snyder's Red 7 system. Protocol 21 helps you practice the color-dependent starting counts unique to this system.",
+        "date": "2026-01-28",
+        "author": "Protocol 21 Team",
+        "category": "Systems",
+        "readTime": "5 min read",
+        "content": "Red 7 is a unique beast. It's powerful and unbalanced, but it has one specific quirk that trips people up: **remembering the pivot points** and the color-dependent values of the 7s.\n\n## The Solution\n\nProtocol 21 is the only app that has a dedicated preset for **Red 7**. We handle the **Unbalanced** logic automatically. Most importantly, our engine distinguishes between Red 7s and Black 7s, a feature critical for this system.\n\n## How to Practice Red 7\n\nFollow this routine to lock in the Red 7 system:\n\n- **Step 1: Color Recognition.** Use the 'Color Drill' to practice spotting Red 7s vs Black 7s instantly. This is the foundation of the system.\n- **Step 2: Pivot Practice.** Drills that focus specifically on the pivot point. The app will pause and ask you for the betting decision when the count crosses the threshold.\n- **Step 3: Casino Speed.** Integrate it all. Full speed dealing with color-dependent values.\n\n## Master Red 7 Today\n\nUnlock the power of unbalanced counting.\n\n[Download Protocol 21 to master Red 7 today](/download/ios)"
+    },
+    {
+        "slug": "wong-halves-counting-app",
+        "title": "Wong Halves Blackjack Trainer | Expert Counting App",
+        "description": "Wong Halves is the hardest system to master. Protocol 21 is the only app that supports fractional values for expert drills.",
+        "date": "2026-01-28",
+        "author": "Protocol 21 Team",
+        "category": "Systems",
+        "readTime": "7 min read",
+        "content": "Wong Halves. The name alone scares off most counters. It's theoretically perfect, but **calculating fractional values (.5) on the fly** is a nightmare for the human brain under pressure.\n\n## The Solution\n\nProtocol 21 is the only app that has a dedicated preset for **Wong Halves**. It handles the **Balanced** logic automatically. Uniquely, our engine supports fractional values, allowing you to track counts like +4.5 without rounding errors.\n\n## How to Practice Wong Halves\n\nIf you are brave enough to learn this, do it right:\n\n- **Step 1: Fraction Math.** Use our 'Math Drill' to get comfortable adding and subtracting 0.5s. It sounds simple, but it's not when you're tired.\n- **Step 2: Slow Drills.** Do not rush. Start at 30% speed. You are building a new neural pathway for fractional arithmetic.\n- **Step 3: Casino Speed.** The ultimate test. Can you handle fractions at 1 card per second? The app will tell you the truth.\n\n## Master Wong Halves Today\n\nFor the perfectionist. The ultimate tool for the ultimate system.\n\n[Download Protocol 21 to master Wong Halves today](/download/ios)"
+    },
+    {
+        "slug": "blackjack-true-count-practice",
+        "title": "Blackjack True Count Trainer App",
+        "description": "Master mental math with Protocol 21. Learn to divide the running count by decks remaining instantly.",
+        "date": "2026-01-28",
+        "author": "Protocol 21 Team",
+        "category": "Drills",
+        "readTime": "4 min read",
+        "content": "You have the running count. Great. But in a 6-deck shoe, that number is useless without the True Count. The problem? **Dividing the running count by decks remaining instantly** is hard math to do while the dealer is staring at you.\n\n## The Fix\n\nProtocol 21 isolates this specific skill in the **True Count Conversion** module. We don't just let you play; we force you to do the math. The app pauses at random intervals and asks: 'What is the True Count?'\n\n## Why Protocol 21?\n\n- **SEO Note:** **True Count Conversion** is critical for high-stakes play.\n- **Real Conditions:** We simulate the visual estimation of the discard tray, so your divisor is based on what you see, not just a number on a screen.\n- **Feedback:** Get instant feedback on your rounding errors. Are you flooring correctly? The app knows.\n\n[Download Protocol 21 to practice True Count today](/download/ios)"
+    },
+    {
+        "slug": "deck-estimation-drills",
+        "title": "Deck Penetration & Estimation Drills",
+        "description": "Improve your visual accuracy. Learn to guess how many decks are in the discard tray with precision.",
+        "date": "2026-01-28",
+        "author": "Protocol 21 Team",
+        "category": "Drills",
+        "readTime": "4 min read",
+        "content": "If you can't estimate how many decks have been played, your True Count is wrong. And if your True Count is wrong, you are betting big when you should be betting small. The pain point is **guessing how many decks are in the discard tray** with visual accuracy.\n\n## The Fix\n\nProtocol 21 solves this with the **Deck Estimation** module. We show you a discard tray with a random number of cards and ask you to estimate the decks to the nearest 0.5 or 0.25.\n\n## Why Protocol 21?\n\n- **Visual Training:** We use high-fidelity graphics to render the stack height realistically.\n- **Target Skill:** This drill builds **Visual Accuracy** that translates directly to the casino floor.\n- **Calibration:** Calibrate your eye to see exactly what 1.5 decks looks like versus 2 decks.\n\n[Download Protocol 21 to practice Deck Estimation today](/download/ios)"
+    },
+    {
+        "slug": "card-counting-speed-drills",
+        "title": "Card Counting Speed Simulator",
+        "description": "Increase your reaction time. Don't lose the count when the dealer speeds up.",
+        "date": "2026-01-28",
+        "author": "Protocol 21 Team",
+        "category": "Drills",
+        "readTime": "4 min read",
+        "content": "You can count at home. But can you count when the dealer is a speed demon? **Losing the count when the dealer speeds up** is the most common reason beginners fail. Your brain jams, and the edge is gone.\n\n## The Fix\n\nProtocol 21's **Speed Count** module is designed to break your limits. We push cards at you faster than any human dealer ever could.\n\n## Why Protocol 21?\n\n- **Over-training:** If you can count at 0.5 seconds per card in the app, the 1.0 second per card in the casino feels like slow motion.\n- **Reaction Time:** This drill specifically targets **Reaction Time**.\n- **Flow State:** Achieve the flow state where you stop 'calculating' and start just 'knowing' the count.\n\n[Download Protocol 21 to practice Speed Counting today](/download/ios)"
+    }
 ]
