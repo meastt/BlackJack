@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import "./globals.css";
 import { OrganizationSchema, WebSiteSchema } from "@/components/seo";
 
@@ -49,6 +50,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     images: [
       {
+        url: `${BASE_URL}/protocol-21-hero1.webp`,
         url: `${BASE_URL}/images/protocol-21-hero1.webp`,
         width: 1200,
         height: 630,
@@ -56,6 +58,7 @@ export const metadata: Metadata = {
         type: "image/webp",
       },
       {
+        url: `${BASE_URL}/best-guide-to-blackjack-card-couting-apps-FI.webp`,
         url: `${BASE_URL}/images/best-guide-to-blackjack-card-couting-apps-FI.webp`,
         width: 1200,
         height: 630,
@@ -68,6 +71,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Protocol 21: Best Blackjack Card Counting App",
     description: "Master card counting with Protocol 21. Learn Hi-Lo, KO, Omega II. Casino-grade drills for iOS & Android.",
+    images: [`${BASE_URL}/protocol-21-hero1.webp`],
     images: [`${BASE_URL}/images/protocol-21-hero1.webp`],
     creator: "@protocol21app",
   },
@@ -104,6 +108,20 @@ export default function RootLayout({
       <head>
         <OrganizationSchema />
         <WebSiteSchema />
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-5P3CB205H1"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-5P3CB205H1');
+          `}
+        </Script>
       </head>
       <body className="font-sans antialiased">
         {children}

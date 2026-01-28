@@ -75,7 +75,7 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="relative w-full max-w-4xl mx-auto aspect-video rounded-2xl overflow-hidden shadow-2xl border border-white/10 flex justify-center mt-12 lg:ml-[12.5%]">
+          <div className="relative w-full max-w-4xl mx-auto aspect-video rounded-2xl overflow-hidden shadow-2xl border border-white/10 flex justify-center mt-12">
              <Image
               src="/protocol-21-hero1.webp"
               alt="Protocol 21 App Interface"
@@ -118,7 +118,7 @@ export default function Home() {
             <h2 className="section-title">
               <span className="text-gradient">Supported Systems</span>
             </h2>
-            <div className="relative w-full max-w-4xl mx-auto h-96 mb-12 rounded-xl overflow-hidden flex justify-center lg:ml-[12.5%]">
+            <div className="relative w-full max-w-4xl mx-auto h-96 mb-12 rounded-xl overflow-hidden flex justify-center">
                <Image
                 src="/protocol-21-card-shoe.webp"
                 alt="Blackjack Card Shoe"
@@ -173,7 +173,7 @@ export default function Home() {
       <section className="section bg-surface">
         <div className="container">
           <div className="section-header">
-            <div className="relative w-full max-w-4xl mx-auto h-96 mb-12 rounded-xl overflow-hidden flex justify-center lg:ml-[12.5%]">
+            <div className="relative w-full max-w-4xl mx-auto h-96 mb-12 rounded-xl overflow-hidden flex justify-center">
                <Image
                 src="/protocol-21-true-count.webp"
                 alt="True Count Training"
@@ -232,7 +232,7 @@ export default function Home() {
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
 
             <div className="relative z-10">
-              <div className="relative w-full max-w-2xl mx-auto h-96 mb-12 rounded-xl overflow-hidden shadow-lg border border-white/5 flex justify-center lg:ml-[12.5%]">
+              <div className="relative w-full max-w-2xl mx-auto h-96 mb-12 rounded-xl overflow-hidden shadow-lg border border-white/5 flex justify-center">
                  <Image
                   src="/Skill-increased-blackjack-counting-cards.webp"
                   alt="Increase Your Blackjack Skills"
