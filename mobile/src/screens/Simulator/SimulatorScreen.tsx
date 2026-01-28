@@ -9,18 +9,24 @@ import { Card } from '@card-counter-ai/shared';
 import { BlackjackGameEngine } from '../../utils/BlackjackGameEngine';
 import { useSimState } from '../../store/SimState';
 import * as Haptics from 'expo-haptics';
+import { TacticalShoe } from '../../components/simulator/TacticalShoe';
+import { TacticalChip, ChipValue } from '../../components/simulator/TacticalChip';
+import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
 
 type GamePhase = 'BETTING' | 'DEALING' | 'PLAYER_TURN' | 'DEALER_TURN' | 'RESOLUTION' | 'SHOE_SHUFFLE';
 
 export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
     // Global state
-    const { setSuspicionLevel, updateChallengeStats } = useSimState();
+    const { setSuspicionLevel, updateChallengeStats, checkCount, setRunningCount: setGlobalRC, getAccuracy } = useSimState();
+    const insets = useSafeAreaInsets();
 
     // Game state
     const [gamePhase, setGamePhase] = useState<GamePhase>('BETTING');
     const [playerHand, setPlayerHand] = useState<Card[]>([]);
     const [dealerHand, setDealerHand] = useState<Card[]>([]);
-    const [currentBet, setCurrentBet] = useState(10);
+    const [currentBet, setCurrentBet] = useState(0);
     const [bankroll, setBankroll] = useState(1000);
     const [startingBankroll] = useState(1000);
 
@@ -60,9 +66,17 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
 
     // UI toggles
     const [showSessionStats, setShowSessionStats] = useState(false);
+    const [showSettings, setShowSettings] = useState(false);
+
+    // Training Helper Toggles
+    const [showCountImpact, setShowCountImpact] = useState(true);
+    const [showTacticalShoe, setShowTacticalShoe] = useState(true);
+    const [showChipTray, setShowChipTray] = useState(true);
+    const [deckCount, setDeckCount] = useState(6);
+    const [checkInterval, setCheckInterval] = useState(0); // 0 means manual only
 
     const MIN_BET = 10;
-    const MAX_BET = 200;
+    const MAX_BET = 10000;
 
     // Calculate decks remaining from cards
     const getDecksRemaining = (): number => {
@@ -79,12 +93,19 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
 
         setRunningCount(newRC);
         setTrueCount(newTC);
+        setGlobalRC(newRC);
     };
 
     // Start a new hand
     const startNewHand = () => {
         if (bankroll < currentBet) {
             setResultMessage('OUT OF MONEY! Game Over.');
+            return;
+        }
+
+        // Auto-prompt for count check
+        if (checkInterval > 0 && handsPlayed > 0 && handsPlayed % checkInterval === 0) {
+            setShowCountCheck(true);
             return;
         }
 
@@ -104,39 +125,78 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
             return;
         }
 
-        // Deduct bet
-        setBankroll(prev => prev - currentBet);
+        // Bet is already deducted in handleAddBet
 
-        // Deal initial cards
+        // Deal initial cards sequentially for animation
         setGamePhase('DEALING');
         setResultMessage('Dealing...');
+        setPlayerHand([]);
+        setDealerHand([]);
 
-        const cards: Card[] = [];
-        for (let i = 0; i < 4; i++) {
-            const card = shoe.pop();
-            if (card) {
-                cards.push(card);
-                updateCount(card);
-            }
-        }
+        const dealSequence = async () => {
+            const tempCards: Card[] = [];
+            let localPlayerHand: Card[] = [];
+            let localDealerHand: Card[] = [];
 
-        setPlayerHand([cards[0], cards[2]]);
-        setDealerHand([cards[1], cards[3]]);
-        setHandsPlayed(prev => prev + 1);
+            for (let i = 0; i < 4; i++) {
+                const card = shoe.pop();
+                if (card) {
+                    tempCards.push(card);
+                    updateCount(card);
 
-        // Check for immediate blackjack
-        setTimeout(() => {
-            if (BlackjackGameEngine.isBlackjack([cards[0], cards[2]])) {
-                if (BlackjackGameEngine.isBlackjack([cards[1], cards[3]])) {
-                    resolveHand([cards[0], cards[2]], [cards[1], cards[3]]);
-                } else {
-                    resolveDealerTurn([cards[0], cards[2]]);
+                    if (i === 0) {
+                        localPlayerHand = [card];
+                        setPlayerHand(localPlayerHand);
+                    } else if (i === 1) {
+                        localDealerHand = [card];
+                        setDealerHand(localDealerHand);
+                    } else if (i === 2) {
+                        localPlayerHand = [...localPlayerHand, card];
+                        setPlayerHand(localPlayerHand);
+                    } else if (i === 3) {
+                        localDealerHand = [...localDealerHand, card];
+                        setDealerHand(localDealerHand);
+                    }
+
+                    await new Promise(resolve => setTimeout(resolve, 250));
                 }
+            }
+
+            setHandsPlayed(prev => prev + 1);
+
+            // Check for immediate blackjack AFTER animation
+            if (BlackjackGameEngine.isBlackjack(localPlayerHand)) {
+                if (BlackjackGameEngine.isBlackjack(localDealerHand)) {
+                    // Both have BJ - Push
+                    resolveHand(localPlayerHand, localDealerHand);
+                } else {
+                    // Player has BJ, Dealer does not - Instant Win (New Logic)
+                    // We DO NOT let dealer play out their hand.
+                    resolveHand(localPlayerHand, localDealerHand);
+                }
+            } else if (BlackjackGameEngine.isBlackjack(localDealerHand)) {
+                // Dealer has BJ, Player doesn't - Instant Loss
+                resolveHand(localPlayerHand, localDealerHand);
             } else {
                 setGamePhase('PLAYER_TURN');
                 setResultMessage('');
             }
-        }, 800);
+        };
+
+        dealSequence();
+    };
+
+    const nextHand = () => {
+        setPlayerHand([]);
+        setDealerHand([]);
+        setResultMessage('');
+        setGamePhase('BETTING');
+
+        // Clear split state
+        setIsSplitHand(false);
+        setSplitHands([]);
+        setActiveHandIndex(0);
+        setSplitBets([]);
     };
 
     // Player hits
@@ -161,7 +221,9 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
         // Check if busted
-        if (BlackjackGameEngine.isBusted(newHand)) {
+        const { value: handValue } = BlackjackGameEngine.getHandValue(newHand);
+
+        if (handValue > 21) {
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
 
             if (isSplitHand) {
@@ -178,7 +240,15 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
                     heatGenerated: 0,
                 });
 
-                setTimeout(() => resetForNextHand(), 2000);
+                setTimeout(() => nextHand(), 2000);
+            }
+        } else if (handValue === 21) {
+            // Auto-stand on 21
+            if (isSplitHand) {
+                handleSplitHandComplete(newHand);
+            } else {
+                setGamePhase('DEALER_TURN');
+                resolveDealerTurn(newHand);
             }
         }
     };
@@ -253,7 +323,7 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
                     heatGenerated: 0,
                 });
 
-                setTimeout(() => resetForNextHand(), 2000);
+                setTimeout(() => nextHand(), 2000);
             }
         } else {
             // Automatically stand
@@ -326,28 +396,34 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
         const shoe = shoeRef.current;
 
         // Dealer draws cards with delay for animation
-        const dealerDrawCard = () => {
-            if (BlackjackGameEngine.dealerShouldHit(dealerCards)) {
+        const dealerDrawCard = (currentHand: Card[]) => {
+            if (BlackjackGameEngine.dealerShouldHit(currentHand)) {
                 setTimeout(() => {
                     const card = shoe.pop();
-                    if (!card) return;
+
+                    if (!card) {
+                        // Safety: If shoe is empty mid-hand, force resolve to prevent hang
+                        setResultMessage('Shoe Empty! Resolving...');
+                        resolveHand(finalPlayerHand, currentHand);
+                        return;
+                    }
 
                     updateCount(card);
-                    dealerCards = [...dealerCards, card];
-                    setDealerHand(dealerCards);
+                    const newHand = [...currentHand, card];
+                    setDealerHand(newHand);
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
-                    dealerDrawCard(); // Recursively draw
+                    dealerDrawCard(newHand); // Recursively draw
                 }, 600);
             } else {
                 // Dealer stands, resolve
                 setTimeout(() => {
-                    resolveHand(finalPlayerHand, dealerCards);
+                    resolveHand(finalPlayerHand, currentHand);
                 }, 600);
             }
         };
 
-        dealerDrawCard();
+        dealerDrawCard(dealerCards);
     };
 
     // Resolve the hand and determine winner
@@ -408,7 +484,7 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
         const heatIncrease = BlackjackGameEngine.calculateHeatFromBet(currentBet, trueCount, MIN_BET);
         setSuspicionLevel((prev: number) => Math.min(100, prev + heatIncrease));
 
-        setTimeout(() => resetForNextHand(), 3000);
+        setTimeout(() => nextHand(), 3000);
     };
 
     // Dealer plays against split hands
@@ -504,23 +580,27 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
         );
         setSuspicionLevel((prev: number) => Math.min(100, prev + heatIncrease));
 
-        setTimeout(() => resetForNextHand(), 3500);
+        setTimeout(() => nextHand(), 3500);
     };
 
-    // Reset for next hand
-    const resetForNextHand = () => {
-        setPlayerHand([]);
-        setDealerHand([]);
-        setResultMessage('');
-        setCurrentBet(MIN_BET); // Reset to min bet
-        setGamePhase('BETTING');
-
-        // Clear split state
-        setIsSplitHand(false);
-        setSplitHands([]);
-        setActiveHandIndex(0);
-        setSplitBets([]);
+    // Add to current bet using chips
+    const handleAddBet = (value: number) => {
+        if (bankroll >= value && currentBet + value <= MAX_BET) {
+            setBankroll(prev => prev - value);
+            setCurrentBet(prev => prev + value);
+        } else if (bankroll < value) {
+            setResultMessage('Not enough bankroll!');
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+        }
     };
+
+    const handleClearBet = () => {
+        setBankroll(prev => prev + currentBet);
+        setCurrentBet(0);
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    };
+
+    // (Unifying reset logic into nextHand)
 
     // Auto-bet based on true count
     const handleAutoBet = () => {
@@ -534,20 +614,16 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
         const userRC = parseInt(userInputRC);
         const userTC = parseInt(userInputTC);
 
-        const isRCCorrect = userRC === runningCount;
-        const isTCCorrect = userTC === trueCount;
-        const isCorrect = isRCCorrect && isTCCorrect;
-
-        // Track accuracy
-        setCountAccuracy(prev => [...prev, isCorrect ? 1 : 0]);
+        const { isCorrectRc, isCorrectTc } = checkCount(userRC, userTC, trueCount);
+        const isCorrect = isCorrectRc && isCorrectTc;
 
         if (isCorrect) {
-            setResultMessage('✓ Perfect Count!');
+            setResultMessage('✓ PERFECT_COUNT');
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         } else {
-            let message = '✗ Incorrect. ';
-            if (!isRCCorrect) message += `RC should be ${runningCount}. `;
-            if (!isTCCorrect) message += `TC should be ${trueCount}.`;
+            let message = '✗ MATH_DRIFT: ';
+            if (!isCorrectRc) message += `RC should be ${runningCount}. `;
+            if (!isCorrectTc) message += `TC should be ${trueCount}.`;
             setResultMessage(message);
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
         }
@@ -555,12 +631,6 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
         setShowCountCheck(false);
         setUserInputRC('');
         setUserInputTC('');
-
-        setTimeout(() => {
-            if (gamePhase === 'BETTING') {
-                setResultMessage('');
-            }
-        }, 2000);
     };
 
     // Calculate overall counting accuracy
@@ -600,322 +670,340 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
         return Math.round((sessionStats.handsWon / totalHands) * 100);
     };
 
+
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={[styles.container, { paddingTop: insets.top }]}>
             {/* Header */}
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                    <Text style={styles.backText}>← Back</Text>
-                </TouchableOpacity>
-                <Text style={styles.title}>Casino Simulator</Text>
-                <TouchableOpacity onPress={() => setShowCountDisplay(!showCountDisplay)}>
-                    <Text style={styles.toggleText}>{showCountDisplay ? '👁️' : '🙈'}</Text>
-                </TouchableOpacity>
-            </View>
+                <View style={styles.headerLeft}>
+                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+                        <Ionicons name="chevron-back" size={24} color={colors.textSecondary} />
+                    </TouchableOpacity>
+                    <Text style={styles.headerBankroll}>
+                        <Ionicons name="cash-outline" size={14} color={colors.primary} /> ${bankroll.toLocaleString()}
+                    </Text>
+                </View>
 
-            <ScrollView contentContainerStyle={styles.content}>
-                {/* Stats HUD */}
-                <View style={styles.hud}>
-                    <View style={styles.statBox}>
-                        <Text style={styles.statLabel}>Bankroll</Text>
-                        <Text style={[styles.statValue, bankroll > 1000 ? styles.pos : styles.neg]}>
-                            ${bankroll}
+                <View style={styles.headerRight}>
+                    <View style={styles.headerAccuracy}>
+                        <Text style={styles.headerAccuracyLabel}>ACCURACY</Text>
+                        <Text style={[styles.headerAccuracyValue, { color: getAccuracy() >= 90 ? colors.success : colors.error }]}>
+                            {getAccuracy()}%
                         </Text>
                     </View>
-                    <View style={styles.statBox}>
-                        <Text style={styles.statLabel}>Hands</Text>
-                        <Text style={styles.statValue}>{handsPlayed}</Text>
+                    <TouchableOpacity onPress={() => setShowSettings(true)} style={styles.headerIcon}>
+                        <Ionicons name="settings-sharp" size={20} color={colors.textSecondary} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+
+            {/* Table Surface */}
+            <View style={styles.gameTable}>
+                {/* Vignette Background */}
+                <LinearGradient
+                    colors={[colors.surface, '#000000']}
+                    style={[StyleSheet.absoluteFill, { zIndex: 0 }]}
+                    start={{ x: 0.5, y: 0.2 }}
+                    end={{ x: 0.5, y: 1.2 }}
+                />
+
+                {/* Neon Arch (Dealer Rail) */}
+                <View style={styles.neonArch} />
+
+                {/* Table Markings & Text */}
+                <View style={styles.tableTextContainer}>
+                    <Text style={styles.tableTextTitle}>BLACKJACK</Text>
+                    <Text style={styles.tableTextSubtitle}>PAYS 3 TO 2</Text>
+                    <Text style={styles.tableTextRules}>DEALER MUST DRAW TO 16 AND STAND ON ALL 17s</Text>
+                    <Text style={styles.tableTextRules}>INSURANCE PAYS 2 TO 1</Text>
+                </View>
+
+                {/* Top HUD Overlay */}
+                <View style={styles.topHud}>
+                    <View style={styles.hudBadge}>
+                        <Text style={styles.hudBadgeText}>DECKS: {deckCount}</Text>
+                        <Text style={styles.hudBadgeText}>CARDS: {shoeRef.current.getCardsRemaining()}</Text>
+                        {showCountDisplay && (
+                            <Text style={[styles.hudBadgeText, { color: colors.primary }]}>RC: {runningCount > 0 ? `+${runningCount}` : runningCount}</Text>
+                        )}
                     </View>
-                    {showCountDisplay && (
-                        <>
-                            <View style={styles.statBox}>
-                                <Text style={styles.statLabel}>RC</Text>
-                                <Text style={[styles.statValue, runningCount > 0 ? styles.pos : styles.neg]}>
-                                    {runningCount > 0 ? `+${runningCount}` : runningCount}
-                                </Text>
-                            </View>
-                            <View style={styles.statBox}>
-                                <Text style={styles.statLabel}>TC</Text>
-                                <Text style={[styles.statValue, trueCount > 0 ? styles.pos : styles.neg]}>
-                                    {trueCount > 0 ? `+${trueCount}` : trueCount}
-                                </Text>
-                            </View>
-                        </>
+                    {showTacticalShoe && (
+                        <TacticalShoe
+                            remaining={shoeRef.current.getCardsRemaining()}
+                            total={deckCount * 52}
+                        />
                     )}
                 </View>
 
-                {/* Heat Meter */}
-                <View style={styles.heatContainer}>
-                    <Text style={styles.heatLabel}>PIT BOSS HEAT</Text>
-                    <HeatMeter />
-                </View>
-
-                {/* Session Stats */}
-                <TouchableOpacity
-                    style={styles.sessionStatsToggle}
-                    onPress={() => setShowSessionStats(!showSessionStats)}
-                >
-                    <Text style={styles.sessionStatsToggleText}>
-                        Session Stats {showSessionStats ? '▼' : '▶'}
-                    </Text>
-                </TouchableOpacity>
-
-                {showSessionStats && (
-                    <View style={styles.sessionStatsContainer}>
-                        <View style={styles.sessionStatsGrid}>
-                            <View style={styles.sessionStatItem}>
-                                <Text style={styles.sessionStatLabel}>Win Rate</Text>
-                                <Text style={[styles.sessionStatValue, styles.pos]}>{getWinRate()}%</Text>
-                            </View>
-                            <View style={styles.sessionStatItem}>
-                                <Text style={styles.sessionStatLabel}>Net</Text>
-                                <Text style={[
-                                    styles.sessionStatValue,
-                                    bankroll >= startingBankroll ? styles.pos : styles.neg
-                                ]}>
-                                    {bankroll >= startingBankroll ? '+' : ''}${bankroll - startingBankroll}
-                                </Text>
-                            </View>
-                        </View>
-
-                        <View style={styles.sessionStatsGrid}>
-                            <View style={styles.sessionStatItem}>
-                                <Text style={styles.sessionStatLabel}>W/L/P</Text>
-                                <Text style={styles.sessionStatValue}>
-                                    {sessionStats.handsWon}/{sessionStats.handsLost}/{sessionStats.handsPushed}
-                                </Text>
-                            </View>
-                            <View style={styles.sessionStatItem}>
-                                <Text style={styles.sessionStatLabel}>Peak</Text>
-                                <Text style={styles.sessionStatValue}>${sessionStats.highestBankroll}</Text>
-                            </View>
-                        </View>
-
-                        <View style={styles.sessionStatsGrid}>
-                            <View style={styles.sessionStatItem}>
-                                <Text style={styles.sessionStatLabel}>Best Win</Text>
-                                <Text style={[styles.sessionStatValue, styles.pos]}>
-                                    +${sessionStats.biggestWin}
-                                </Text>
-                            </View>
-                            <View style={styles.sessionStatItem}>
-                                <Text style={styles.sessionStatLabel}>Worst Loss</Text>
-                                <Text style={[styles.sessionStatValue, styles.neg]}>
-                                    -${sessionStats.biggestLoss}
-                                </Text>
-                            </View>
-                        </View>
-
-                        <TouchableOpacity
-                            style={styles.resetButton}
-                            onPress={resetSession}
-                        >
-                            <Text style={styles.resetButtonText}>Reset Session</Text>
-                        </TouchableOpacity>
-                    </View>
-                )}
-
-                {/* Game Table */}
-                {gamePhase !== 'BETTING' && (
-                    <View style={styles.gameTable}>
-                        {/* Dealer */}
-                        <View style={styles.dealerArea}>
-                            <Text style={styles.label}>
-                                Dealer{gamePhase !== 'PLAYER_TURN' && dealerHand.length > 0
-                                    ? `: ${BlackjackGameEngine.getHandValue(dealerHand).value}`
-                                    : ''}
-                            </Text>
-                            <View style={styles.cardRow}>
-                                {dealerHand.map((card, i) => (
+                {/* Main Vertical Flow */}
+                <View style={styles.tableCenter}>
+                    {/* Dealer Area */}
+                    <View style={styles.handArea}>
+                        <View style={styles.cardOverlapRow}>
+                            {dealerHand.map((card, i) => (
+                                <View key={i} style={[styles.cardInHand, { zIndex: i, marginLeft: i > 0 ? -30 : 0 }]}>
                                     <CardComponent
-                                        key={i}
                                         card={card}
-                                        size="medium"
+                                        size="small"
                                         showBack={gamePhase === 'PLAYER_TURN' && i === 1}
+                                        showCountImpact={showCountImpact && (gamePhase !== 'PLAYER_TURN' || i === 0)}
                                     />
-                                ))}
-                            </View>
+                                </View>
+                            ))}
                         </View>
+                        {dealerHand.length > 0 && <Text style={styles.handLabel}>DEALER</Text>}
+                    </View>
 
-                        {/* Player */}
-                        {!isSplitHand ? (
-                            <View style={styles.playerArea}>
-                                <Text style={styles.label}>
-                                    You{playerHand.length > 0
-                                        ? `: ${BlackjackGameEngine.getHandValue(playerHand).value}`
-                                        : ''}
-                                </Text>
-                                <View style={styles.cardRow}>
-                                    {playerHand.map((card, i) => (
-                                        <CardComponent key={i} card={card} size="medium" />
+                    {/* Pot / Bet Stack */}
+                    <View style={styles.potArea}>
+                        <View style={styles.bettingRing} />
+                        {currentBet > 0 ? (
+                            <View style={styles.betStackContainer}>
+                                <View style={styles.betStack}>
+                                    {/* Visual representation of stack */}
+                                    {[...Array(Math.min(5, Math.ceil(currentBet / 25)))].map((_, i) => (
+                                        <View key={i} style={[styles.betStackChip, { bottom: i * 3 }]} />
                                     ))}
+                                </View>
+                                <View style={styles.betLabelBadge}>
+                                    <Text style={styles.betLabelText}>${currentBet}</Text>
                                 </View>
                             </View>
                         ) : (
-                            <View style={styles.playerArea}>
+                            gamePhase === 'BETTING' && <Text style={styles.placeBetPrompt}>PLACE YOUR BET</Text>
+                        )}
+                    </View>
+
+                    {/* Player Area */}
+                    <View style={styles.handArea}>
+                        {!isSplitHand ? (
+                            <View style={styles.cardOverlapRow}>
+                                {playerHand.map((card, i) => (
+                                    <View key={i} style={[styles.cardInHand, { zIndex: i, marginLeft: i > 0 ? -30 : 0 }]}>
+                                        <CardComponent
+                                            card={card}
+                                            size="small"
+                                            showCountImpact={showCountImpact}
+                                        />
+                                    </View>
+                                ))}
+                            </View>
+                        ) : (
+                            <View style={styles.handArea}>
                                 {splitHands.map((hand, index) => (
                                     <View
                                         key={index}
                                         style={[
-                                            styles.splitHandContainer,
+                                            styles.cardOverlapRow,
                                             activeHandIndex === index && styles.activeHand
                                         ]}
                                     >
-                                        <Text style={styles.label}>
-                                            Hand {index + 1} ${splitBets[index]}
-                                            {hand.length > 0
-                                                ? `: ${BlackjackGameEngine.getHandValue(hand).value}`
-                                                : ''}
-                                            {activeHandIndex === index ? ' ◀' : ''}
-                                        </Text>
-                                        <View style={styles.cardRow}>
-                                            {hand.map((card, i) => (
-                                                <CardComponent key={i} card={card} size="small" />
-                                            ))}
-                                        </View>
+                                        {hand.map((card, i) => (
+                                            <View key={i} style={[styles.cardInHand, { zIndex: i, marginLeft: i > 0 ? -30 : 0 }]}>
+                                                <CardComponent
+                                                    card={card}
+                                                    size="small"
+                                                    showCountImpact={showCountImpact}
+                                                />
+                                            </View>
+                                        ))}
                                     </View>
                                 ))}
                             </View>
                         )}
+                        {playerHand.length > 0 && <Text style={styles.handLabel}>PLAYER</Text>}
+                    </View>
+                </View>
+
+                {/* Result Message Overlay */}
+                {gamePhase === 'RESOLUTION' && resultMessage && (
+                    <View style={styles.resultOverlay}>
+                        <View style={styles.resultBox}>
+                            <Text style={[
+                                styles.resultMainText,
+                                resultMessage.includes('WIN') || resultMessage.includes('BLACKJACK') ? styles.pos : styles.neg
+                            ]}>
+                                {resultMessage}
+                            </Text>
+                            <TouchableOpacity style={styles.nextHandBtn} onPress={nextHand}>
+                                <Text style={styles.nextHandBtnText}>NEXT HAND</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 )}
+            </View>
 
-                {/* Result Message */}
-                {resultMessage && (
-                    <View style={styles.resultContainer}>
-                        <Text style={[
-                            styles.resultText,
-                            resultMessage.includes('WIN') || resultMessage.includes('BLACKJACK') ? styles.pos : styles.neg
-                        ]}>
-                            {resultMessage}
-                        </Text>
+            {/* Bottom Controls */}
+            <View style={[styles.controlPanel, { paddingBottom: insets.bottom + 10 }]}>
+                {gamePhase === 'BETTING' ? (
+                    <View style={styles.bettingFlow}>
+                        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipScroll}>
+                            {[1, 5, 25, 100, 500].map((val) => (
+                                <TacticalChip
+                                    key={val}
+                                    value={val as ChipValue}
+                                    onPress={() => handleAddBet(val)}
+                                    disabled={bankroll < val}
+                                />
+                            ))}
+                        </ScrollView>
+                        <View style={styles.dealRow}>
+                            <TouchableOpacity style={styles.clearBtn} onPress={handleClearBet}>
+                                <Ionicons name="refresh" size={20} color={colors.textSecondary} />
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.mainDealBtn, currentBet === 0 && styles.btnDisabled]}
+                                onPress={startNewHand}
+                                disabled={currentBet === 0}
+                            >
+                                <Text style={styles.mainDealBtnText}>DEAL CARDS</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
+                ) : (
+                    gamePhase === 'PLAYER_TURN' && (
+                        <View style={styles.actionRow}>
+                            <TouchableOpacity style={[styles.actionBtn, styles.hitBtn]} onPress={handleHit}>
+                                <Text style={styles.actionBtnText}>HIT</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={[styles.actionBtn, styles.standBtn]} onPress={handleStand}>
+                                <Text style={styles.actionBtnText}>STAND</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                style={[
+                                    styles.actionBtn,
+                                    styles.doubleBtn,
+                                    !BlackjackGameEngine.canDouble(playerHand, bankroll >= currentBet) && styles.btnActionDisabled
+                                ]}
+                                onPress={handleDouble}
+                                disabled={!BlackjackGameEngine.canDouble(playerHand, bankroll >= currentBet)}
+                            >
+                                <Text style={styles.actionBtnText}>2X</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                style={[
+                                    styles.actionBtn,
+                                    styles.splitBtn,
+                                    !BlackjackGameEngine.canSplit(playerHand, bankroll >= currentBet) && styles.btnActionDisabled
+                                ]}
+                                onPress={handleSplit}
+                                disabled={!BlackjackGameEngine.canSplit(playerHand, bankroll >= currentBet)}
+                            >
+                                <Text style={styles.actionBtnText}>SPLIT</Text>
+                            </TouchableOpacity>
+                        </View>
+                    )
                 )}
+            </View>
 
-                {/* Betting Interface */}
-                {gamePhase === 'BETTING' && (
-                    <View style={styles.bettingInterface}>
-                        <Text style={styles.betPrompt}>Place your bet</Text>
-
-                        <View style={styles.betControls}>
-                            <TouchableOpacity
-                                onPress={() => setCurrentBet(MIN_BET)}
-                                style={styles.betBtn}
-                            >
-                                <Text style={styles.betBtnText}>MIN</Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                                onPress={() => setCurrentBet(prev => Math.max(MIN_BET, prev - 10))}
-                                style={styles.betBtn}
-                            >
-                                <Text style={styles.betBtnText}>-$10</Text>
-                            </TouchableOpacity>
-
-                            <View style={styles.betAmountContainer}>
-                                <Text style={styles.betAmount}>${currentBet}</Text>
-                            </View>
-
-                            <TouchableOpacity
-                                onPress={() => setCurrentBet(prev => Math.min(MAX_BET, bankroll, prev + 10))}
-                                style={styles.betBtn}
-                            >
-                                <Text style={styles.betBtnText}>+$10</Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                                onPress={handleAutoBet}
-                                style={[styles.betBtn, styles.autoBtn]}
-                            >
-                                <Text style={styles.betBtnText}>AUTO</Text>
+            {/* Count Check Modal */}
+            <Modal
+                visible={showSettings}
+                transparent
+                animationType="slide"
+                onRequestClose={() => setShowSettings(false)}
+            >
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContent}>
+                        <View style={styles.modalHeader}>
+                            <Text style={styles.modalTitle}>TACTICAL_SETTINGS</Text>
+                            <TouchableOpacity onPress={() => setShowSettings(false)}>
+                                <Ionicons name="close" size={24} color={colors.textSecondary} />
                             </TouchableOpacity>
                         </View>
 
+                        <View style={styles.settingsGroup}>
+                            <Text style={styles.groupLabel}>TRAINING HELPERS</Text>
+
+                            <View style={styles.settingItem}>
+                                <Text style={styles.settingLabel}>Show Count Tags</Text>
+                                <TouchableOpacity
+                                    onPress={() => setShowCountImpact(!showCountImpact)}
+                                    style={[styles.miniToggle, showCountImpact && styles.miniToggleActive]}
+                                >
+                                    <View style={[styles.miniToggleCircle, showCountImpact && styles.miniToggleCircleActive]} />
+                                </TouchableOpacity>
+                            </View>
+
+                            <View style={styles.settingItem}>
+                                <Text style={styles.settingLabel}>Visual Shoe Aid</Text>
+                                <TouchableOpacity
+                                    onPress={() => setShowTacticalShoe(!showTacticalShoe)}
+                                    style={[styles.miniToggle, showTacticalShoe && styles.miniToggleActive]}
+                                >
+                                    <View style={[styles.miniToggleCircle, showTacticalShoe && styles.miniToggleCircleActive]} />
+                                </TouchableOpacity>
+                            </View>
+
+                            <View style={styles.settingItem}>
+                                <Text style={styles.settingLabel}>Modern Chip Tray</Text>
+                                <TouchableOpacity
+                                    onPress={() => setShowChipTray(!showChipTray)}
+                                    style={[styles.miniToggle, showChipTray && styles.miniToggleActive]}
+                                >
+                                    <View style={[styles.miniToggleCircle, showChipTray && styles.miniToggleCircleActive]} />
+                                </TouchableOpacity>
+                            </View>
+
+                            <View style={styles.settingItem}>
+                                <Text style={styles.settingLabel}>Spot Check Interval</Text>
+                                <View style={styles.deckSelector}>
+                                    {[0, 5, 10, 20].map(i => (
+                                        <TouchableOpacity
+                                            key={i}
+                                            onPress={() => setCheckInterval(i)}
+                                            style={[styles.deckOption, checkInterval === i && styles.deckOptionActive]}
+                                        >
+                                            <Text style={[styles.deckOptionText, checkInterval === i && styles.deckOptionTextActive]}>
+                                                {i === 0 ? 'OFF' : i}
+                                            </Text>
+                                        </TouchableOpacity>
+                                    ))}
+                                </View>
+                            </View>
+
+                            <View style={styles.settingItem}>
+                                <Text style={styles.settingLabel}>Chaos Mode (Distractions)</Text>
+                                <TouchableOpacity
+                                    onPress={() => setIsDistractionActive(!isDistractionActive)}
+                                    style={[styles.miniToggle, isDistractionActive && styles.miniToggleActive]}
+                                >
+                                    <View style={[styles.miniToggleCircle, isDistractionActive && styles.miniToggleCircleActive]} />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+
+                        <View style={styles.settingsGroup}>
+                            <Text style={styles.groupLabel}>CASINO RULES</Text>
+                            <View style={styles.settingItem}>
+                                <Text style={styles.settingLabel}>Decks in Shoe</Text>
+                                <View style={styles.deckSelector}>
+                                    {[1, 2, 6, 8].map(d => (
+                                        <TouchableOpacity
+                                            key={d}
+                                            onPress={() => setDeckCount(d)}
+                                            style={[styles.deckOption, deckCount === d && styles.deckOptionActive]}
+                                        >
+                                            <Text style={[styles.deckOptionText, deckCount === d && styles.deckOptionTextActive]}>{d}</Text>
+                                        </TouchableOpacity>
+                                    ))}
+                                </View>
+                            </View>
+                        </View>
+
                         <TouchableOpacity
-                            style={styles.dealButton}
-                            onPress={startNewHand}
+                            style={styles.modalCloseBtn}
+                            onPress={() => setShowSettings(false)}
                         >
-                            <Text style={styles.dealButtonText}>DEAL</Text>
+                            <Text style={styles.modalCloseBtnText}>APPLY_CHANGES</Text>
                         </TouchableOpacity>
                     </View>
-                )}
-
-                {/* Player Action Buttons */}
-                {gamePhase === 'PLAYER_TURN' && (
-                    <View style={styles.actionButtons}>
-                        <TouchableOpacity
-                            style={[styles.actionBtn, styles.hitBtn]}
-                            onPress={handleHit}
-                        >
-                            <Text style={[styles.actionBtnText, styles.hitBtnText]}>HIT</Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity
-                            style={[styles.actionBtn, styles.standBtn]}
-                            onPress={handleStand}
-                        >
-                            <Text style={[styles.actionBtnText, styles.standBtnText]}>STAND</Text>
-                        </TouchableOpacity>
-
-                        {!isSplitHand && BlackjackGameEngine.canDouble(playerHand, bankroll >= currentBet) && (
-                            <TouchableOpacity
-                                style={[styles.actionBtn, styles.doubleBtn]}
-                                onPress={handleDouble}
-                            >
-                                <Text style={[styles.actionBtnText, styles.doubleBtnText]}>DOUBLE</Text>
-                            </TouchableOpacity>
-                        )}
-
-                        {!isSplitHand && BlackjackGameEngine.canSplit(playerHand, bankroll >= currentBet) && (
-                            <TouchableOpacity
-                                style={[styles.actionBtn, styles.splitBtn]}
-                                onPress={handleSplit}
-                            >
-                                <Text style={[styles.actionBtnText, styles.splitBtnText]}>SPLIT</Text>
-                            </TouchableOpacity>
-                        )}
-                    </View>
-                )}
-
-                {/* Distraction Toggle */}
-                <View style={styles.settingsRow}>
-                    <Text style={styles.settingsLabel}>Distractions:</Text>
-                    <TouchableOpacity
-                        onPress={() => setIsDistractionActive(!isDistractionActive)}
-                        style={[styles.toggleButton, isDistractionActive && styles.toggleActive]}
-                    >
-                        <Text style={styles.toggleButtonText}>
-                            {isDistractionActive ? 'ON' : 'OFF'}
-                        </Text>
-                    </TouchableOpacity>
                 </View>
+            </Modal>
 
-                {/* Count Check Button */}
-                <TouchableOpacity
-                    style={styles.countCheckButton}
-                    onPress={() => setShowCountCheck(true)}
-                >
-                    <Text style={styles.countCheckButtonText}>Check My Count</Text>
-                </TouchableOpacity>
-
-                {/* Counting Accuracy */}
-                {countAccuracy.length > 0 && (
-                    <View style={styles.accuracyContainer}>
-                        <Text style={styles.accuracyLabel}>Counting Accuracy:</Text>
-                        <Text style={[
-                            styles.accuracyValue,
-                            getCountingAccuracy() >= 90 ? styles.pos : styles.neg
-                        ]}>
-                            {getCountingAccuracy()}%
-                        </Text>
-                        <Text style={styles.accuracyDetail}>
-                            ({countAccuracy.filter(v => v === 1).length}/{countAccuracy.length} correct)
-                        </Text>
-                    </View>
-                )}
-            </ScrollView>
-
-            {/* Count Check Modal */}
+            {/* Count Check Modal (Spot Check) */}
             <Modal
                 visible={showCountCheck}
                 transparent
@@ -924,59 +1012,61 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
             >
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContent}>
-                        <Text style={styles.modalTitle}>What's the count?</Text>
-                        <Text style={styles.modalSubtitle}>Test your counting accuracy</Text>
-
-                        <View style={styles.inputContainer}>
-                            <Text style={styles.inputLabel}>Running Count:</Text>
-                            <TextInput
-                                style={styles.input}
-                                value={userInputRC}
-                                onChangeText={setUserInputRC}
-                                keyboardType="numeric"
-                                placeholder="0"
-                                placeholderTextColor={colors.textTertiary}
-                                autoFocus
-                            />
-                        </View>
-
-                        <View style={styles.inputContainer}>
-                            <Text style={styles.inputLabel}>True Count:</Text>
-                            <TextInput
-                                style={styles.input}
-                                value={userInputTC}
-                                onChangeText={setUserInputTC}
-                                keyboardType="numeric"
-                                placeholder="0"
-                                placeholderTextColor={colors.textTertiary}
-                            />
-                        </View>
-
-                        <View style={styles.modalButtons}>
-                            <TouchableOpacity
-                                style={[styles.modalBtn, styles.modalBtnCancel]}
-                                onPress={() => {
-                                    setShowCountCheck(false);
-                                    setUserInputRC('');
-                                    setUserInputTC('');
-                                }}
-                            >
-                                <Text style={styles.modalBtnText}>Cancel</Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                                style={[styles.modalBtn, styles.modalBtnConfirm]}
-                                onPress={handleCountCheck}
-                            >
-                                <Text style={styles.modalBtnText}>Check</Text>
+                        <View style={styles.modalHeader}>
+                            <Text style={styles.modalTitle}>SPOT_CHECK</Text>
+                            <TouchableOpacity onPress={() => setShowCountCheck(false)}>
+                                <Ionicons name="close" size={24} color={colors.textSecondary} />
                             </TouchableOpacity>
                         </View>
+
+                        <Text style={styles.modalSubtitle}>Verify your math precision</Text>
+
+                        <View style={styles.inputGroup}>
+                            <View style={styles.inputContainer}>
+                                <Text style={styles.inputLabel}>Running Count</Text>
+                                <TextInput
+                                    style={styles.input}
+                                    value={userInputRC}
+                                    onChangeText={setUserInputRC}
+                                    keyboardType="numeric"
+                                    placeholder="0"
+                                    placeholderTextColor={colors.textTertiary}
+                                    autoFocus
+                                />
+                            </View>
+
+                            <View style={styles.inputContainer}>
+                                <Text style={styles.inputLabel}>True Count</Text>
+                                <TextInput
+                                    style={styles.input}
+                                    value={userInputTC}
+                                    onChangeText={setUserInputTC}
+                                    keyboardType="numeric"
+                                    placeholder="0"
+                                    placeholderTextColor={colors.textTertiary}
+                                />
+                            </View>
+                        </View>
+
+                        <TouchableOpacity
+                            style={styles.modalCloseBtn}
+                            onPress={handleCountCheck}
+                        >
+                            <Text style={styles.modalCloseBtnText}>VERIFY_PRECISION</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={[styles.modalBtn, { marginTop: 10 }]}
+                            onPress={() => setShowCountCheck(false)}
+                        >
+                            <Text style={[styles.modalBtnText, { color: colors.textSecondary }]}>Abort</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </Modal>
 
             <DistractionLayer isActive={isDistractionActive} />
-        </SafeAreaView>
+        </View>
     );
 };
 
@@ -989,19 +1079,21 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: 20,
+        paddingVertical: 12,
+        paddingHorizontal: 15,
         borderBottomWidth: 1,
         borderBottomColor: colors.border,
         backgroundColor: colors.background,
+        zIndex: 100,
+        elevation: 10,
+    },
+    headerLeft: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 4,
     },
     backButton: {
-        padding: 8,
-    },
-    backText: {
-        color: colors.textSecondary,
-        fontSize: 14,
-        fontWeight: '600',
-        letterSpacing: 1,
+        padding: 4,
     },
     title: {
         color: colors.textPrimary,
@@ -1009,6 +1101,14 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textTransform: 'uppercase',
         letterSpacing: 2,
+    },
+    headerRight: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 15,
+    },
+    headerIcon: {
+        padding: 4,
     },
     toggleText: {
         fontSize: 22,
@@ -1020,32 +1120,31 @@ const styles = StyleSheet.create({
     },
     hud: {
         flexDirection: 'row',
-        flexWrap: 'wrap',
-        gap: 10,
+        gap: 6,
         marginBottom: 24,
     },
     statBox: {
         flex: 1,
-        minWidth: 80,
         backgroundColor: colors.surface,
-        padding: 12,
-        borderRadius: 4, // Sharp corners for tactical look
+        padding: 8,
+        borderRadius: 4,
         borderWidth: 1,
         borderColor: colors.border,
         alignItems: 'center',
+        marginHorizontal: 3,
     },
     statLabel: {
         color: colors.textTertiary,
-        fontSize: 10,
+        fontSize: 7,
         marginBottom: 4,
         textTransform: 'uppercase',
-        letterSpacing: 1.5,
-        fontWeight: '600',
+        letterSpacing: 1,
+        fontWeight: 'bold',
     },
     statValue: {
         color: colors.textPrimary,
-        fontSize: 20,
-        fontWeight: '700', // Monospace-like bold
+        fontSize: 15,
+        fontWeight: '700',
         fontVariant: ['tabular-nums'],
     },
     pos: {
@@ -1061,20 +1160,30 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         borderWidth: 1,
         borderColor: colors.border,
+        alignSelf: 'flex-start', // Fix elongation
+        minWidth: 120,
+    },
+    heatSectionWrapper: {
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        gap: 5,
+    },
+    heatGraphSide: {
+        // Removed flex: 1
     },
     heatLabel: {
         color: colors.textSecondary,
         fontSize: 10,
         fontWeight: 'bold',
         letterSpacing: 2,
-        marginBottom: 12,
-        textAlign: 'center',
         textTransform: 'uppercase',
+        marginBottom: 8,
     },
     gameTable: {
-        marginBottom: 24,
-        minHeight: 300,
+        flex: 1,
         justifyContent: 'center',
+        position: 'relative',
+        overflow: 'hidden', // Clip the neonArch so it doesn't cover the header
     },
     dealerArea: {
         alignItems: 'center',
@@ -1085,11 +1194,270 @@ const styles = StyleSheet.create({
     },
     label: {
         color: colors.textSecondary,
-        fontSize: 12,
-        fontWeight: '600',
-        marginBottom: 12,
-        letterSpacing: 1,
+        fontSize: 10,
+        fontWeight: 'bold',
         textTransform: 'uppercase',
+        letterSpacing: 2,
+        marginBottom: 8,
+    },
+    headerCore: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 20,
+    },
+    headerBankroll: {
+        color: colors.textPrimary,
+        fontSize: 16,
+        fontWeight: '900',
+        fontVariant: ['tabular-nums'],
+    },
+    headerAccuracy: {
+        alignItems: 'flex-start',
+    },
+    headerAccuracyLabel: {
+        color: colors.textTertiary,
+        fontSize: 8,
+        fontWeight: 'bold',
+        letterSpacing: 1,
+    },
+    headerAccuracyValue: {
+        fontSize: 13,
+        fontWeight: '900',
+        fontVariant: ['tabular-nums'],
+    },
+    topHud: {
+        position: 'absolute',
+        top: 5,
+        left: 0,
+        right: 0,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingHorizontal: 20,
+        zIndex: 50,
+        elevation: 5,
+    },
+    hudBadge: {
+        backgroundColor: 'rgba(0,0,0,0.4)',
+        padding: 8,
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: 'rgba(255,255,255,0.05)',
+    },
+    hudBadgeText: {
+        color: colors.textSecondary,
+        fontSize: 9,
+        fontWeight: 'bold',
+        letterSpacing: 1,
+        marginBottom: 2,
+    },
+    tableCenter: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: 5,
+        gap: 60,
+        zIndex: 10,
+    },
+    handArea: {
+        alignItems: 'center',
+        minHeight: 100,
+    },
+    cardOverlapRow: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 40,
+    },
+    cardInHand: {
+        shadowColor: '#000',
+        shadowOffset: { width: 4, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 5,
+    },
+    handLabel: {
+        marginTop: 5,
+        color: 'rgba(255,255,255,0.3)',
+        fontSize: 10,
+        fontWeight: '900',
+        letterSpacing: 4,
+    },
+    potArea: {
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    betStackContainer: {
+        alignItems: 'center',
+    },
+    betStack: {
+        width: 44,
+        height: 30,
+        position: 'relative',
+    },
+    betStackChip: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        height: 12,
+        borderRadius: 30,
+        backgroundColor: colors.primary,
+        borderWidth: 2,
+        borderColor: 'rgba(255,255,255,0.2)',
+        opacity: 0.8,
+    },
+    betLabelBadge: {
+        marginTop: 5,
+        backgroundColor: 'rgba(0,0,0,0.6)',
+        paddingHorizontal: 12,
+        paddingVertical: 4,
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: colors.primary,
+    },
+    betLabelText: {
+        color: '#FFF',
+        fontSize: 14,
+        fontWeight: 'bold',
+        fontVariant: ['tabular-nums'],
+    },
+    placeBetPrompt: {
+        color: 'rgba(255,255,255,0.1)',
+        fontSize: 18,
+        fontWeight: '900',
+        letterSpacing: 5,
+    },
+    resultOverlay: {
+        position: 'absolute',
+        inset: 0,
+        backgroundColor: 'rgba(0,0,0,0.8)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 100,
+    },
+    resultBox: {
+        backgroundColor: colors.surface,
+        padding: 30,
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: colors.border,
+        alignItems: 'center',
+        width: '80%',
+    },
+    resultMainText: {
+        fontSize: 32,
+        fontWeight: '900',
+        letterSpacing: 2,
+        marginBottom: 20,
+        textAlign: 'center',
+    },
+    nextHandBtn: {
+        backgroundColor: colors.primary,
+        paddingVertical: 15,
+        paddingHorizontal: 40,
+        borderRadius: 8,
+        shadowColor: colors.primary,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.4,
+        shadowRadius: 8,
+    },
+    nextHandBtnText: {
+        color: '#FFF',
+        fontWeight: 'bold',
+        fontSize: 16,
+        letterSpacing: 1,
+    },
+    controlPanel: {
+        backgroundColor: colors.surface,
+        borderTopWidth: 1,
+        borderTopColor: colors.border,
+        padding: 15,
+    },
+    bettingFlow: {
+        gap: 15,
+    },
+    chipScroll: {
+        paddingVertical: 10,
+        gap: 10,
+        flexGrow: 1,
+        justifyContent: 'center',
+        paddingHorizontal: 15,
+    },
+    dealRow: {
+        flexDirection: 'row',
+        gap: 10,
+        alignItems: 'center',
+    },
+    clearBtn: {
+        width: 50,
+        height: 50,
+        borderRadius: 25,
+        backgroundColor: colors.surfaceDark,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: colors.border,
+    },
+    mainDealBtn: {
+        flex: 1,
+        height: 55,
+        backgroundColor: colors.success,
+        borderRadius: 8,
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: colors.success,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 5,
+    },
+    mainDealBtnText: {
+        color: '#FFF',
+        fontSize: 18,
+        fontWeight: '900',
+        letterSpacing: 2,
+    },
+    actionRow: {
+        flexDirection: 'row',
+        gap: 8,
+        alignItems: 'center',
+    },
+    actionBtn: {
+        flex: 1,
+        height: 55,
+        borderRadius: 6,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+    },
+    actionBtnText: {
+        color: '#FFF',
+        fontSize: 12,
+        fontWeight: '900',
+        letterSpacing: 1,
+    },
+    hitBtn: {
+        backgroundColor: 'rgba(34, 197, 94, 0.15)',
+        borderColor: '#22c55e',
+    },
+    standBtn: {
+        backgroundColor: 'rgba(239, 68, 68, 0.15)',
+        borderColor: '#ef4444',
+    },
+    doubleBtn: {
+        backgroundColor: 'rgba(99, 102, 241, 0.15)',
+        borderColor: colors.primary,
+    },
+    splitBtn: {
+        backgroundColor: 'rgba(245, 158, 11, 0.15)',
+        borderColor: '#f59e0b',
+    },
+    btnActionDisabled: {
+        opacity: 0.2,
+        borderColor: 'rgba(255,255,255,0.1)',
+        backgroundColor: 'rgba(255,255,255,0.05)',
+    },
+    btnDisabled: {
+        opacity: 0.5,
+        backgroundColor: colors.surfaceDark,
     },
     cardRow: {
         flexDirection: 'row',
@@ -1163,6 +1531,46 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         fontVariant: ['tabular-nums'],
     },
+    chipTray: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 15,
+        marginVertical: 15,
+        paddingHorizontal: 20,
+    },
+    activeBetContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: colors.surface,
+        padding: 12,
+        paddingHorizontal: 20,
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: colors.primary,
+        marginBottom: 20,
+        gap: 15,
+    },
+    activeBetDisplay: {
+        alignItems: 'center',
+    },
+    activeBetLabel: {
+        color: colors.textTertiary,
+        fontSize: 8,
+        fontWeight: '900',
+        letterSpacing: 1,
+    },
+    activeBetValue: {
+        color: colors.primary,
+        fontSize: 20,
+        fontWeight: '700',
+    },
+    clearBetBtn: {
+        padding: 8,
+        backgroundColor: 'rgba(244, 63, 94, 0.1)',
+        borderRadius: 4,
+    },
     dealButton: {
         backgroundColor: colors.primary,
         paddingVertical: 16,
@@ -1181,59 +1589,9 @@ const styles = StyleSheet.create({
         letterSpacing: 2,
         textTransform: 'uppercase',
     },
-    actionButtons: {
-        flexDirection: 'row',
-        gap: 10,
-        marginVertical: 20,
-    },
-    actionBtn: {
-        flex: 1,
-        paddingVertical: 16,
-        borderRadius: 4,
-        alignItems: 'center',
-        borderWidth: 1,
-    },
-    actionBtnText: {
-        fontSize: 14,
-        fontWeight: 'bold',
-        letterSpacing: 1,
-        color: '#FFFFFF',
-    },
-    hitBtn: {
-        backgroundColor: 'transparent',
-        borderColor: colors.success,
-        shadowColor: colors.success,
-        shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 0.3,
-        shadowRadius: 10,
-    },
     hitBtnText: { color: colors.success },
-    standBtn: {
-        backgroundColor: 'transparent',
-        borderColor: colors.error,
-        shadowColor: colors.error,
-        shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 0.3,
-        shadowRadius: 10,
-    },
     standBtnText: { color: colors.error },
-    doubleBtn: {
-        backgroundColor: 'transparent',
-        borderColor: colors.primary,
-        shadowColor: colors.primary,
-        shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 0.3,
-        shadowRadius: 10,
-    },
     doubleBtnText: { color: colors.primary },
-    splitBtn: {
-        backgroundColor: 'transparent',
-        borderColor: colors.warning,
-        shadowColor: colors.warning,
-        shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 0.3,
-        shadowRadius: 10,
-    },
     splitBtnText: { color: colors.warning },
     splitHandContainer: {
         marginBottom: 20,
@@ -1364,8 +1722,12 @@ const styles = StyleSheet.create({
         textTransform: 'uppercase',
         letterSpacing: 1,
     },
+    inputGroup: {
+        gap: 15,
+        marginBottom: 25,
+    },
     inputContainer: {
-        marginBottom: 20,
+        marginBottom: 0,
     },
     inputLabel: {
         color: colors.textSecondary,
@@ -1411,6 +1773,93 @@ const styles = StyleSheet.create({
         color: colors.textPrimary,
         textTransform: 'uppercase',
         letterSpacing: 1,
+    },
+    modalHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 25,
+    },
+    settingsGroup: {
+        marginBottom: 25,
+    },
+    groupLabel: {
+        color: colors.primary,
+        fontSize: 10,
+        fontWeight: '900',
+        letterSpacing: 1.5,
+        marginBottom: 15,
+    },
+    settingItem: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 15,
+        backgroundColor: colors.surfaceDark,
+        padding: 12,
+        borderRadius: 4,
+    },
+    settingLabel: {
+        color: colors.textPrimary,
+        fontSize: 14,
+        fontWeight: '600',
+    },
+    miniToggle: {
+        width: 44,
+        height: 24,
+        borderRadius: 12,
+        backgroundColor: colors.surfaceLight,
+        padding: 2,
+    },
+    miniToggleActive: {
+        backgroundColor: colors.primary,
+    },
+    miniToggleCircle: {
+        width: 20,
+        height: 20,
+        borderRadius: 10,
+        backgroundColor: colors.textSecondary,
+    },
+    miniToggleCircleActive: {
+        backgroundColor: '#FFF',
+        transform: [{ translateX: 20 }],
+    },
+    deckSelector: {
+        flexDirection: 'row',
+        gap: 8,
+    },
+    deckOption: {
+        flex: 1,
+        paddingVertical: 8,
+        alignItems: 'center',
+        backgroundColor: colors.surfaceLight,
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: 'transparent',
+    },
+    deckOptionActive: {
+        borderColor: colors.primary,
+        backgroundColor: 'rgba(99, 102, 241, 0.1)',
+    },
+    deckOptionText: {
+        color: colors.textSecondary,
+        fontWeight: 'bold',
+        fontSize: 12,
+    },
+    deckOptionTextActive: {
+        color: colors.primary,
+    },
+    modalCloseBtn: {
+        backgroundColor: colors.primary,
+        paddingVertical: 16,
+        borderRadius: 4,
+        alignItems: 'center',
+        marginTop: 10,
+    },
+    modalCloseBtnText: {
+        color: '#FFF',
+        fontWeight: '900',
+        letterSpacing: 2,
     },
     sessionStatsToggle: {
         backgroundColor: colors.surface,
@@ -1479,5 +1928,62 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textTransform: 'uppercase',
         letterSpacing: 1,
+    },
+    tableTextContainer: {
+        position: 'absolute',
+        top: '30%',
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        opacity: 0.4,
+        zIndex: 2, // Layer 2
+        transform: [{ perspective: 1000 }, { rotateX: '20deg' }],
+        pointerEvents: 'none', // Allow clicks to pass through to table
+    },
+    tableTextTitle: {
+        color: colors.primary,
+        fontSize: 32,
+        fontWeight: '900',
+        letterSpacing: 4,
+        textShadowColor: colors.primary,
+        textShadowRadius: 10,
+    },
+    tableTextSubtitle: {
+        color: colors.textSecondary,
+        fontSize: 14,
+        fontWeight: 'bold',
+        letterSpacing: 3,
+        marginTop: 4,
+        marginBottom: 12,
+    },
+    tableTextRules: {
+        color: colors.textTertiary,
+        fontSize: 9,
+        fontWeight: 'bold',
+        letterSpacing: 1,
+        marginBottom: 2,
+    },
+    neonArch: {
+        position: 'absolute',
+        top: '-15%',
+        left: -100,
+        right: -100,
+        height: 600,
+        borderRadius: 600,
+        borderWidth: 2,
+        borderColor: colors.primary,
+        opacity: 0.08,
+        zIndex: 1, // Layer 1
+        pointerEvents: 'none',
+    },
+    bettingRing: {
+        position: 'absolute',
+        width: 100,
+        height: 100,
+        borderRadius: 50,
+        borderWidth: 2,
+        borderColor: colors.primary,
+        opacity: 0.15,
+        backgroundColor: 'rgba(6, 182, 212, 0.02)',
     },
 });

@@ -14,6 +14,7 @@ interface SimState {
     mistakesCost: number; // EV lost from mistakes
   };
   bankrollHistory: number[];
+  accuracyHistory: { correct: boolean, timestamp: number }[];
   isProMode?: boolean;
   certificationStatus?: 'PRO' | 'NONE';
   challengeStats?: {
@@ -37,12 +38,14 @@ interface SimState {
   trackEV: (isCorrect: boolean, type: 'INSURANCE' | 'DEVIATION' | 'BASIC') => void;
   validateBet: (amount: number) => void;
   updateBankroll: (delta: number) => void;
+  checkCount: (userRc: number, userTc: number, actualTc: number) => { isCorrectRc: boolean; isCorrectTc: boolean };
   resetSimState: () => void;
 
   toggleProMode: () => void;
   startChallenge: () => void;
   updateChallengeStats: (stats: any) => void;
   completeChallenge: () => { success: boolean; rubric: { failReason: string; improvementTip: string } };
+  getAccuracy: () => number;
 
   // Computed/Logic
   getSuggestedBet: (minBet: number) => number;
@@ -58,6 +61,7 @@ export const useSimState = create<SimState>((set, get) => ({
   speedErrors: 0,
   evTracking: { theoreticalWin: 0, mistakesCost: 0 },
   bankrollHistory: [1000],
+  accuracyHistory: [],
 
   setRunningCount: (count) => set({ runningCount: count }),
   setTrueCountUserEstimate: (count) => set({ trueCountUserEstimate: count }),
@@ -129,6 +133,26 @@ export const useSimState = create<SimState>((set, get) => ({
     };
   }),
 
+  checkCount: (userRc, userTc, actualTc) => {
+    const state = get();
+    const isCorrectRc = userRc === state.runningCount;
+    // Tolerance of 1 for True Count as per reference app
+    const isCorrectTc = Math.abs(userTc - actualTc) <= 1;
+
+    const isCorrectOverall = isCorrectRc && isCorrectTc;
+
+    set((state) => ({
+      accuracyHistory: [...state.accuracyHistory, { correct: isCorrectOverall, timestamp: Date.now() }],
+      challengeStats: state.challengeStats ? {
+        ...state.challengeStats,
+        countChecks: state.challengeStats.countChecks + 1,
+        correctCounts: state.challengeStats.correctCounts + (isCorrectOverall ? 1 : 0)
+      } : state.challengeStats
+    }));
+
+    return { isCorrectRc, isCorrectTc };
+  },
+
   resetSimState: () => set({
     runningCount: 0,
     trueCountUserEstimate: 0,
@@ -139,6 +163,7 @@ export const useSimState = create<SimState>((set, get) => ({
     speedErrors: 0,
     evTracking: { theoreticalWin: 0, mistakesCost: 0 },
     bankrollHistory: [1000],
+    accuracyHistory: [],
   }),
 
   toggleProMode: () => set(state => ({ isProMode: !state.isProMode })),
@@ -242,5 +267,11 @@ export const useSimState = create<SimState>((set, get) => ({
     // But usually in a casino you have to play minBet or leave.
     // If edge is positive, suggested bet should be at least minBet.
     return Math.max(minBet, Math.floor(suggestedBet));
+  },
+  getAccuracy: () => {
+    const historicalAccuracy = get().accuracyHistory;
+    if (historicalAccuracy.length === 0) return 100;
+    const correct = historicalAccuracy.filter(x => x.correct).length;
+    return Math.round((correct / historicalAccuracy.length) * 100);
   },
 }));

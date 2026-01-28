@@ -8,6 +8,7 @@ interface CardProps {
   card: CardType;
   size?: 'small' | 'medium' | 'large';
   showBack?: boolean;
+  showCountImpact?: boolean;
 }
 
 const suitSymbols: Record<Suit, string> = {
@@ -38,6 +39,12 @@ const isFaceCard = (rank: Rank): boolean => {
 
 const isAce = (rank: Rank): boolean => {
   return rank === 'A';
+};
+
+const getHiLoValue = (rank: Rank): number => {
+  if (['10', 'J', 'Q', 'K', 'A'].includes(rank)) return -1;
+  if (['2', '3', '4', '5', '6'].includes(rank)) return 1;
+  return 0;
 };
 
 // Pip positions for each card (relative positions 0-1)
@@ -108,7 +115,7 @@ const getFaceSymbol = (rank: Rank): string => {
   return symbols[rank] || '';
 };
 
-export const Card: React.FC<CardProps> = ({ card, size = 'medium', showBack = false }) => {
+export const Card: React.FC<CardProps> = ({ card, size = 'medium', showBack = false, showCountImpact = false }) => {
   const cardDimensions = {
     small: { width: 70, height: 98, fontSize: 14, suitSize: 12, pipSize: 10, faceSize: 28, padding: 6 },
     medium: { width: 110, height: 154, fontSize: 20, suitSize: 16, pipSize: 14, faceSize: 40, padding: 8 },
@@ -205,6 +212,22 @@ export const Card: React.FC<CardProps> = ({ card, size = 'medium', showBack = fa
             {suitSymbol}
           </Text>
         </View>
+
+        {/* Count Impact Tag Overlay */}
+        {showCountImpact && (
+          <View style={styles.countImpactContainer}>
+            <BlurView intensity={30} tint="dark" style={styles.countImpactBlur}>
+              <Text style={[
+                styles.countImpactText,
+                { fontSize: fontSize * 0.8 },
+                getHiLoValue(card.rank) > 0 ? styles.countPos :
+                  getHiLoValue(card.rank) < 0 ? styles.countNeg : styles.countNeu
+              ]}>
+                {getHiLoValue(card.rank) > 0 ? `+${getHiLoValue(card.rank)}` : getHiLoValue(card.rank)}
+              </Text>
+            </BlurView>
+          </View>
+        )}
       </View>
     </View>
   );
@@ -291,4 +314,27 @@ const styles = StyleSheet.create({
     marginTop: -8,
   },
   aceSuit: {},
+  countImpactContainer: {
+    position: 'absolute',
+    inset: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10,
+  },
+  countImpactBlur: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    minWidth: 40,
+    alignItems: 'center',
+  },
+  countImpactText: {
+    fontWeight: '900',
+    fontFamily: 'System',
+  },
+  countPos: { color: colors.success },
+  countNeg: { color: colors.error },
+  countNeu: { color: colors.textSecondary },
 });
