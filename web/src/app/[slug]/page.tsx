@@ -51,6 +51,31 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   // Convert markdown-style content to JSX
   const renderContent = (content: string) => {
+    const renderTextWithFormatting = (text: string) => {
+      // Split by links first
+      const parts = text.split(/(\[.*?\]\(.*?\))/g);
+      return parts.map((part, i) => {
+        const linkMatch = part.match(/^\[(.*?)\]\((.*?)\)$/);
+        if (linkMatch) {
+          return (
+            <Link key={i} href={linkMatch[2]} className="text-primary hover:underline">
+              {linkMatch[1]}
+            </Link>
+          );
+        }
+        
+        // Then handle bold
+        const boldParts = part.split(/(\*\*.*?\*\*)/g);
+        return boldParts.map((boldPart, j) => {
+          const boldMatch = boldPart.match(/^\*\*(.*?)\*\*$/);
+          if (boldMatch) {
+            return <strong key={`${i}-${j}`} className="text-white">{boldMatch[1]}</strong>;
+          }
+          return boldPart;
+        });
+      });
+    };
+
     const paragraphs = content.split("\n\n");
     return paragraphs.map((paragraph, index) => {
       if (paragraph.startsWith("## ")) {
@@ -60,46 +85,25 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </h2>
         );
       }
-      if (paragraph.startsWith("- **")) {
+      if (paragraph.startsWith("- ")) {
         const items = paragraph.split("\n");
         return (
           <ul key={index} className="space-y-3 my-6 ml-4">
             {items.map((item, i) => {
-              const match = item.match(/- \*\*(.+?):\*\* (.+)/);
-              if (match) {
-                return (
-                  <li key={i} className="text-gray-300 flex">
-                    <span className="text-primary mr-2">•</span>
-                    <span><strong className="text-white">{match[1]}:</strong> {match[2]}</span>
-                  </li>
-                );
-              }
+              const cleanItem = item.replace(/^- /, "");
               return (
                 <li key={i} className="text-gray-300 flex">
                   <span className="text-primary mr-2">•</span>
-                  <span>{item.replace("- ", "")}</span>
+                  <span>{renderTextWithFormatting(cleanItem)}</span>
                 </li>
               );
             })}
           </ul>
         );
       }
-      if (paragraph.startsWith("- ")) {
-        const items = paragraph.split("\n");
-        return (
-          <ul key={index} className="space-y-3 my-6 ml-4">
-            {items.map((item, i) => (
-              <li key={i} className="text-gray-300 flex">
-                <span className="text-primary mr-2">•</span>
-                <span>{item.replace("- ", "")}</span>
-              </li>
-            ))}
-          </ul>
-        );
-      }
       return (
         <p key={index} className="text-gray-300 leading-relaxed my-5">
-          {paragraph}
+          {renderTextWithFormatting(paragraph)}
         </p>
       );
     });
