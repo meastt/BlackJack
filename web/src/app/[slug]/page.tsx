@@ -80,7 +80,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     return paragraphs.map((paragraph, index) => {
       if (paragraph.startsWith("## ")) {
         return (
-          <h2 key={index} className="text-2xl font-bold mt-10 mb-4 text-gradient-gold">
+          <h2 key={index} className="text-2xl font-bold mt-16 mb-6 text-gradient-gold">
             {paragraph.replace("## ", "")}
           </h2>
         );
@@ -88,12 +88,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       if (paragraph.startsWith("- ")) {
         const items = paragraph.split("\n");
         return (
-          <ul key={index} className="space-y-3 my-6 ml-4">
+          <ul key={index} className="space-y-4 my-8 ml-6 list-disc marker:text-primary">
             {items.map((item, i) => {
               const cleanItem = item.replace(/^- /, "");
               return (
-                <li key={i} className="text-gray-300 flex">
-                  <span className="text-primary mr-2">•</span>
+                <li key={i} className="text-body pl-2">
                   <span>{renderTextWithFormatting(cleanItem)}</span>
                 </li>
               );
@@ -102,7 +101,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         );
       }
       return (
-        <p key={index} className="text-gray-300 leading-relaxed my-5">
+        <p key={index} className="text-body leading-loose my-6">
           {renderTextWithFormatting(paragraph)}
         </p>
       );
@@ -111,15 +110,15 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   return (
     <main className="min-h-screen">
-      <article className="container py-16 md:py-24 max-w-3xl">
-        <Link href="/blog" className="inline-flex items-center text-primary hover:text-primary-light mb-8 transition-colors">
+      <article className="container py-16 md:py-24 prose-container">
+        <Link href="/blog" className="inline-flex items-center text-primary hover:text-primary-light mb-12 transition-colors">
           <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
           </svg>
           Back to Blog
         </Link>
 
-        <div className="flex flex-wrap items-center gap-4 mb-6 text-sm">
+        <div className="flex flex-wrap items-center gap-4 mb-8 text-sm">
           <span className="badge badge-beginner">
             {post.category}
           </span>
@@ -127,10 +126,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <span className="text-text-muted">{post.readTime}</span>
         </div>
 
-        <h1 className="text-4xl md:text-5xl font-bold mb-6">{post.title}</h1>
-        <p className="text-xl text-text-secondary mb-8 leading-relaxed">{post.description}</p>
+        <h1 className="text-4xl md:text-5xl font-bold mb-8">{post.title}</h1>
+        <p className="text-xl text-text-secondary mb-12 leading-relaxed">{post.description}</p>
 
-        <div className="border-t border-surface-border pt-8">
+        <div className="border-t border-surface-border pt-12 space-y-relaxed">
           {renderContent(post.content)}
         </div>
 
