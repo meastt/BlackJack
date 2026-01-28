@@ -46,7 +46,17 @@ export const TacticalShoe: React.FC<TacticalShoeProps> = ({ remaining, total, pe
                             end={{ x: 0, y: 1 }}
                         >
                             {/* Card edge texture */}
-                            <View style={styles.edgeTexture} />
+                            <View style={styles.edgeTexture}>
+                                {Array.from({ length: 40 }).map((_, i) => (
+                                    <View
+                                        key={i}
+                                        style={[
+                                            styles.cardHash,
+                                            { left: i * 2 }
+                                        ]}
+                                    />
+                                ))}
+                            </View>
 
                             {/* Gloss line */}
                             <View style={styles.stackGloss} />
@@ -138,12 +148,16 @@ const styles = StyleSheet.create({
     },
     edgeTexture: {
         ...StyleSheet.absoluteFillObject,
-        opacity: 0.2,
-        backgroundColor: 'rgba(0,0,0,0.5)',
-        // Replicating dashed texture is hard without SVGs, 
-        // but we can use a repeating pattern simulation
-        borderLeftWidth: 1,
-        borderColor: 'rgba(255,255,255,0.2)',
+        overflow: 'hidden',
+        opacity: 0.3,
+        flexDirection: 'row',
+    },
+    cardHash: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        width: 1,
+        backgroundColor: 'rgba(0,0,0,0.4)',
     },
     stackGloss: {
         position: 'absolute',

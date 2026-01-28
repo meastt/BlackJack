@@ -111,8 +111,9 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
 
     // Start a new hand
     const startNewHand = () => {
-        if (bankroll < currentBet) {
-            setResultMessage('OUT OF MONEY! Game Over.');
+        // Check if bet is placed
+        if (currentBet === 0) {
+            setResultMessage('Place a bet!');
             return;
         }
 
@@ -157,6 +158,9 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
                 if (card) {
                     tempCards.push(card);
                     updateCount(card);
+
+                    // Add haptic feedback for initial deal
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
                     if (i === 0) {
                         localPlayerHand = [card];
@@ -205,6 +209,7 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
         setDealerHand([]);
         setResultMessage('');
         setGamePhase('BETTING');
+        setCurrentBet(0); // Reset visible bet to force new deduction
         currentBetRef.current = 0; // Reset bet ref
 
         // Clear split state
@@ -255,7 +260,8 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
                     heatGenerated: 0,
                 });
 
-                setTimeout(() => nextHand(), 2000);
+                // Auto-advance removed - User must tap Next Hand
+                // setTimeout(() => nextHand(), 2000);
             }
         } else if (handValue === 21) {
             // Auto-stand on 21
@@ -340,7 +346,8 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
                     heatGenerated: 0,
                 });
 
-                setTimeout(() => nextHand(), 2000);
+                // Auto-advance removed - User must tap Next Hand
+                // setTimeout(() => nextHand(), 2000);
             }
         } else {
             // Automatically stand
@@ -514,7 +521,8 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
         const heatIncrease = BlackjackGameEngine.calculateHeatFromBet(actualBet, trueCount, MIN_BET);
         setSuspicionLevel((prev: number) => Math.min(100, prev + heatIncrease));
 
-        setTimeout(() => nextHand(), 3000);
+        // Auto-advance removed - User must tap Next Hand
+        // setTimeout(() => nextHand(), 3000);
     };
 
     // Dealer plays against split hands
@@ -610,7 +618,8 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
         );
         setSuspicionLevel((prev: number) => Math.min(100, prev + heatIncrease));
 
-        setTimeout(() => nextHand(), 3500);
+        // Auto-advance removed - User must tap Next Hand
+        // setTimeout(() => nextHand(), 3500);
     };
 
     // Add to current bet using chips
@@ -758,8 +767,13 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
                 <View style={styles.neonArch} />
 
                 {/* Table Markings & Text */}
-                <View style={styles.tableTextContainer}>
+                {/* Top Title Banner */}
+                <View style={styles.tableTitleContainer}>
                     <Text style={styles.tableTextTitle}>PROTOCOL 21</Text>
+                </View>
+
+                {/* Bottom Table Rules */}
+                <View style={styles.tableTextContainer}>
                     <Text style={styles.tableTextSubtitle}>PAYS 3 TO 2</Text>
                     <Text style={styles.tableTextRules}>DEALER MUST DRAW TO 16 AND STAND ON ALL 17s</Text>
                     <Text style={styles.tableTextRules}>INSURANCE PAYS 2 TO 1</Text>
@@ -775,7 +789,7 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
                                     <CardComponent
                                         card={card}
                                         size="small"
-                                        showBack={gamePhase === 'PLAYER_TURN' && i === 1}
+                                        showBack={(gamePhase === 'DEALING' || gamePhase === 'PLAYER_TURN') && i === 1}
                                         showCountImpact={showCountImpact && (gamePhase !== 'PLAYER_TURN' || i === 0)}
                                     />
                                 </View>
@@ -1281,10 +1295,9 @@ const styles = StyleSheet.create({
     },
     tableCenter: {
         flex: 1,
-        justifyContent: 'center',
+        justifyContent: 'space-evenly', // Changed from center to space-evenly
         alignItems: 'center',
-        paddingVertical: 5,
-        gap: 60,
+        paddingVertical: 20, // Increased padding
         zIndex: 20,
     },
     handArea: {
@@ -1294,7 +1307,7 @@ const styles = StyleSheet.create({
     dealerHandArea: {
         alignItems: 'center',
         minHeight: 100,
-        marginBottom: 20,
+        // marginBottom removed for space-evenly
     },
     cardOverlapRow: {
         flexDirection: 'row',
@@ -1971,15 +1984,24 @@ const styles = StyleSheet.create({
         textTransform: 'uppercase',
         letterSpacing: 1,
     },
+    tableTitleContainer: {
+        position: 'absolute',
+        top: '4%', // Pushed up to match bottom spacing
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        opacity: 0.15,
+        zIndex: 1,
+        pointerEvents: 'none',
+    },
     tableTextContainer: {
         position: 'absolute',
-        bottom: '5%',
+        bottom: '4%', // Pushed down to bottom
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
         opacity: 0.2,
         zIndex: 1,
-        elevation: 1,
         pointerEvents: 'none',
     },
     tableTextTitle: {
