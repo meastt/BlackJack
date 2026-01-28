@@ -108,7 +108,38 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   font-weight: 700;
   letter-spacing: -0.02em;
-  line-height: 1.1;
+  line-height: 1.2;
+  margin-bottom: var(--space-md);
+}
+
+h1 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  margin-bottom: var(--space-lg);
+}
+
+h2 {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  margin-top: var(--space-xl);
+  margin-bottom: var(--space-md);
+}
+
+h3 {
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-sm);
+}
+
+p {
+  margin-bottom: var(--space-md);
+  line-height: 1.8;
+}
+
+ul, ol {
+  margin-bottom: var(--space-lg);
+}
+
+li {
+  margin-bottom: var(--space-sm);
 }
 
 /* Gradient text utility */
@@ -137,10 +168,39 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0 var(--space-lg);
 }
 
+.prose-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
 @media (min-width: 768px) {
   .container {
     padding: 0 var(--space-xl);
   }
+}
+
+/* ==========================================================================
+   Utility Classes
+   ========================================================================== */
+
+.space-y-relaxed > * + * {
+  margin-top: var(--space-xl);
+}
+
+.space-y-loose > * + * {
+  margin-top: var(--space-2xl);
+}
+
+.text-body {
+  color: var(--color-text-secondary);
+  font-size: 1.125rem;
+  line-height: 1.8;
+}
+
+.text-body-lg {
+  color: var(--color-text-secondary);
+  font-size: 1.25rem;
+  line-height: 1.8;
 }
 
 /* ==========================================================================

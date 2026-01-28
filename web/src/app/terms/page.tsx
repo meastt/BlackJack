@@ -9,8 +9,8 @@ export const metadata: Metadata = {
 export default function TermsOfService() {
   return (
     <main className="min-h-screen">
-      <div className="container py-16 md:py-24 max-w-3xl">
-        <Link href="/" className="inline-flex items-center text-primary hover:text-primary-light mb-8 transition-colors">
+      <div className="container py-16 md:py-24 prose-container">
+        <Link href="/" className="inline-flex items-center text-primary hover:text-primary-light mb-12 transition-colors">
           <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
           </svg>
@@ -18,20 +18,20 @@ export default function TermsOfService() {
         </Link>
 
         <h1 className="text-4xl md:text-5xl font-bold mb-4">Terms of Service</h1>
-        <p className="text-text-secondary mb-12">Last updated: January 2026</p>
+        <p className="text-text-secondary mb-16 text-lg">Last updated: January 2026</p>
 
-        <div className="space-y-10">
+        <div className="space-y-16">
           <section>
-            <h2 className="text-2xl font-semibold mb-4">1. Acceptance of Terms</h2>
-            <p className="text-gray-300 leading-relaxed">
+            <h2 className="text-2xl font-bold mb-6 text-white">1. Acceptance of Terms</h2>
+            <p className="text-body">
               By downloading, installing, or using Protocol 21 (&quot;the App&quot;), you agree to be bound
               by these Terms of Service. If you do not agree to these terms, please do not use the App.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold mb-4">2. Description of Service</h2>
-            <p className="text-gray-300 leading-relaxed">
+            <h2 className="text-2xl font-bold mb-6 text-white">2. Description of Service</h2>
+            <p className="text-body">
               Protocol 21 is an educational application designed to help users learn and practice
               card counting techniques for blackjack. The App provides training drills, simulations,
               and educational content about various card counting systems.
@@ -39,8 +39,8 @@ export default function TermsOfService() {
           </section>
 
           <section className="card border-l-4 border-l-primary">
-            <h2 className="text-xl font-semibold mb-3 text-primary">3. Educational Purpose Only</h2>
-            <p className="text-gray-300 leading-relaxed">
+            <h2 className="text-2xl font-bold mb-4 text-primary mt-0">3. Educational Purpose Only</h2>
+            <p className="text-body mb-0">
               The App is intended solely for educational and entertainment purposes. Card counting
               is a legal activity, but casinos may ask players to leave or ban them from playing
               blackjack. We do not encourage or endorse any illegal gambling activities. Users are
@@ -50,8 +50,8 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold mb-4">4. Free Service</h2>
-            <p className="text-gray-300 leading-relaxed">
+            <h2 className="text-2xl font-bold mb-6 text-white">4. Free Service</h2>
+            <p className="text-body">
               Protocol 21 is currently offered free of charge. We reserve the right to introduce
               premium features or modify the pricing structure in the future, with appropriate notice
               to users.
@@ -59,8 +59,8 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold mb-4">5. Intellectual Property</h2>
-            <p className="text-gray-300 leading-relaxed">
+            <h2 className="text-2xl font-bold mb-6 text-white">5. Intellectual Property</h2>
+            <p className="text-body">
               All content, features, and functionality of the App (including but not limited to text,
               graphics, logos, and software) are owned by Protocol 21 and are protected by copyright,
               trademark, and other intellectual property laws.
@@ -68,8 +68,8 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold mb-4">6. No Warranty</h2>
-            <p className="text-gray-300 leading-relaxed">
+            <h2 className="text-2xl font-bold mb-6 text-white">6. No Warranty</h2>
+            <p className="text-body">
               The App is provided &quot;as is&quot; and &quot;as available&quot; without warranties of any kind,
               either express or implied. We do not guarantee that the App will be error-free,
               uninterrupted, or that it will meet your specific requirements. We make no guarantees
@@ -78,8 +78,8 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold mb-4">7. Limitation of Liability</h2>
-            <p className="text-gray-300 leading-relaxed">
+            <h2 className="text-2xl font-bold mb-6 text-white">7. Limitation of Liability</h2>
+            <p className="text-body">
               To the fullest extent permitted by law, Protocol 21 shall not be liable for any
               indirect, incidental, special, consequential, or punitive damages, including but not
               limited to loss of profits, data, or other intangible losses, resulting from your use
@@ -88,16 +88,16 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold mb-4">8. User Responsibilities</h2>
-            <p className="text-gray-300 leading-relaxed">
+            <h2 className="text-2xl font-bold mb-6 text-white">8. User Responsibilities</h2>
+            <p className="text-body">
               You agree to use the App only for lawful purposes and in accordance with these Terms.
               You are solely responsible for your gambling decisions and any consequences that may arise.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold mb-4">9. Changes to Terms</h2>
-            <p className="text-gray-300 leading-relaxed">
+            <h2 className="text-2xl font-bold mb-6 text-white">9. Changes to Terms</h2>
+            <p className="text-body">
               We reserve the right to modify these Terms at any time. Changes will be effective
               immediately upon posting. Your continued use of the App after changes are posted
               constitutes your acceptance of the modified Terms.
@@ -105,8 +105,8 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold mb-4">10. Contact Information</h2>
-            <p className="text-gray-300 leading-relaxed">
+            <h2 className="text-2xl font-bold mb-6 text-white">10. Contact Information</h2>
+            <p className="text-body">
               For questions about these Terms of Service, please contact us at:{" "}
               <a href="mailto:mike@protocol21blackjack.com" className="text-primary hover:text-primary-light transition-colors">
                 mike@protocol21blackjack.com
