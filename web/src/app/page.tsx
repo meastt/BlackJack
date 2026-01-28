@@ -15,14 +15,14 @@ export default function Home() {
           </div>
 
           {/* Headline */}
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-10 tracking-tight">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight" style={{ marginBottom: '2.5rem' }}>
             <span className="text-gradient-gold">Master the Count.</span>
             <br />
             <span className="text-white/90">Beat the House.</span>
           </h1>
 
           {/* Subheadline */}
-          <p className="text-lg md:text-xl text-text-secondary max-w-2xl mx-auto mb-14 leading-relaxed text-center">
+          <p className="text-lg md:text-xl text-text-secondary max-w-2xl leading-relaxed text-center" style={{ margin: '0 auto 3rem auto' }}>
             Protocol 21 is the only card counting trainer built for serious advantage players.
             Casino-grade drills. Six proven systems. Your edge starts here.
           </p>
@@ -161,10 +161,10 @@ export default function Home() {
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
 
             <div className="relative z-10">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold" style={{ marginBottom: '1.5rem' }}>
                 Ready to Get Your Edge?
               </h2>
-              <p className="text-text-secondary max-w-lg mx-auto mb-10 text-center">
+              <p className="text-text-secondary max-w-lg leading-relaxed text-center" style={{ margin: '0 auto 2.5rem auto' }}>
                 Join thousands of advantage players who trust Protocol 21 for their training.
                 Start your journey to consistent profits today.
               </p>
