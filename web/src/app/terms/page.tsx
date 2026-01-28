@@ -8,16 +8,19 @@ export const metadata: Metadata = {
 
 export default function TermsOfService() {
   return (
-    <main className="min-h-screen bg-background">
-      <div className="container py-16 max-w-3xl">
-        <Link href="/" className="text-primary hover:text-primary-light mb-8 inline-block">
-          &larr; Back to Home
+    <main className="min-h-screen">
+      <div className="container py-16 md:py-24 max-w-3xl">
+        <Link href="/" className="inline-flex items-center text-primary hover:text-primary-light mb-8 transition-colors">
+          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+          </svg>
+          Back to Home
         </Link>
 
-        <h1 className="text-4xl font-bold mb-8">Terms of Service</h1>
-        <p className="text-secondary mb-8">Last updated: January 2026</p>
+        <h1 className="text-4xl md:text-5xl font-bold mb-4">Terms of Service</h1>
+        <p className="text-text-secondary mb-12">Last updated: January 2026</p>
 
-        <div className="prose prose-invert max-w-none space-y-8">
+        <div className="space-y-10">
           <section>
             <h2 className="text-2xl font-semibold mb-4">1. Acceptance of Terms</h2>
             <p className="text-gray-300 leading-relaxed">
@@ -35,8 +38,8 @@ export default function TermsOfService() {
             </p>
           </section>
 
-          <section>
-            <h2 className="text-2xl font-semibold mb-4">3. Educational Purpose Only</h2>
+          <section className="card border-l-4 border-l-primary">
+            <h2 className="text-xl font-semibold mb-3 text-primary">3. Educational Purpose Only</h2>
             <p className="text-gray-300 leading-relaxed">
               The App is intended solely for educational and entertainment purposes. Card counting
               is a legal activity, but casinos may ask players to leave or ban them from playing
@@ -105,13 +108,32 @@ export default function TermsOfService() {
             <h2 className="text-2xl font-semibold mb-4">10. Contact Information</h2>
             <p className="text-gray-300 leading-relaxed">
               For questions about these Terms of Service, please contact us at:{" "}
-              <a href="mailto:mike@protocol21blackjack.com" className="text-primary hover:text-primary-light">
+              <a href="mailto:mike@protocol21blackjack.com" className="text-primary hover:text-primary-light transition-colors">
                 mike@protocol21blackjack.com
               </a>
             </p>
           </section>
         </div>
       </div>
+
+      <footer className="footer">
+        <div className="container">
+          <p className="footer-brand mb-2">
+            &copy; {new Date().getFullYear()} Protocol 21. All rights reserved.
+          </p>
+          <p className="footer-brand">
+            Built by fellow degens in the desert at{" "}
+            <a href="https://techridgeseo.com" target="_blank" rel="noopener noreferrer">
+              TechRidgeSEO
+            </a>
+          </p>
+          <div className="footer-links">
+            <Link href="/privacy">Privacy Policy</Link>
+            <Link href="/terms">Terms of Service</Link>
+            <Link href="/blog">Blog</Link>
+          </div>
+        </div>
+      </footer>
     </main>
   );
 }

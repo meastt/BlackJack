@@ -6,89 +6,146 @@ export default function Home() {
   return (
     <main className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-background to-surface pt-20 pb-32 border-b border-white/10">
-        <div className="container text-center">
-          <div className="inline-block px-4 py-1.5 mb-6 rounded-full bg-primary/10 border border-primary/20">
-            <span className="text-primary text-sm font-semibold tracking-wider uppercase">Protocol 21 - Early Access</span>
+      <section className="hero">
+        <div className="container text-center relative z-10">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm">
+            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+            <span className="text-primary text-sm font-semibold tracking-wide">Early Access Now Available</span>
           </div>
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-primary tracking-tight">
-            The Pro Blackjack <br /> Trainer App
+
+          {/* Headline */}
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight">
+            <span className="text-gradient-gold">Master the Count.</span>
+            <br />
+            <span className="text-white/90">Beat the House.</span>
           </h1>
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Master card counting with casino-grade drills. Whether you use Hi-Lo, KO, or Omega II,
-            Protocol 21 is the only trainer built for serious advantage players.
+
+          {/* Subheadline */}
+          <p className="text-lg md:text-xl text-text-secondary max-w-2xl mx-auto mb-10 leading-relaxed">
+            Protocol 21 is the only card counting trainer built for serious advantage players.
+            Casino-grade drills. Six proven systems. Your edge starts here.
           </p>
-          <div className="flex flex-col md:flex-row gap-4 justify-center">
-            <Link href="/download/ios" className="btn btn-primary text-lg px-8">
-              Download on iOS
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/download/ios" className="btn btn-primary text-lg px-8 py-4">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+              </svg>
+              Download for iOS
             </Link>
-            <Link href="/download/android" className="btn btn-outline text-lg px-8">
+            <Link href="/download/android" className="btn btn-outline text-lg px-8 py-4">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.523 2.047a.5.5 0 0 0-.78.203l-1.617 4.366a12.5 12.5 0 0 0-6.252 0L7.257 2.25a.5.5 0 0 0-.78-.203C4.602 3.793 3.262 6.16 3.009 8.88A12.5 12.5 0 0 0 2 13.5v.5c0 4.418 4.477 8 10 8s10-3.582 10-8v-.5a12.5 12.5 0 0 0-1.009-4.62c-.253-2.72-1.593-5.087-3.468-6.833zM8 15a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm8 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+              </svg>
               Get for Android
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Trust / Stats Stripe */}
-      <div className="border-b border-white/5 bg-surface py-8">
-        <div className="container flex flex-wrap justify-center gap-12 text-center">
-          <div>
-            <div className="text-3xl font-bold text-white">99.5%</div>
-            <div className="text-sm text-gray-400 uppercase tracking-widest mt-1">Accuracy Goal</div>
-          </div>
-          <div>
-            <div className="text-3xl font-bold text-white">6+</div>
-            <div className="text-sm text-gray-400 uppercase tracking-widest mt-1">Counting Systems</div>
-          </div>
-          <div>
-            <div className="text-3xl font-bold text-white">PRO</div>
-            <div className="text-sm text-gray-400 uppercase tracking-widest mt-1">Casino Simulator</div>
+      {/* Stats Strip */}
+      <div className="stats-strip">
+        <div className="container">
+          <div className="flex flex-wrap justify-center gap-8 md:gap-16">
+            <div className="stat-item">
+              <div className="stat-value">99.5%</div>
+              <div className="stat-label">Accuracy Goal</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-value">6+</div>
+              <div className="stat-label">Counting Systems</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-value">PRO</div>
+              <div className="stat-label">Casino Simulator</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-value">FREE</div>
+              <div className="stat-label">To Download</div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Systems Grid (pSEO Clusters) */}
-      <section className="py-24 container">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center">Supported Systems</h2>
-        <p className="text-gray-400 text-center mb-16 max-w-2xl mx-auto">
-          Don&apos;t just learn to count. Master the specific nuances of your chosen system with dedicated algorithms.
-        </p>
+      {/* Systems Grid */}
+      <section className="section">
+        <div className="container">
+          <div className="section-header">
+            <h2 className="section-title">
+              <span className="text-gradient">Supported Systems</span>
+            </h2>
+            <p className="section-subtitle">
+              Don&apos;t just learn to count. Master the specific nuances of your chosen system with dedicated algorithms and real-time feedback.
+            </p>
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {systems.map((system) => (
-            <Link href={`/systems/${system.slug}`} key={system.id} className="group overflow-hidden rounded-xl bg-surface border border-white/5 hover:border-primary transition-colors p-8">
-              <div className="flex justify-between items-start mb-4">
-                <span className={`px-2 py-1 rounded text-xs font-bold uppercase ${system.difficulty_level === 'Beginner' ? 'bg-green-900/30 text-green-400' :
-                    system.difficulty_level === 'Intermediate' ? 'bg-yellow-900/30 text-yellow-400' :
-                      'bg-red-900/30 text-red-400'
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {systems.map((system) => (
+              <Link
+                href={`/systems/${system.slug}`}
+                key={system.id}
+                className="card group"
+              >
+                <div className="flex justify-between items-start mb-4">
+                  <span className={`badge ${
+                    system.difficulty_level === 'Beginner' ? 'badge-beginner' :
+                    system.difficulty_level === 'Intermediate' ? 'badge-intermediate' :
+                    'badge-advanced'
                   }`}>
-                  {system.difficulty_level}
-                </span>
-                <span className="text-xs text-gray-400">{system.count_type}</span>
-              </div>
-              <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">{system.system_name}</h3>
-              <p className="text-gray-400 text-sm mb-4">
-                {system.seo_desc}
-              </p>
-              <div className="text-primary text-sm font-semibold flex items-center">
-                Start Training <span className="ml-2 group-hover:translate-x-1 transition-transform">&rarr;</span>
-              </div>
-            </Link>
-          ))}
+                    {system.difficulty_level}
+                  </span>
+                  <span className="text-xs text-text-muted font-mono">{system.count_type}</span>
+                </div>
+
+                <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">
+                  {system.system_name}
+                </h3>
+
+                <p className="text-text-secondary text-sm mb-6 leading-relaxed">
+                  {system.seo_desc}
+                </p>
+
+                <div className="flex items-center text-primary text-sm font-semibold">
+                  Start Training
+                  <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Drills Section */}
-      <section className="py-24 bg-surface border-y border-white/5">
+      <section className="section bg-surface">
         <div className="container">
-          <h2 className="text-3xl md:text-4xl font-bold mb-16 text-center">Advanced Drills</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="section-header">
+            <h2 className="section-title">Advanced Drills</h2>
+            <p className="section-subtitle">
+              Purpose-built exercises that target your weakest skills and transform them into strengths.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {drills.map((drill) => (
-              <div key={drill.slug} className="p-6 rounded-xl bg-background border border-white/5">
+              <div key={drill.slug} className="card">
+                <div className="w-12 h-12 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center mb-4">
+                  <svg className="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+
                 <h3 className="text-lg font-bold mb-2">{drill.drill_name}</h3>
-                <p className="text-gray-400 text-sm mb-4">Targeting: <span className="text-primary">{drill.target_skill}</span></p>
-                <p className="text-sm text-gray-500">
-                  Solves: &quot;{drill.pain_point}&quot;
+
+                <p className="text-text-secondary text-sm mb-4">
+                  Target: <span className="text-accent font-medium">{drill.target_skill}</span>
+                </p>
+
+                <p className="text-sm text-text-muted italic">
+                  &ldquo;{drill.pain_point}&rdquo;
                 </p>
               </div>
             ))}
@@ -96,25 +153,50 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-12 border-t border-white/10 text-center text-gray-400 text-sm">
+      {/* CTA Section */}
+      <section className="section">
         <div className="container">
-          <p className="mb-2">&copy; {new Date().getFullYear()} Protocol 21. All rights reserved.</p>
-          <p className="mb-4">
+          <div className="card text-center py-12 md:py-16 relative overflow-hidden">
+            {/* Background glow */}
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
+
+            <div className="relative z-10">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                Ready to Get Your Edge?
+              </h2>
+              <p className="text-text-secondary max-w-lg mx-auto mb-8">
+                Join thousands of advantage players who trust Protocol 21 for their training.
+                Start your journey to consistent profits today.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link href="/download/ios" className="btn btn-primary px-8">
+                  Download Now — It&apos;s Free
+                </Link>
+                <Link href="/blog" className="btn btn-outline px-8">
+                  Read Our Guides
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="footer">
+        <div className="container">
+          <p className="footer-brand mb-2">
+            &copy; {new Date().getFullYear()} Protocol 21. All rights reserved.
+          </p>
+          <p className="footer-brand">
             Built by fellow degens in the desert at{" "}
-            <a
-              href="https://techridgeseo.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:text-primary-light transition-colors"
-            >
+            <a href="https://techridgeseo.com" target="_blank" rel="noopener noreferrer">
               TechRidgeSEO
             </a>
           </p>
-          <div className="space-x-6">
-            <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
-            <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>
+          <div className="footer-links">
+            <Link href="/privacy">Privacy Policy</Link>
+            <Link href="/terms">Terms of Service</Link>
+            <Link href="/blog">Blog</Link>
           </div>
         </div>
       </footer>
