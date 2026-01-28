@@ -244,11 +244,13 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   card: {
-    backgroundColor: colors.surface, // Tungsten background
+    backgroundColor: '#1a1a1a', // Solid opaque tungsten background
     borderRadius: 8,              // Sharper corners (Radius 8)
     borderColor: colors.surfaceLight, // Graphite border
     borderWidth: 1,
     overflow: 'hidden',
+    elevation: 15, // Ensure card renders above table text
+    zIndex: 100,
   },
   cardBack: {
     backgroundColor: colors.surface,

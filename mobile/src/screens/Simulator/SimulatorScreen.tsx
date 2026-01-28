@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView, Modal, TextInput } from 'react-native';
 import { colors } from '../../theme/colors';
 import { HeatMeter } from '../../components/simulator/HeatMeter';
@@ -49,6 +49,7 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
 
     // Shoe and counting
     const shoeRef = useRef(new Shoe(6)); // 6-deck shoe
+    const currentBetRef = useRef(0); // Ref to track actual bet for resolution (handles async state)
     const [runningCount, setRunningCount] = useState(0);
     const [trueCount, setTrueCount] = useState(0);
     const [handsPlayed, setHandsPlayed] = useState(0);
@@ -74,6 +75,18 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
     const [showChipTray, setShowChipTray] = useState(true);
     const [deckCount, setDeckCount] = useState(6);
     const [checkInterval, setCheckInterval] = useState(0); // 0 means manual only
+
+    // Reset shoe when deck count changes
+    useEffect(() => {
+        shoeRef.current = new Shoe(deckCount);
+        setRunningCount(0);
+        setTrueCount(0);
+        // Also reset the hand if we're in betting phase
+        if (gamePhase === 'BETTING') {
+            setPlayerHand([]);
+            setDealerHand([]);
+        }
+    }, [deckCount]);
 
     const MIN_BET = 10;
     const MAX_BET = 10000;
@@ -132,6 +145,7 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
         setResultMessage('Dealing...');
         setPlayerHand([]);
         setDealerHand([]);
+        currentBetRef.current = currentBet; // Set ref for resolution
 
         const dealSequence = async () => {
             const tempCards: Card[] = [];
@@ -191,6 +205,7 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
         setDealerHand([]);
         setResultMessage('');
         setGamePhase('BETTING');
+        currentBetRef.current = 0; // Reset bet ref
 
         // Clear split state
         setIsSplitHand(false);
@@ -284,7 +299,9 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
             newBets[activeHandIndex] *= 2;
             setSplitBets(newBets);
         } else {
-            setCurrentBet(prev => prev * 2);
+            const doubledBet = currentBet * 2;
+            setCurrentBet(doubledBet);
+            currentBetRef.current = doubledBet; // Update ref immediately for resolution
         }
 
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -428,10 +445,12 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
 
     // Resolve the hand and determine winner
     const resolveHand = (finalPlayerHand: Card[], finalDealerHand: Card[]) => {
-        const result = BlackjackGameEngine.resolveHand(finalPlayerHand, finalDealerHand, currentBet);
+        // Use ref value for bet to handle async state updates (e.g., after double)
+        const actualBet = currentBetRef.current || currentBet;
+        const result = BlackjackGameEngine.resolveHand(finalPlayerHand, finalDealerHand, actualBet);
 
-        const payout = currentBet * result.payout;
-        const netWin = payout - currentBet;
+        const payout = actualBet * result.payout;
+        const netWin = payout - actualBet;
         const newBankroll = bankroll + payout;
         setBankroll(newBankroll);
 
@@ -450,6 +469,9 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
         }));
 
         let message = '';
+        const playerBJ = BlackjackGameEngine.isBlackjack(finalPlayerHand);
+        const dealerBJ = BlackjackGameEngine.isBlackjack(finalDealerHand);
+
         switch (result.outcome) {
             case 'WIN':
                 message = `WIN! +$${netWin}`;
@@ -460,11 +482,19 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
                 Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
                 break;
             case 'PUSH':
-                message = 'PUSH (Tie)';
+                if (playerBJ && dealerBJ) {
+                    message = 'PUSH - Both Blackjack!';
+                } else {
+                    message = 'PUSH (Tie)';
+                }
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
                 break;
             case 'LOSE':
-                message = `LOSE! -$${currentBet}`;
+                if (dealerBJ) {
+                    message = `DEALER BLACKJACK!\n-$${actualBet}`;
+                } else {
+                    message = `LOSE! -$${actualBet}`;
+                }
                 Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
                 break;
         }
@@ -481,7 +511,7 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
         });
 
         // Update heat meter
-        const heatIncrease = BlackjackGameEngine.calculateHeatFromBet(currentBet, trueCount, MIN_BET);
+        const heatIncrease = BlackjackGameEngine.calculateHeatFromBet(actualBet, trueCount, MIN_BET);
         setSuspicionLevel((prev: number) => Math.min(100, prev + heatIncrease));
 
         setTimeout(() => nextHand(), 3000);
@@ -555,7 +585,7 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
         const netResult = totalPayout - totalBet;
 
         setResultMessage(
-            results.join(' | ') + `\nNet: ${netResult >= 0 ? '+' : ''}$${netResult}`
+            results.join('\n') + `\n\nNet: ${netResult >= 0 ? '+' : ''}$${netResult}`
         );
 
         if (netResult > 0) {
@@ -697,6 +727,23 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
                 </View>
             </View>
 
+            {/* Top HUD Overlay - OUTSIDE gameTable to avoid overflow:hidden clipping */}
+            <View style={styles.topHud}>
+                <View style={styles.hudBadge}>
+                    <Text style={styles.hudBadgeText}>DECKS: {deckCount}</Text>
+                    <Text style={styles.hudBadgeText}>CARDS: {shoeRef.current.getCardsRemaining()}</Text>
+                    {showCountDisplay && (
+                        <Text style={[styles.hudBadgeText, { color: colors.primary }]}>RC: {runningCount > 0 ? `+${runningCount}` : runningCount}</Text>
+                    )}
+                </View>
+                {showTacticalShoe && (
+                    <TacticalShoe
+                        remaining={shoeRef.current.getCardsRemaining()}
+                        total={deckCount * 52}
+                    />
+                )}
+            </View>
+
             {/* Table Surface */}
             <View style={styles.gameTable}>
                 {/* Vignette Background */}
@@ -712,33 +759,16 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
 
                 {/* Table Markings & Text */}
                 <View style={styles.tableTextContainer}>
-                    <Text style={styles.tableTextTitle}>BLACKJACK</Text>
+                    <Text style={styles.tableTextTitle}>PROTOCOL 21</Text>
                     <Text style={styles.tableTextSubtitle}>PAYS 3 TO 2</Text>
                     <Text style={styles.tableTextRules}>DEALER MUST DRAW TO 16 AND STAND ON ALL 17s</Text>
                     <Text style={styles.tableTextRules}>INSURANCE PAYS 2 TO 1</Text>
                 </View>
 
-                {/* Top HUD Overlay */}
-                <View style={styles.topHud}>
-                    <View style={styles.hudBadge}>
-                        <Text style={styles.hudBadgeText}>DECKS: {deckCount}</Text>
-                        <Text style={styles.hudBadgeText}>CARDS: {shoeRef.current.getCardsRemaining()}</Text>
-                        {showCountDisplay && (
-                            <Text style={[styles.hudBadgeText, { color: colors.primary }]}>RC: {runningCount > 0 ? `+${runningCount}` : runningCount}</Text>
-                        )}
-                    </View>
-                    {showTacticalShoe && (
-                        <TacticalShoe
-                            remaining={shoeRef.current.getCardsRemaining()}
-                            total={deckCount * 52}
-                        />
-                    )}
-                </View>
-
                 {/* Main Vertical Flow */}
                 <View style={styles.tableCenter}>
                     {/* Dealer Area */}
-                    <View style={styles.handArea}>
+                    <View style={styles.dealerHandArea}>
                         <View style={styles.cardOverlapRow}>
                             {dealerHand.map((card, i) => (
                                 <View key={i} style={[styles.cardInHand, { zIndex: i, marginLeft: i > 0 ? -30 : 0 }]}>
@@ -856,7 +886,7 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
                                 onPress={startNewHand}
                                 disabled={currentBet === 0}
                             >
-                                <Text style={styles.mainDealBtnText}>DEAL CARDS</Text>
+                                <Text style={styles.mainDealBtnText}>DEAL</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -1184,6 +1214,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         position: 'relative',
         overflow: 'hidden', // Clip the neonArch so it doesn't cover the header
+        paddingTop: 30, // Space for table text with rotateX transform
     },
     dealerArea: {
         alignItems: 'center',
@@ -1226,15 +1257,13 @@ const styles = StyleSheet.create({
         fontVariant: ['tabular-nums'],
     },
     topHud: {
-        position: 'absolute',
-        top: 5,
-        left: 0,
-        right: 0,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingHorizontal: 20,
+        paddingHorizontal: 15,
+        paddingVertical: 10,
         zIndex: 50,
         elevation: 5,
+        backgroundColor: 'transparent',
     },
     hudBadge: {
         backgroundColor: 'rgba(0,0,0,0.4)',
@@ -1256,23 +1285,31 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: 5,
         gap: 60,
-        zIndex: 10,
+        zIndex: 20,
     },
     handArea: {
         alignItems: 'center',
         minHeight: 100,
+    },
+    dealerHandArea: {
+        alignItems: 'center',
+        minHeight: 100,
+        marginBottom: 20,
     },
     cardOverlapRow: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         paddingHorizontal: 40,
+        zIndex: 100,
+        elevation: 10,
     },
     cardInHand: {
         shadowColor: '#000',
         shadowOffset: { width: 4, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 5,
+        elevation: 10,
     },
     handLabel: {
         marginTop: 5,
@@ -1329,40 +1366,46 @@ const styles = StyleSheet.create({
     resultOverlay: {
         position: 'absolute',
         inset: 0,
-        backgroundColor: 'rgba(0,0,0,0.8)',
+        backgroundColor: 'rgba(0,0,0,0.85)',
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 100,
     },
     resultBox: {
-        backgroundColor: colors.surface,
-        padding: 30,
-        borderRadius: 12,
+        backgroundColor: 'rgba(26, 26, 26, 0.95)',
+        paddingVertical: 35,
+        paddingHorizontal: 25,
+        borderRadius: 16,
         borderWidth: 1,
-        borderColor: colors.border,
+        borderColor: 'rgba(255, 255, 255, 0.1)',
         alignItems: 'center',
-        width: '80%',
+        width: '85%',
+        maxWidth: 340,
+        shadowColor: colors.primary,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.3,
+        shadowRadius: 20,
+        elevation: 10,
     },
     resultMainText: {
-        fontSize: 32,
-        fontWeight: '900',
-        letterSpacing: 2,
-        marginBottom: 20,
+        fontSize: 22,
+        fontWeight: '600',
+        letterSpacing: 1,
+        marginBottom: 25,
         textAlign: 'center',
+        lineHeight: 32,
     },
     nextHandBtn: {
-        backgroundColor: colors.primary,
-        paddingVertical: 15,
-        paddingHorizontal: 40,
-        borderRadius: 8,
-        shadowColor: colors.primary,
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.4,
-        shadowRadius: 8,
+        backgroundColor: 'transparent',
+        paddingVertical: 14,
+        paddingHorizontal: 50,
+        borderRadius: 30,
+        borderWidth: 2,
+        borderColor: colors.primary,
     },
     nextHandBtnText: {
-        color: '#FFF',
-        fontWeight: 'bold',
+        color: colors.primary,
+        fontWeight: '600',
         fontSize: 16,
         letterSpacing: 1,
     },
@@ -1386,6 +1429,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         gap: 10,
         alignItems: 'center',
+        justifyContent: 'center',
     },
     clearBtn: {
         width: 50,
@@ -1398,21 +1442,19 @@ const styles = StyleSheet.create({
         borderColor: colors.border,
     },
     mainDealBtn: {
-        flex: 1,
-        height: 55,
-        backgroundColor: colors.success,
-        borderRadius: 8,
+        paddingHorizontal: 60,
+        height: 50,
+        backgroundColor: 'rgba(16, 185, 129, 0.15)',
+        borderRadius: 25,
         justifyContent: 'center',
         alignItems: 'center',
-        shadowColor: colors.success,
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 5,
+        borderWidth: 2,
+        borderColor: colors.success,
     },
     mainDealBtnText: {
-        color: '#FFF',
-        fontSize: 18,
-        fontWeight: '900',
+        color: colors.success,
+        fontSize: 16,
+        fontWeight: '600',
         letterSpacing: 2,
     },
     actionRow: {
@@ -1695,9 +1737,9 @@ const styles = StyleSheet.create({
     modalContent: {
         backgroundColor: colors.background,
         borderRadius: 4,
-        padding: 30,
-        width: '100%',
-        maxWidth: 400,
+        padding: 20,
+        width: '90%',
+        maxWidth: 360,
         borderWidth: 1,
         borderColor: colors.primary,
         shadowColor: colors.primary,
@@ -1931,14 +1973,14 @@ const styles = StyleSheet.create({
     },
     tableTextContainer: {
         position: 'absolute',
-        top: '30%',
+        bottom: '5%',
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
-        opacity: 0.4,
-        zIndex: 2, // Layer 2
-        transform: [{ perspective: 1000 }, { rotateX: '20deg' }],
-        pointerEvents: 'none', // Allow clicks to pass through to table
+        opacity: 0.2,
+        zIndex: 1,
+        elevation: 1,
+        pointerEvents: 'none',
     },
     tableTextTitle: {
         color: colors.primary,
