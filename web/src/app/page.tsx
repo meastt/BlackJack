@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import systems from "@/data/systems.json";
 import drills from "@/data/drills.json";
 import { FAQSchema, SoftwareApplicationSchema } from "@/components/seo";
@@ -227,48 +226,41 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Image Section */}
+      {/* Built for Serious Players Section */}
       <section className="section bg-surface">
         <div className="container">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="relative w-full h-64 md:h-80 rounded-xl overflow-hidden">
-              <Image
-                src="/images/protocol-21-is-the-best-app-for-serious-blackjack-card-counting.webp"
-                alt="Protocol 21 is the best app for serious blackjack card counting"
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 600px"
-              />
-            </div>
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                <span className="text-gradient-gold">Built for Serious Players</span>
-              </h2>
-              <p className="text-text-secondary text-lg leading-relaxed mb-6">
-                Protocol 21 isn&apos;t another blackjack game. It&apos;s a professional-grade training system
-                designed by advantage players, for advantage players. Every drill, every algorithm,
-                every feature exists to make you better at the table.
-              </p>
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-center gap-3">
-                  <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span className="text-text-secondary">Casino-accurate dealing speeds</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span className="text-text-secondary">Background noise simulation</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span className="text-text-secondary">Detailed accuracy analytics</span>
-                </li>
-              </ul>
+          <div className="section-header">
+            <h2 className="section-title">
+              <span className="text-gradient-gold">Built for Serious Players</span>
+            </h2>
+            <p className="section-subtitle">
+              Protocol 21 isn&apos;t another blackjack game. It&apos;s a professional-grade training system
+              designed by advantage players, for advantage players.
+            </p>
+          </div>
+
+          <div className="max-w-2xl mx-auto">
+            <ul className="space-y-4 mb-8">
+              <li className="flex items-center justify-center gap-3">
+                <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span className="text-text-secondary">Casino-accurate dealing speeds</span>
+              </li>
+              <li className="flex items-center justify-center gap-3">
+                <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span className="text-text-secondary">Background noise simulation</span>
+              </li>
+              <li className="flex items-center justify-center gap-3">
+                <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span className="text-text-secondary">Detailed accuracy analytics</span>
+              </li>
+            </ul>
+            <div className="text-center">
               <Link href="/download" className="btn btn-primary">
                 Get Protocol 21 Free
               </Link>
