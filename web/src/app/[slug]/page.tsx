@@ -55,7 +55,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     return paragraphs.map((paragraph, index) => {
       if (paragraph.startsWith("## ")) {
         return (
-          <h2 key={index} className="text-2xl font-bold mt-8 mb-4">
+          <h2 key={index} className="text-2xl font-bold mt-10 mb-4 text-gradient-gold">
             {paragraph.replace("## ", "")}
           </h2>
         );
@@ -63,17 +63,23 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       if (paragraph.startsWith("- **")) {
         const items = paragraph.split("\n");
         return (
-          <ul key={index} className="list-disc list-inside space-y-2 my-4">
+          <ul key={index} className="space-y-3 my-6 ml-4">
             {items.map((item, i) => {
               const match = item.match(/- \*\*(.+?):\*\* (.+)/);
               if (match) {
                 return (
-                  <li key={i} className="text-gray-300">
-                    <strong className="text-white">{match[1]}:</strong> {match[2]}
+                  <li key={i} className="text-gray-300 flex">
+                    <span className="text-primary mr-2">•</span>
+                    <span><strong className="text-white">{match[1]}:</strong> {match[2]}</span>
                   </li>
                 );
               }
-              return <li key={i} className="text-gray-300">{item.replace("- ", "")}</li>;
+              return (
+                <li key={i} className="text-gray-300 flex">
+                  <span className="text-primary mr-2">•</span>
+                  <span>{item.replace("- ", "")}</span>
+                </li>
+              );
             })}
           </ul>
         );
@@ -81,15 +87,18 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       if (paragraph.startsWith("- ")) {
         const items = paragraph.split("\n");
         return (
-          <ul key={index} className="list-disc list-inside space-y-2 my-4">
+          <ul key={index} className="space-y-3 my-6 ml-4">
             {items.map((item, i) => (
-              <li key={i} className="text-gray-300">{item.replace("- ", "")}</li>
+              <li key={i} className="text-gray-300 flex">
+                <span className="text-primary mr-2">•</span>
+                <span>{item.replace("- ", "")}</span>
+              </li>
             ))}
           </ul>
         );
       }
       return (
-        <p key={index} className="text-gray-300 leading-relaxed my-4">
+        <p key={index} className="text-gray-300 leading-relaxed my-5">
           {paragraph}
         </p>
       );
@@ -97,42 +106,68 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   };
 
   return (
-    <main className="min-h-screen bg-background">
-      <article className="container py-16 max-w-3xl">
-        <Link href="/blog" className="text-primary hover:text-primary-light mb-8 inline-block">
-          &larr; Back to Blog
+    <main className="min-h-screen">
+      <article className="container py-16 md:py-24 max-w-3xl">
+        <Link href="/blog" className="inline-flex items-center text-primary hover:text-primary-light mb-8 transition-colors">
+          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+          </svg>
+          Back to Blog
         </Link>
 
         <div className="flex flex-wrap items-center gap-4 mb-6 text-sm">
-          <span className="px-3 py-1 rounded-full bg-primary/10 text-primary font-medium">
+          <span className="badge badge-beginner">
             {post.category}
           </span>
-          <span className="text-gray-500">{post.date}</span>
-          <span className="text-gray-500">{post.readTime}</span>
+          <span className="text-text-muted">{post.date}</span>
+          <span className="text-text-muted">{post.readTime}</span>
         </div>
 
         <h1 className="text-4xl md:text-5xl font-bold mb-6">{post.title}</h1>
-        <p className="text-xl text-gray-400 mb-8">{post.description}</p>
+        <p className="text-xl text-text-secondary mb-8 leading-relaxed">{post.description}</p>
 
-        <div className="border-t border-white/10 pt-8">
+        <div className="border-t border-surface-border pt-8">
           {renderContent(post.content)}
         </div>
 
-        <div className="mt-12 p-6 rounded-xl bg-surface border border-white/5">
-          <h3 className="text-xl font-bold mb-2">Ready to Practice?</h3>
-          <p className="text-gray-400 mb-4">
-            Download Protocol 21 and start mastering card counting with our casino-grade training drills.
-          </p>
-          <div className="flex flex-wrap gap-4">
-            <Link href="/download/ios" className="btn btn-primary">
-              Download on iOS
-            </Link>
-            <Link href="/download/android" className="btn btn-outline">
-              Get for Android
-            </Link>
+        {/* CTA Card */}
+        <div className="card mt-12 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
+          <div className="relative z-10">
+            <h3 className="text-xl font-bold mb-2">Ready to Practice?</h3>
+            <p className="text-text-secondary mb-6">
+              Download Protocol 21 and start mastering card counting with our casino-grade training drills.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <Link href="/download/ios" className="btn btn-primary">
+                Download on iOS
+              </Link>
+              <Link href="/download/android" className="btn btn-outline">
+                Get for Android
+              </Link>
+            </div>
           </div>
         </div>
       </article>
+
+      <footer className="footer">
+        <div className="container">
+          <p className="footer-brand mb-2">
+            &copy; {new Date().getFullYear()} Protocol 21. All rights reserved.
+          </p>
+          <p className="footer-brand">
+            Built by fellow degens in the desert at{" "}
+            <a href="https://techridgeseo.com" target="_blank" rel="noopener noreferrer">
+              TechRidgeSEO
+            </a>
+          </p>
+          <div className="footer-links">
+            <Link href="/privacy">Privacy Policy</Link>
+            <Link href="/terms">Terms of Service</Link>
+            <Link href="/blog">Blog</Link>
+          </div>
+        </div>
+      </footer>
     </main>
   );
 }
