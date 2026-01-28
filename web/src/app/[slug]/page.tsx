@@ -1,7 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import blogPosts from "@/data/blog-posts.json";
+import { BlogPostingSchema, Breadcrumbs } from "@/components/seo";
+
+const BASE_URL = "https://protocol21blackjack.com";
+
+// Map slugs to featured images
+const postImages: Record<string, string> = {
+  "ultimate-blackjack-card-counting-app-guide": "/images/best-guide-to-blackjack-card-couting-apps-FI.webp",
+  "best-card-counting-apps-for-practice": "/images/learn-to-count-cards-blackjack-best-app-2026.webp",
+  "how-does-card-counting-work-in-blackjack": "/images/Skill-increased-blackjack-counting-cards.webp",
+  "hi-lo-card-counting-system-complete-guide": "/images/protocol-21-card-shoe.webp",
+  "blackjack-true-count-practice": "/images/protocol-21-true-count.webp",
+};
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -19,24 +32,40 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 
   if (!post) {
     return {
-      title: "Post Not Found | Protocol 21",
+      title: "Post Not Found",
     };
   }
 
+  const imageUrl = postImages[slug] || "/images/protocol-21-hero1.webp";
+
   return {
-    title: `${post.title} | Protocol 21`,
+    title: post.title,
     description: post.description,
+    alternates: {
+      canonical: `${BASE_URL}/${slug}`,
+    },
     openGraph: {
       title: post.title,
       description: post.description,
       type: "article",
       publishedTime: post.date,
+      modifiedTime: post.date,
       authors: [post.author],
+      url: `${BASE_URL}/${slug}`,
+      images: [
+        {
+          url: `${BASE_URL}${imageUrl}`,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.description,
+      images: [`${BASE_URL}${imageUrl}`],
     },
   };
 }
@@ -108,21 +137,45 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     });
   };
 
+  const imageUrl = postImages[slug] || "/images/protocol-21-hero1.webp";
+
   return (
     <main className="min-h-screen">
+      <BlogPostingSchema
+        title={post.title}
+        description={post.description}
+        slug={slug}
+        datePublished={post.date}
+        author={post.author}
+        image={imageUrl}
+        readTime={post.readTime}
+      />
       <article className="container py-16 md:py-24 prose-container">
-        <Link href="/blog" className="inline-flex items-center text-primary hover:text-primary-light mb-12 transition-colors">
-          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
-          </svg>
-          Back to Blog
-        </Link>
+        <Breadcrumbs
+          items={[
+            { name: "Blog", url: "/blog" },
+            { name: post.title, url: `/${slug}` },
+          ]}
+          className="mb-8"
+        />
+
+        {/* Featured Image */}
+        <div className="relative w-full h-64 md:h-96 rounded-xl overflow-hidden mb-8">
+          <Image
+            src={imageUrl}
+            alt={post.title}
+            fill
+            className="object-cover"
+            priority
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+          />
+        </div>
 
         <div className="flex flex-wrap items-center gap-4 mb-8 text-sm">
           <span className="badge badge-beginner">
             {post.category}
           </span>
-          <span className="text-text-muted">{post.date}</span>
+          <time dateTime={post.date} className="text-text-muted">{post.date}</time>
           <span className="text-text-muted">{post.readTime}</span>
         </div>
 
