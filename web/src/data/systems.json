@@ -1,0 +1,92 @@
+[
+    {
+        "id": "hilo",
+        "system_name": "Hi-Lo",
+        "slug": "hi-lo-card-counting-app",
+        "difficulty_level": "Beginner",
+        "count_type": "Balanced",
+        "tags": [
+            "Level 1",
+            "Most Popular",
+            "Standard"
+        ],
+        "seo_title": "Hi-Lo Card Counting App | Protocol 21 Blackjack Trainer",
+        "seo_desc": "Master the famous Hi-Lo card counting system. Protocol 21 provides the specific +1/-1 drills you need to learn Hi-Lo for iOS and Android.",
+        "pain_point": "keeping the running count during fast deals"
+    },
+    {
+        "id": "ko",
+        "system_name": "KO (Knock-Out)",
+        "slug": "ko-card-counting-app",
+        "difficulty_level": "Beginner",
+        "count_type": "Unbalanced",
+        "tags": [
+            "Level 1",
+            "No True Count",
+            "Easiest"
+        ],
+        "seo_title": "KO (Knock-Out) Blackjack System App & Trainer",
+        "seo_desc": "Learn the Knock-Out (KO) system without the math. Protocol 21 is the best app for unbalanced counting systems on mobile.",
+        "pain_point": "converting to true count (which KO eliminates)"
+    },
+    {
+        "id": "omega2",
+        "system_name": "Omega II",
+        "slug": "omega-ii-card-counting-app",
+        "difficulty_level": "Advanced",
+        "count_type": "Balanced",
+        "tags": [
+            "Level 2",
+            "High Efficiency",
+            "Ace Side Count"
+        ],
+        "seo_title": "Omega II Card Counting Trainer | Advanced Blackjack App",
+        "seo_desc": "Practice the complex Omega II system with Protocol 21. Our advanced mode supports Level 2 values and Ace side-counts.",
+        "pain_point": "memorizing the complex Level 2 card values"
+    },
+    {
+        "id": "zen",
+        "system_name": "Zen Count",
+        "slug": "zen-count-blackjack-app",
+        "difficulty_level": "Intermediate",
+        "count_type": "Balanced",
+        "tags": [
+            "Level 2",
+            "Old School",
+            "Powerful"
+        ],
+        "seo_title": "Zen Count Blackjack Trainer App",
+        "seo_desc": "The Zen Count requires precision. Use Protocol 21's custom drills to master this powerful Level 2 balanced system.",
+        "pain_point": "maintaining speed with multi-value cards"
+    },
+    {
+        "id": "red7",
+        "system_name": "Red 7",
+        "slug": "red-7-card-counting-app",
+        "difficulty_level": "Beginner",
+        "count_type": "Unbalanced",
+        "tags": [
+            "Level 1",
+            "Arnold Snyder",
+            "Simple"
+        ],
+        "seo_title": "Red 7 Card Counting App | Learn Unbalanced Counting",
+        "seo_desc": "Learn Arnold Snyder's Red 7 system. Protocol 21 helps you practice the color-dependent starting counts unique to this system.",
+        "pain_point": "remembering the pivot points"
+    },
+    {
+        "id": "halves",
+        "system_name": "Wong Halves",
+        "slug": "wong-halves-counting-app",
+        "difficulty_level": "Expert",
+        "count_type": "Balanced",
+        "tags": [
+            "Level 3",
+            "Fractional",
+            "Hardest"
+        ],
+        "seo_title": "Wong Halves Blackjack Trainer | Expert Counting App",
+        "seo_desc": "Wong Halves is the hardest system to master. Protocol 21 is the only app that supports fractional values for expert drills.",
+        "pain_point": "calculating fractional values (.5) on the fly"
+    }
+]

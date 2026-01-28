@@ -1,0 +1,23 @@
+[
+    {
+        "drill_name": "True Count Conversion",
+        "slug": "blackjack-true-count-practice",
+        "target_skill": "Mental Math",
+        "seo_title": "Blackjack True Count Trainer App",
+        "pain_point": "dividing the running count by decks remaining instantly"
+    },
+    {
+        "drill_name": "Deck Estimation",
+        "slug": "deck-estimation-drills",
+        "target_skill": "Visual Accuracy",
+        "seo_title": "Deck Penetration & Estimation Drills",
+        "pain_point": "guessing how many decks are in the discard tray"
+    },
+    {
+        "drill_name": "Speed Count",
+        "slug": "card-counting-speed-drills",
+        "target_skill": "Reaction Time",
+        "seo_title": "Card Counting Speed Simulator",
+        "pain_point": "losing the count when the dealer speeds up"
+    }
+]

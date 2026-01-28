@@ -37,6 +37,11 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "scheme": "card-counter-ai"
+    "scheme": "card-counter-ai",
+    "extra": {
+      "eas": {
+        "projectId": "444db622-274d-4260-b197-fe1e2f0a3310"
+      }
+    }
   }
 }
