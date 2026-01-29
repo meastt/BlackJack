@@ -76,12 +76,13 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="relative w-full max-w-4xl mx-auto aspect-video rounded-2xl overflow-hidden shadow-2xl border border-white/10 mt-12">
+          <div className="flex justify-center w-full max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-2xl border border-white/10 mt-12">
             <Image
               src="/protocol-21-hero1.webp"
               alt="Protocol 21 App Interface"
-              fill
-              className="object-contain object-center"
+              width={896}
+              height={504}
+              className="w-full h-auto"
               priority
             />
           </div>
@@ -119,12 +120,13 @@ export default function Home() {
             <h2 className="section-title">
               <span className="text-gradient">Supported Systems</span>
             </h2>
-            <div className="relative w-full max-w-4xl mx-auto h-96 mb-12 rounded-xl overflow-hidden">
+            <div className="flex justify-center w-full max-w-4xl mx-auto mb-12 rounded-xl overflow-hidden">
               <Image
                 src="/protocol-21-card-shoe.webp"
                 alt="Blackjack Card Shoe"
-                fill
-                className="object-contain object-center"
+                width={896}
+                height={384}
+                className="w-full h-auto max-h-96 object-contain"
               />
             </div>
             <p className="section-subtitle mt-8">
@@ -174,12 +176,13 @@ export default function Home() {
       <section className="section bg-surface">
         <div className="container">
           <div className="section-header">
-            <div className="relative w-full max-w-4xl mx-auto h-96 mb-12 rounded-xl overflow-hidden">
+            <div className="flex justify-center w-full max-w-4xl mx-auto mb-12 rounded-xl overflow-hidden">
               <Image
                 src="/protocol-21-true-count.webp"
                 alt="True Count Training"
-                fill
-                className="object-contain object-center"
+                width={896}
+                height={384}
+                className="w-full h-auto max-h-96 object-contain"
               />
             </div>
             <h2 className="section-title">Advanced Drills</h2>
@@ -233,12 +236,13 @@ export default function Home() {
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
 
             <div className="relative z-10">
-              <div className="relative w-full max-w-2xl mx-auto h-96 mb-12 rounded-xl overflow-hidden shadow-lg border border-white/5">
+              <div className="flex justify-center w-full max-w-2xl mx-auto mb-12 rounded-xl overflow-hidden shadow-lg border border-white/5">
                 <Image
                   src="/Skill-increased-blackjack-counting-cards.webp"
                   alt="Increase Your Blackjack Skills"
-                  fill
-                  className="object-cover object-center"
+                  width={672}
+                  height={384}
+                  className="w-full h-auto max-h-96 object-cover"
                 />
               </div>
               <h2 className="text-3xl md:text-4xl font-bold" style={{ marginBottom: '1.5rem' }}>
