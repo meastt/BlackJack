@@ -1,4 +1,6 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* ==========================================================================
    Protocol 21 - Design System
@@ -6,75 +8,13 @@
    Direction: Dark, sophisticated, with gold/emerald accents
    ========================================================================== */
 
-@theme {
-  /* Primary - Gold/Amber (Casino luxury, winning, prestige) */
-  --color-primary: #f59e0b;
-  --color-primary-dark: #d97706;
-  --color-primary-light: #fbbf24;
-  --color-primary-glow: rgba(245, 158, 11, 0.4);
-
-  /* Accent - Emerald (Card table felt, money, advantage) */
-  --color-accent: #10b981;
-  --color-accent-dark: #059669;
-  --color-accent-light: #34d399;
-  --color-accent-glow: rgba(16, 185, 129, 0.3);
-
-  /* Surfaces - Deep blacks with subtle warmth */
-  --color-background: #0a0a0a;
-  --color-surface: #141414;
-  --color-surface-elevated: #1c1c1c;
-  --color-surface-border: rgba(255, 255, 255, 0.06);
-
-  /* Text hierarchy */
-  --color-text-primary: #fafafa;
-  --color-text-secondary: #a3a3a3;
-  --color-text-muted: #525252;
-
-  /* Semantic */
-  --color-success: #22c55e;
-  --color-warning: #eab308;
-  --color-danger: #ef4444;
-
-  /* Typography */
-  --font-display: "Inter", system-ui, sans-serif;
-  --font-body: "Inter", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
-
-  /* Spacing scale */
-  --space-xs: 0.25rem;
-  --space-sm: 0.5rem;
-  --space-md: 1rem;
-  --space-lg: 1.5rem;
-  --space-xl: 2rem;
-  --space-2xl: 3rem;
-  --space-3xl: 4rem;
-  --space-4xl: 6rem;
-
-  /* Border radius */
-  --radius-sm: 0.375rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
-  --radius-2xl: 1.5rem;
-  --radius-full: 9999px;
-}
-
-/* ==========================================================================
-   Base Styles
-   ========================================================================== */
-
+/* Base Styles */
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  font-family: var(--font-body);
-  background-color: var(--color-background);
-  color: var(--color-text-primary);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  line-height: 1.6;
-  overflow-x: hidden;
+  @apply font-body bg-background text-text-primary antialiased leading-relaxed overflow-x-hidden;
 }
 
 /* Subtle noise texture overlay for depth */
@@ -88,148 +28,96 @@ body::before {
   z-index: -1;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-/* ==========================================================================
-   Typography
-   ========================================================================== */
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-display);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-  margin-bottom: var(--space-md);
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-display font-bold tracking-tight leading-tight mb-md;
 }
 
 h1 {
   font-size: clamp(2.5rem, 5vw, 4rem);
-  margin-bottom: var(--space-lg);
+  @apply mb-lg;
 }
 
 h2 {
   font-size: clamp(1.75rem, 3vw, 2.5rem);
-  margin-top: var(--space-xl);
-  margin-bottom: var(--space-md);
+  @apply mt-xl mb-md;
 }
 
 h3 {
   font-size: clamp(1.25rem, 2vw, 1.75rem);
-  margin-top: var(--space-lg);
-  margin-bottom: var(--space-sm);
+  @apply mt-lg mb-sm;
 }
 
 p {
-  margin-bottom: var(--space-md);
-  line-height: 1.8;
+  @apply mb-md leading-relaxed;
 }
 
-ul, ol {
-  margin-bottom: var(--space-lg);
+ul,
+ol {
+  @apply mb-lg;
 }
 
 li {
-  margin-bottom: var(--space-sm);
+  @apply mb-sm;
 }
 
-/* Gradient text utility */
+/* Gradient text utility - Vegas Nights Neon */
 .text-gradient {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 50%, var(--color-accent) 100%);
+  background: linear-gradient(135deg, #FF2D7C 0%, #00D4FF 50%, #00FF88 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .text-gradient-gold {
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+  background: linear-gradient(135deg, #FFE500 0%, #FFC700 50%, #FFA500 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* ==========================================================================
-   Layout
-   ========================================================================== */
-
+/* Layout */
 .container {
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0 var(--space-lg);
-}
-
-.prose-container {
-  max-width: 800px;
-  margin: 0 auto;
+  padding: 0 1.5rem;
 }
 
 @media (min-width: 768px) {
   .container {
-    padding: 0 var(--space-xl);
+    padding: 0 2rem;
   }
 }
 
-/* ==========================================================================
-   Utility Classes
-   ========================================================================== */
-
-.space-y-relaxed > * + * {
-  margin-top: var(--space-xl);
+/* Utility Classes */
+.space-y-relaxed>*+* {
+  @apply mt-xl;
 }
 
-.space-y-loose > * + * {
-  margin-top: var(--space-2xl);
+.space-y-loose>*+* {
+  @apply mt-2xl;
 }
 
 .text-body {
-  color: var(--color-text-secondary);
-  font-size: 1.125rem;
-  line-height: 1.8;
+  @apply text-text-secondary text-lg leading-relaxed;
 }
 
-.text-body-lg {
-  color: var(--color-text-secondary);
-  font-size: 1.25rem;
-  line-height: 1.8;
-}
-
-/* ==========================================================================
-   Button System
-   ========================================================================== */
-
+/* Button System */
 .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-sm);
-  padding: var(--space-md) var(--space-xl);
-  border-radius: var(--radius-lg);
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 0.9375rem;
-  letter-spacing: 0.01em;
-  cursor: pointer;
-  border: none;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
+  @apply inline-flex items-center justify-center gap-sm px-xl py-md rounded-2xl font-display font-semibold text-[0.9375rem] tracking-wide cursor-pointer border-none transition-all duration-300 relative overflow-hidden;
 }
 
 .btn::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
   opacity: 0;
   transition: opacity 0.25s ease;
 }
@@ -238,72 +126,44 @@ li {
   opacity: 1;
 }
 
-/* Primary Button - Gold with glow */
+/* Primary Button - Vegas Nights Neon */
 .btn-primary {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
-  color: #000;
+  background: linear-gradient(135deg, #FF2D7C 0%, #CC2463 100%);
+  color: #FFFFFF;
   box-shadow:
-    0 0 0 1px rgba(245, 158, 11, 0.2),
-    0 4px 16px -4px var(--color-primary-glow),
-    0 12px 24px -8px rgba(0, 0, 0, 0.4);
+    0 0 0 1px rgba(255, 45, 124, 0.3),
+    0 4px 16px -4px rgba(255, 45, 124, 0.6),
+    0 12px 24px -8px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(255, 45, 124, 0.4);
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
+  @apply -translate-y-[2px];
   box-shadow:
-    0 0 0 1px rgba(245, 158, 11, 0.3),
-    0 8px 24px -4px var(--color-primary-glow),
-    0 16px 32px -8px rgba(0, 0, 0, 0.5);
-}
-
-.btn-primary:active {
-  transform: translateY(0);
+    0 0 0 1px rgba(255, 45, 124, 0.5),
+    0 8px 24px -4px rgba(255, 45, 124, 0.6),
+    0 16px 32px -8px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(255, 45, 124, 0.6);
 }
 
 /* Outline Button */
 .btn-outline {
-  background: transparent;
-  color: var(--color-text-primary);
-  border: 1px solid var(--color-surface-border);
+  @apply bg-transparent text-text-primary border border-surface-border;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04);
 }
 
 .btn-outline:hover {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
-  background: rgba(245, 158, 11, 0.05);
+  @apply border-primary text-primary;
+  background-color: rgba(255, 45, 124, 0.05);
   box-shadow:
-    0 0 0 1px rgba(245, 158, 11, 0.2),
-    0 4px 12px -4px var(--color-primary-glow);
+    0 0 0 1px rgba(255, 45, 124, 0.3),
+    0 4px 12px -4px rgba(255, 45, 124, 0.6),
+    0 0 20px rgba(255, 45, 124, 0.3);
 }
 
-/* Secondary Button - Emerald accent */
-.btn-secondary {
-  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
-  color: #000;
-  box-shadow:
-    0 0 0 1px rgba(16, 185, 129, 0.2),
-    0 4px 16px -4px var(--color-accent-glow);
-}
-
-.btn-secondary:hover {
-  transform: translateY(-2px);
-  box-shadow:
-    0 0 0 1px rgba(16, 185, 129, 0.3),
-    0 8px 24px -4px var(--color-accent-glow);
-}
-
-/* ==========================================================================
-   Card System
-   ========================================================================== */
-
+/* Card System */
 .card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-surface-border);
-  border-radius: var(--radius-xl);
-  padding: var(--space-xl);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
+  @apply bg-surface border border-surface-border rounded-xl p-xl transition-all duration-300 relative;
 }
 
 .card::before {
@@ -311,88 +171,69 @@ li {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 50%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
   pointer-events: none;
 }
 
 .card:hover {
-  border-color: rgba(245, 158, 11, 0.3);
-  transform: translateY(-4px);
+  border-color: rgba(255, 45, 124, 0.3);
+  @apply -translate-y-1;
   box-shadow:
-    0 0 0 1px rgba(245, 158, 11, 0.1),
+    0 0 0 1px rgba(255, 45, 124, 0.2),
     0 20px 40px -12px rgba(0, 0, 0, 0.5),
-    0 0 60px -20px var(--color-primary-glow);
+    0 0 60px -20px rgba(255, 45, 124, 0.6);
 }
 
-/* ==========================================================================
-   Badge System
-   ========================================================================== */
-
+/* Badge System */
 .badge {
-  display: inline-flex;
-  align-items: center;
-  padding: var(--space-xs) var(--space-sm);
-  border-radius: var(--radius-sm);
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  @apply inline-flex items-center px-sm py-xs rounded-lg text-xs font-semibold uppercase tracking-wider;
 }
 
 .badge-beginner {
-  background: rgba(34, 197, 94, 0.15);
-  color: #4ade80;
-  border: 1px solid rgba(34, 197, 94, 0.2);
+  background: rgba(0, 255, 136, 0.15);
+  color: #00FF88;
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
 }
 
 .badge-intermediate {
-  background: rgba(234, 179, 8, 0.15);
-  color: #facc15;
-  border: 1px solid rgba(234, 179, 8, 0.2);
+  background: rgba(0, 212, 255, 0.15);
+  color: #00D4FF;
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
 }
 
 .badge-advanced {
-  background: rgba(239, 68, 68, 0.15);
-  color: #f87171;
-  border: 1px solid rgba(239, 68, 68, 0.2);
+  background: rgba(255, 45, 124, 0.15);
+  color: #FF2D7C;
+  border: 1px solid rgba(255, 45, 124, 0.3);
+  box-shadow: 0 0 10px rgba(255, 45, 124, 0.2);
 }
 
-/* ==========================================================================
-   Section Styles
-   ========================================================================== */
-
+/* Section Styles */
 .section {
-  padding: var(--space-4xl) 0;
+  @apply py-4xl;
 }
 
 .section-header {
-  text-align: center;
-  margin-bottom: var(--space-3xl);
+  @apply text-center mb-3xl;
 }
 
 .section-title {
   font-size: clamp(2rem, 5vw, 3rem);
-  margin-bottom: var(--space-md);
+  @apply mb-md;
 }
 
 .section-subtitle {
-  font-size: 1.125rem;
-  color: var(--color-text-secondary);
-  max-width: 600px;
-  margin: 0 auto;
+  @apply text-lg text-text-secondary max-w-2xl mx-auto;
 }
 
-/* ==========================================================================
-   Hero Section
-   ========================================================================== */
-
+/* Hero Section */
 .hero {
-  position: relative;
-  padding: var(--space-4xl) 0 calc(var(--space-4xl) * 1.5);
-  overflow: hidden;
+  @apply relative py-4xl overflow-hidden;
+  padding-bottom: 6rem;
 }
 
-/* Ambient glow effects */
 .hero::before {
   content: "";
   position: absolute;
@@ -401,8 +242,8 @@ li {
   transform: translateX(-50%);
   width: 150%;
   height: 100%;
-  background: radial-gradient(ellipse at center, var(--color-primary-glow) 0%, transparent 60%);
-  opacity: 0.3;
+  background: radial-gradient(ellipse at center, rgba(255, 45, 124, 0.6) 0%, rgba(0, 212, 255, 0.3) 40%, transparent 70%);
+  opacity: 0.4;
   pointer-events: none;
 }
 
@@ -413,137 +254,114 @@ li {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent 0%, var(--color-surface-border) 20%, var(--color-primary) 50%, var(--color-surface-border) 80%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 20%, #FF2D7C 50%, rgba(255, 255, 255, 0.1) 80%, transparent 100%);
 }
 
-/* ==========================================================================
-   Stats Strip
-   ========================================================================== */
-
+/* Stats Strip */
 .stats-strip {
-  background: var(--color-surface);
-  border-top: 1px solid var(--color-surface-border);
-  border-bottom: 1px solid var(--color-surface-border);
-  padding: var(--space-xl) 0;
+  @apply bg-surface border-y border-surface-border py-xl;
 }
 
 .stat-item {
-  text-align: center;
+  @apply text-center;
 }
 
 .stat-value {
-  font-size: 2rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, var(--color-text-primary) 0%, var(--color-primary-light) 100%);
+  @apply text-3xl font-bold;
+  background: linear-gradient(135deg, #FFFFFF 0%, #00D4FF 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .stat-label {
-  font-size: 0.75rem;
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-top: var(--space-xs);
+  @apply text-xs text-text-muted uppercase tracking-widest mt-xs;
 }
 
-/* ==========================================================================
-   Footer
-   ========================================================================== */
-
+/* Footer */
 .footer {
-  border-top: 1px solid var(--color-surface-border);
-  padding: var(--space-3xl) 0;
-  text-align: center;
+  @apply border-t border-surface-border py-3xl text-center;
 }
 
 .footer-brand {
-  color: var(--color-text-muted);
-  font-size: 0.875rem;
-}
-
-.footer-brand a {
-  color: var(--color-primary);
-  font-weight: 500;
-}
-
-.footer-brand a:hover {
-  color: var(--color-primary-light);
+  @apply text-sm text-text-muted;
 }
 
 .footer-links {
-  display: flex;
-  justify-content: center;
-  gap: var(--space-xl);
-  margin-top: var(--space-lg);
+  @apply flex justify-center gap-xl mt-lg;
 }
 
 .footer-links a {
-  color: var(--color-text-secondary);
-  font-size: 0.875rem;
-  transition: color 0.2s ease;
+  @apply text-sm text-text-secondary hover:text-text-primary transition-colors;
 }
 
-.footer-links a:hover {
-  color: var(--color-text-primary);
-}
-
-/* ==========================================================================
-   Animations
-   ========================================================================== */
-
+/* Animations */
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
 
-@keyframes pulse-glow {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.7; }
-}
+  0%,
+  100% {
+    transform: translateY(0);
+  }
 
-@keyframes shimmer {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 .animate-float {
   animation: float 4s ease-in-out infinite;
 }
 
-.animate-pulse-glow {
-  animation: pulse-glow 3s ease-in-out infinite;
-}
-
-/* ==========================================================================
-   Responsive Utilities
-   ========================================================================== */
-
-@media (max-width: 768px) {
-  .section {
-    padding: var(--space-3xl) 0;
+@keyframes fade-in {
+  from {
+    opacity: 0;
   }
 
-  .hero {
-    padding: var(--space-3xl) 0;
+  to {
+    opacity: 1;
   }
 }
 
-/* ==========================================================================
-   Focus States (Accessibility)
-   ========================================================================== */
-
-:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+.animate-fade-in {
+  animation: fade-in 0.3s ease-in;
 }
 
-/* ==========================================================================
-   Selection
-   ========================================================================== */
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
 
-::selection {
-  background: var(--color-primary);
-  color: #000;
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scale-in {
+  animation: scale-in 0.3s ease-out;
+}
+
+/* Neon Text Glow Effects */
+.text-glow-pink {
+  text-shadow: 0 0 10px rgba(235, 42, 115, 0.8),
+               0 0 20px rgba(235, 42, 115, 0.4),
+               0 0 30px rgba(235, 42, 115, 0.2);
+}
+
+.text-glow-blue {
+  text-shadow: 0 0 10px rgba(1, 213, 255, 0.8),
+               0 0 20px rgba(1, 213, 255, 0.4),
+               0 0 30px rgba(1, 213, 255, 0.2);
+}
+
+.text-glow-green {
+  text-shadow: 0 0 10px rgba(0, 250, 154, 0.8),
+               0 0 20px rgba(0, 250, 154, 0.4),
+               0 0 30px rgba(0, 250, 154, 0.2);
+}
+
+/* Felt Table Background */
+.bg-felt {
+  background: radial-gradient(ellipse at center, #1a1a1a 0%, #000000 100%);
 }

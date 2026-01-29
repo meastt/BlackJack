@@ -207,6 +207,28 @@ export default function DrillsPage() {
         </div>
       </section>
 
+      {/* Web Simulator CTA */}
+      <section className="section">
+        <div className="container">
+          <div className="card text-center py-12 md:py-16 relative overflow-hidden border-2 border-primary/30 shadow-[0_0_30px_rgba(255,45,124,0.2)]">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent-cyan/10" />
+            <div className="relative z-10">
+              <div className="text-5xl mb-4">🎯</div>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                Try Our Web Simulator
+              </h2>
+              <p className="text-text-secondary max-w-lg mx-auto mb-8 leading-relaxed">
+                Practice card counting right in your browser. Master speed counting with instant feedback.
+                No download required.
+              </p>
+              <Link href="/simulator" className="btn btn-primary px-8 text-lg">
+                Launch Simulator
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="section">
         <div className="container">

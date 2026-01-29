@@ -49,7 +49,7 @@ export default function Home() {
 
           {/* Headline */}
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight" style={{ marginBottom: '2.5rem' }}>
-            <span className="text-gradient-gold">Master the Count.</span>
+            <span className="text-gradient">Master the Count.</span>
             <br />
             <span className="text-white/90">Beat the House.</span>
           </h1>
@@ -270,7 +270,7 @@ export default function Home() {
         <div className="container">
           <div className="section-header">
             <h2 className="section-title">
-              <span className="text-gradient-gold">Built for Serious Players</span>
+              <span className="text-gradient">Built for Serious Players</span>
             </h2>
             <p className="section-subtitle">
               Protocol 21 isn&apos;t another blackjack game. It&apos;s a professional-grade training system

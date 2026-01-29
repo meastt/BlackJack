@@ -2,13 +2,14 @@ import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import "./globals.css";
 import { OrganizationSchema, WebSiteSchema } from "@/components/seo";
+import Header from "@/components/Header";
 
 const BASE_URL = "https://protocol21blackjack.com";
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#0a0a0f",
+  themeColor: "#121212", // Vegas Nights dark background
 };
 
 export const metadata: Metadata = {
@@ -89,6 +90,14 @@ export const metadata: Metadata = {
   category: "Games",
   classification: "Card Counting Training Software",
   metadataBase: new URL(BASE_URL),
+  icons: {
+    icon: [
+      { url: "/icon.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-icon.png", sizes: "512x512", type: "image/png" },
+    ],
+  },
   other: {
     "apple-itunes-app": "app-id=XXXXXXXXX",
     "google-play-app": "app-id=com.protocol21.app",
@@ -121,6 +130,7 @@ export default function RootLayout({
         </Script>
       </head>
       <body className="font-sans antialiased">
+        <Header />
         {children}
       </body>
     </html>
