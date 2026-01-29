@@ -81,7 +81,7 @@ export default function Home() {
               src="/protocol-21-hero1.webp"
               alt="Protocol 21 App Interface"
               fill
-              className="object-contain object-center"
+              style={{ objectFit: 'contain', objectPosition: 'center' }}
               priority
             />
           </div>
@@ -124,7 +124,7 @@ export default function Home() {
                 src="/protocol-21-card-shoe.webp"
                 alt="Blackjack Card Shoe"
                 fill
-                className="object-contain object-center"
+                style={{ objectFit: 'contain', objectPosition: 'center' }}
               />
             </div>
             <p className="section-subtitle mt-8">
@@ -179,7 +179,7 @@ export default function Home() {
                 src="/protocol-21-true-count.webp"
                 alt="True Count Training"
                 fill
-                className="object-contain object-center"
+                style={{ objectFit: 'contain', objectPosition: 'center' }}
               />
             </div>
             <h2 className="section-title">Advanced Drills</h2>
@@ -238,7 +238,7 @@ export default function Home() {
                   src="/Skill-increased-blackjack-counting-cards.webp"
                   alt="Increase Your Blackjack Skills"
                   fill
-                  className="object-cover object-center"
+                  style={{ objectFit: 'cover', objectPosition: 'center' }}
                 />
               </div>
               <h2 className="text-3xl md:text-4xl font-bold" style={{ marginBottom: '1.5rem' }}>
