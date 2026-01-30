@@ -81,90 +81,46 @@ li {
   background-clip: text;
 }
 
-/* Layout */
-.container {
-  width: 100%;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-}
-
-@media (min-width: 768px) {
+/* Layout & Components */
+@layer components {
   .container {
-    padding: 0 2rem;
+    width: 100%;
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+
+  .section {
+    @apply py-20 md:py-32;
+  }
+
+  .section-header {
+    @apply text-center mb-12 md:mb-20 flex flex-col items-center;
+  }
+
+  .section-title {
+    @apply text-3xl md:text-5xl font-bold mb-6;
+  }
+
+  .section-subtitle {
+    @apply text-lg text-text-secondary max-w-2xl mx-auto;
+  }
+
+  .card {
+    @apply bg-surface border border-surface-border rounded-xl p-8 transition-all duration-300 relative w-full;
   }
 }
 
-/* Utility Classes */
-.space-y-relaxed>*+* {
-  @apply mt-xl;
-}
-
-.space-y-loose>*+* {
-  @apply mt-2xl;
-}
-
-.text-body {
-  @apply text-text-secondary text-lg leading-relaxed;
-}
-
-/* Button System */
-.btn {
-  @apply inline-flex items-center justify-center gap-sm px-xl py-md rounded-2xl font-display font-semibold text-[0.9375rem] tracking-wide cursor-pointer border-none transition-all duration-300 relative overflow-hidden;
-}
-
-.btn::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
-  opacity: 0;
-  transition: opacity 0.25s ease;
-}
-
-.btn:hover::before {
-  opacity: 1;
-}
-
-/* Primary Button - Vegas Nights Neon */
-.btn-primary {
-  background: linear-gradient(135deg, #FF2D7C 0%, #CC2463 100%);
-  color: #FFFFFF;
-  box-shadow:
-    0 0 0 1px rgba(255, 45, 124, 0.3),
-    0 4px 16px -4px rgba(255, 45, 124, 0.6),
-    0 12px 24px -8px rgba(0, 0, 0, 0.4),
-    0 0 20px rgba(255, 45, 124, 0.4);
-}
-
-.btn-primary:hover {
-  @apply -translate-y-[2px];
-  box-shadow:
-    0 0 0 1px rgba(255, 45, 124, 0.5),
-    0 8px 24px -4px rgba(255, 45, 124, 0.6),
-    0 16px 32px -8px rgba(0, 0, 0, 0.5),
-    0 0 30px rgba(255, 45, 124, 0.6);
-}
-
-/* Outline Button */
-.btn-outline {
-  @apply bg-transparent text-text-primary border border-surface-border;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04);
-}
-
-.btn-outline:hover {
-  @apply border-primary text-primary;
-  background-color: rgba(255, 45, 124, 0.05);
-  box-shadow:
-    0 0 0 1px rgba(255, 45, 124, 0.3),
-    0 4px 12px -4px rgba(255, 45, 124, 0.6),
-    0 0 20px rgba(255, 45, 124, 0.3);
-}
-
-/* Card System */
-.card {
-  @apply bg-surface border border-surface-border rounded-xl p-xl transition-all duration-300 relative;
-}
+/* Gradient text utility - Vegas Nights Neon */
 
 .card::before {
   content: "";
@@ -345,20 +301,20 @@ li {
 /* Neon Text Glow Effects */
 .text-glow-pink {
   text-shadow: 0 0 10px rgba(235, 42, 115, 0.8),
-               0 0 20px rgba(235, 42, 115, 0.4),
-               0 0 30px rgba(235, 42, 115, 0.2);
+    0 0 20px rgba(235, 42, 115, 0.4),
+    0 0 30px rgba(235, 42, 115, 0.2);
 }
 
 .text-glow-blue {
   text-shadow: 0 0 10px rgba(1, 213, 255, 0.8),
-               0 0 20px rgba(1, 213, 255, 0.4),
-               0 0 30px rgba(1, 213, 255, 0.2);
+    0 0 20px rgba(1, 213, 255, 0.4),
+    0 0 30px rgba(1, 213, 255, 0.2);
 }
 
 .text-glow-green {
   text-shadow: 0 0 10px rgba(0, 250, 154, 0.8),
-               0 0 20px rgba(0, 250, 154, 0.4),
-               0 0 30px rgba(0, 250, 154, 0.2);
+    0 0 20px rgba(0, 250, 154, 0.4),
+    0 0 30px rgba(0, 250, 154, 0.2);
 }
 
 /* Felt Table Background */

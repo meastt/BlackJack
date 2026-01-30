@@ -64,27 +64,29 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
             <Link href="/download/ios" className="btn btn-primary text-lg px-8 py-4">
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
               </svg>
               Download for iOS
             </Link>
             <Link href="/download/android" className="btn btn-outline text-lg px-8 py-4">
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M17.523 2.047a.5.5 0 0 0-.78.203l-1.617 4.366a12.5 12.5 0 0 0-6.252 0L7.257 2.25a.5.5 0 0 0-.78-.203C4.602 3.793 3.262 6.16 3.009 8.88A12.5 12.5 0 0 0 2 13.5v.5c0 4.418 4.477 8 10 8s10-3.582 10-8v-.5a12.5 12.5 0 0 0-1.009-4.62c-.253-2.72-1.593-5.087-3.468-6.833zM8 15a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm8 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                <path d="M17.523 2.047a.5.5 0 0 0-.78.203l-1.617 4.366a12.5 12.5 0 0 0-6.252 0L7.257 2.25a.5.5 0 0 0-.78-.203C4.602 3.793 3.262 6.16 3.009 8.88A12.5 12.5 0 0 0 2 13.5v.5c0 4.418 4.477 8 10 8s10-3.582 10-8v-.5a12.5 12.5 0 0 0-1.009-4.62c-.253-2.72-1.593-5.087-3.468-6.833zM8 15a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm8 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
               </svg>
               Get for Android
             </Link>
           </div>
 
-          <div className="flex justify-center w-full max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-2xl border border-white/10 mt-12">
-            <Image
-              src="/protocol-21-hero1.webp"
-              alt="Protocol 21 App Interface"
-              width={896}
-              height={504}
-              className="w-full h-auto"
-              priority
-            />
+          <div className="flex justify-center mt-12">
+            <div className="w-full max-w-4xl rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+              <Image
+                src="/protocol-21-hero1.webp"
+                alt="Protocol 21 App Interface"
+                width={896}
+                height={504}
+                className="w-full h-auto"
+                priority
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -120,13 +122,13 @@ export default function Home() {
             <h2 className="section-title">
               <span className="text-gradient">Supported Systems</span>
             </h2>
-            <div className="flex justify-center w-full max-w-4xl mx-auto mb-12 rounded-xl overflow-hidden">
+            <div className="w-full max-w-4xl rounded-xl overflow-hidden mt-8">
               <Image
                 src="/protocol-21-card-shoe.webp"
                 alt="Blackjack Card Shoe"
                 width={896}
                 height={384}
-                className="w-full h-auto max-h-96 object-contain"
+                className="w-full h-auto max-h-96 object-contain mx-auto"
               />
             </div>
             <p className="section-subtitle mt-8">
@@ -142,11 +144,10 @@ export default function Home() {
                 className="card group"
               >
                 <div className="flex justify-between items-start mb-4">
-                  <span className={`badge ${
-                    system.difficulty_level === 'Beginner' ? 'badge-beginner' :
+                  <span className={`badge ${system.difficulty_level === 'Beginner' ? 'badge-beginner' :
                     system.difficulty_level === 'Intermediate' ? 'badge-intermediate' :
-                    'badge-advanced'
-                  }`}>
+                      'badge-advanced'
+                    }`}>
                     {system.difficulty_level}
                   </span>
                   <span className="text-xs text-text-muted font-mono">{system.count_type}</span>
@@ -176,13 +177,13 @@ export default function Home() {
       <section className="section bg-surface">
         <div className="container">
           <div className="section-header">
-            <div className="flex justify-center w-full max-w-4xl mx-auto mb-12 rounded-xl overflow-hidden">
+            <div className="w-full max-w-4xl rounded-xl overflow-hidden mb-12">
               <Image
                 src="/protocol-21-true-count.webp"
                 alt="True Count Training"
                 width={896}
                 height={384}
-                className="w-full h-auto max-h-96 object-contain"
+                className="w-full h-auto max-h-96 object-contain mx-auto"
               />
             </div>
             <h2 className="section-title">Advanced Drills</h2>
@@ -236,7 +237,7 @@ export default function Home() {
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
 
             <div className="relative z-10">
-              <div className="flex justify-center w-full max-w-2xl mx-auto mb-12 rounded-xl overflow-hidden shadow-lg border border-white/5">
+              <div className="w-full max-w-2xl mx-auto mb-12 rounded-xl overflow-hidden shadow-lg border border-white/5">
                 <Image
                   src="/Skill-increased-blackjack-counting-cards.webp"
                   alt="Increase Your Blackjack Skills"
@@ -278,28 +279,28 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="max-w-2xl mx-auto">
-            <ul className="space-y-4 mb-8">
-              <li className="flex items-center justify-center gap-3">
-                <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="max-w-2xl mx-auto w-full">
+            <ul className="space-y-4 mb-8 w-full">
+              <li className="flex items-start md:items-center justify-center gap-3">
+                <svg className="w-5 h-5 text-primary flex-shrink-0 mt-1 md:mt-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
-                <span className="text-text-secondary">Casino-accurate dealing speeds</span>
+                <span className="text-text-secondary text-center">Casino-accurate dealing speeds</span>
               </li>
-              <li className="flex items-center justify-center gap-3">
-                <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <li className="flex items-start md:items-center justify-center gap-3">
+                <svg className="w-5 h-5 text-primary flex-shrink-0 mt-1 md:mt-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
-                <span className="text-text-secondary">Background noise simulation</span>
+                <span className="text-text-secondary text-center">Background noise simulation</span>
               </li>
-              <li className="flex items-center justify-center gap-3">
-                <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <li className="flex items-start md:items-center justify-center gap-3">
+                <svg className="w-5 h-5 text-primary flex-shrink-0 mt-1 md:mt-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
-                <span className="text-text-secondary">Detailed accuracy analytics</span>
+                <span className="text-text-secondary text-center">Detailed accuracy analytics</span>
               </li>
             </ul>
-            <div className="text-center">
+            <div className="text-center w-full">
               <Link href="/download" className="btn btn-primary">
                 Get Protocol 21 Free
               </Link>
@@ -320,8 +321,8 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="max-w-3xl mx-auto">
-            <div className="space-y-4">
+          <div className="max-w-3xl mx-auto w-full">
+            <div className="space-y-4 w-full">
               {faqs.map((faq, index) => (
                 <details key={index} className="card group">
                   <summary className="flex justify-between items-center cursor-pointer list-none">
@@ -348,9 +349,9 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="footer">
+      <footer className="footer py-16">
         <div className="container">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 text-left">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12 text-center md:text-left">
             <div>
               <h4 className="font-bold mb-4 text-white">Protocol 21</h4>
               <p className="text-text-muted text-sm">
