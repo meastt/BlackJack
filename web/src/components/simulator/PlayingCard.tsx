@@ -46,30 +46,31 @@ export default function PlayingCard({ card, size = 'large', showCountValue = fal
           ${sizeClasses[size]}
           bg-white rounded-lg shadow-xl
           flex flex-col
-          p-2 md:p-2.5
+          p-1.5 md:p-2
           transition-all duration-200
           hover:scale-105 hover:shadow-[0_0_20px_rgba(255,45,124,0.4)]
           border-2 border-gray-200
           ${className}
+          overflow-hidden
         `}
       >
         {/* Top left corner */}
-        <div className={`flex flex-col items-center leading-none ${suitColor}`}>
+        <div className={`flex flex-col items-center leading-tight ${suitColor} text-xs`}>
           <span className="font-bold">{rankText}</span>
-          <span>{suitSymbol}</span>
+          <span className="text-[10px]">{suitSymbol}</span>
         </div>
 
         {/* Center suit symbol */}
         <div className="flex-1 flex items-center justify-center">
-          <span className={`${size === 'large' ? 'text-6xl' : size === 'medium' ? 'text-4xl' : 'text-2xl'} ${suitColor}`}>
+          <span className={`${size === 'large' ? 'text-4xl md:text-5xl' : size === 'medium' ? 'text-3xl' : 'text-xl'} ${suitColor}`}>
             {suitSymbol}
           </span>
         </div>
 
         {/* Bottom right corner (rotated) */}
-        <div className={`flex flex-col items-center leading-none ${suitColor} rotate-180 self-end`}>
+        <div className={`flex flex-col items-center leading-tight ${suitColor} rotate-180 self-end text-xs`}>
           <span className="font-bold">{rankText}</span>
-          <span>{suitSymbol}</span>
+          <span className="text-[10px]">{suitSymbol}</span>
         </div>
       </div>
 
