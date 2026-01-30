@@ -70,7 +70,7 @@ export default function GameTable({
             ))}
           </div>
           {dealerHand.length > 0 && (
-            <div className="mt-3 flex items-center gap-3">
+            <div className="mt-3 flex items-center justify-center gap-4">
               <div className="text-zinc-400 text-xs font-bold uppercase tracking-widest bg-black/80 px-3 py-1 rounded-full backdrop-blur-sm border border-zinc-800 shadow-lg">
                 Dealer
               </div>
@@ -129,7 +129,7 @@ export default function GameTable({
                     </div>
 
                     {/* Hand Info */}
-                    <div className="flex flex-wrap items-center justify-center gap-3 text-sm">
+                    <div className="flex flex-wrap items-center justify-center gap-4 text-sm">
                       <div className="text-white text-[10px] font-bold uppercase tracking-widest bg-black/60 px-2.5 py-0.5 rounded-full backdrop-blur-sm border border-zinc-800">
                         {playerHands.length > 1 ? `Hand ${handIndex + 1}` : 'Player'}
                       </div>
