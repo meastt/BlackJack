@@ -34,7 +34,8 @@ export default function Chip({ value, onClick, disabled = false, className = '' 
         font-bold text-white text-sm md:text-base
         transition-all duration-200
         ${!disabled && onClick ? 'hover:scale-110 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] active:scale-95 cursor-pointer' : 'cursor-default'}
-        ${disabled ? 'opacity-50' : 'hover:brightness-125'}
+        ${disabled && onClick ? 'opacity-50' : ''}
+        ${!disabled && onClick ? 'hover:brightness-125' : ''}
         ${className}
       `}
     >
