@@ -51,7 +51,7 @@ export default function GameTable({
       <div className="flex flex-col h-full justify-between py-4 md:py-6">
 
         {/* Dealer Hand - Top */}
-        <div className="flex flex-col items-center justify-end min-h-[140px] md:min-h-[180px] px-4 pt-12 md:pt-16">
+        <div className="flex flex-col items-center justify-end min-h-[140px] md:min-h-[180px] px-4 pt-18 md:pt-20">
           <div className="flex justify-center -space-x-4 md:-space-x-6">
             {dealerHand.map((card, i) => (
               <div
