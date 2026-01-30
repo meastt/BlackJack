@@ -34,7 +34,7 @@ export default function BettingInterface({
   };
 
   const handleClearBet = () => {
-    onBetChange(minBet);
+    onBetChange(0);
   };
 
   const handleCustomBet = () => {

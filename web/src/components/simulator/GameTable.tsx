@@ -52,7 +52,7 @@ export default function GameTable({
 
         {/* Dealer Hand - Top */}
         <div className="flex flex-col items-center justify-end min-h-[140px] md:min-h-[180px] px-4 pt-6">
-          <div className="flex justify-center -space-x-5 md:-space-x-8">
+          <div className="flex justify-center -space-x-4 md:-space-x-6">
             {dealerHand.map((card, i) => (
               <div
                 key={card.id}
@@ -60,8 +60,8 @@ export default function GameTable({
                 style={{ zIndex: i }}
               >
                 {i === 1 && phase !== GamePhase.DEALER_TURN && phase !== GamePhase.ROUND_COMPLETE ? (
-                  <div className="w-[90px] h-[126px] md:w-[112px] md:h-[157px] bg-gradient-to-br from-neon-pink/20 to-neon-blue/20 rounded-lg border-2 border-neon-pink/30 flex items-center justify-center shadow-[0_0_20px_rgba(235,42,115,0.2)]">
-                    <span className="text-3xl md:text-5xl opacity-50">🂠</span>
+                  <div className="w-[75px] h-[105px] md:w-[85px] md:h-[119px] bg-gradient-to-br from-neon-pink/20 to-neon-blue/20 rounded-lg border-2 border-neon-pink/30 flex items-center justify-center shadow-[0_0_20px_rgba(235,42,115,0.2)]">
+                    <span className="text-2xl md:text-4xl opacity-50">🂠</span>
                   </div>
                 ) : (
                   <PlayingCard card={card} size="large" showCountValue={showCountValues} />
@@ -116,7 +116,7 @@ export default function GameTable({
                 >
                   <div className="flex flex-col items-center gap-2">
                     {/* Cards */}
-                    <div className="flex justify-center -space-x-5 md:-space-x-8">
+                    <div className="flex justify-center -space-x-4 md:-space-x-6">
                       {hand.cards.map((card, i) => (
                         <div
                           key={card.id}

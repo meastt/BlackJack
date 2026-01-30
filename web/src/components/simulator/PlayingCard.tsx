@@ -35,8 +35,8 @@ export default function PlayingCard({ card, size = 'large', showCountValue = fal
 
   const sizeClasses = {
     small: 'w-[52px] h-[73px] text-xs',
-    medium: 'w-[82px] h-[115px] text-sm',
-    large: 'w-[90px] h-[126px] md:w-[112px] md:h-[157px] text-base md:text-lg',
+    medium: 'w-[70px] h-[98px] text-sm',
+    large: 'w-[75px] h-[105px] md:w-[85px] md:h-[119px] text-base',
   };
 
   return (

@@ -10,7 +10,7 @@ import CountIndicators from './CountIndicators';
 import FeltTable from './FeltTable';
 import { ChipStack } from './ChipDisplay';
 
-const MIN_BET = 10;
+const MIN_BET = 0;
 
 export default function FullSimulator() {
   const { state, actions } = useBlackjackGame();
@@ -268,13 +268,13 @@ export default function FullSimulator() {
         )}
 
         {/* Bankrupt Notice */}
-        {state.bankroll < MIN_BET && state.phase === GamePhase.BETTING && (
+        {state.bankroll <= 0 && state.phase === GamePhase.BETTING && (
           <div className="absolute inset-0 bg-black/95 z-50 flex items-center justify-center p-4 backdrop-blur-md">
             <div className="bg-zinc-900 p-8 rounded-2xl border border-neon-pink/30 shadow-[0_0_50px_rgba(235,42,115,0.2)] max-w-sm w-full text-center animate-in zoom-in duration-300">
               <div className="text-6xl mb-4">💸</div>
               <h3 className="text-2xl font-bold text-neon-pink text-glow-pink mb-4">Bankroll Depleted!</h3>
               <p className="text-zinc-400 mb-6">
-                You don't have enough to place the minimum bet of ${MIN_BET}.
+                You're out of money!
               </p>
               <button
                 onClick={handleResetGame}

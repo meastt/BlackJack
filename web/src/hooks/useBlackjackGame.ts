@@ -54,7 +54,7 @@ const DEFAULT_SETTINGS: GameSettings = {
 };
 
 const INITIAL_BANKROLL = 10000;
-const MIN_BET = 10;
+const MIN_BET = 0;
 
 export function useBlackjackGame() {
   const [state, setState] = useState<GameState>({
@@ -65,7 +65,7 @@ export function useBlackjackGame() {
     currentHandIndex: 0,
     phase: GamePhase.BETTING,
     bankroll: INITIAL_BANKROLL,
-    currentBet: MIN_BET,
+    currentBet: 0,
     settings: DEFAULT_SETTINGS,
     roundCount: 0,
     cutCardReached: false,
@@ -87,7 +87,7 @@ export function useBlackjackGame() {
       currentHandIndex: 0,
       phase: GamePhase.BETTING,
       bankroll: INITIAL_BANKROLL,
-      currentBet: MIN_BET,
+      currentBet: 0,
       settings: newSettings,
       roundCount: 0,
       cutCardReached: false,
@@ -104,7 +104,7 @@ export function useBlackjackGame() {
   const placeBet = useCallback((amount: number) => {
     setState(prev => {
       if (amount > prev.bankroll) return prev;
-      if (amount < MIN_BET) return prev;
+      if (amount < 0) return prev;
       if (prev.phase !== GamePhase.BETTING) return prev;
 
       return {
@@ -431,7 +431,7 @@ export function useBlackjackGame() {
       dealerHand: [],
       currentHandIndex: 0,
       phase: GamePhase.BETTING,
-      currentBet: MIN_BET,
+      currentBet: 0,
     }));
   }, []);
 
