@@ -24,7 +24,7 @@ const getCountValue = (rank: Rank): number => {
 };
 
 const getSuitColor = (suit: string): string => {
-  return suit === 'hearts' || suit === 'diamonds' ? 'text-red-500' : 'text-white';
+  return suit === 'hearts' || suit === 'diamonds' ? 'text-red-500' : 'text-black';
 };
 
 export default function PlayingCard({ card, size = 'large', showCountValue = false, className = '' }: PlayingCardProps) {

@@ -52,44 +52,46 @@ export default function GameTable({
 
         {/* Dealer Hand - Top */}
         <div className="flex flex-col items-center justify-end min-h-[140px] md:min-h-[180px] px-4 pt-18 md:pt-20">
-          <div className="relative w-full flex justify-center">
-            {/* Dealer Label - Left Side */}
-            {dealerHand.length > 0 && (
-              <div className="absolute left-8 md:left-16 lg:left-24 top-1/2 -translate-y-1/2">
-                <div className="text-zinc-400 text-xs font-bold uppercase tracking-widest bg-black/80 px-3 py-1 rounded-full backdrop-blur-sm border border-zinc-800 shadow-lg">
-                  Dealer
+          <div className="w-full max-w-3xl">
+            <div className="relative w-full flex justify-center">
+              {/* Dealer Label - Left Side */}
+              {dealerHand.length > 0 && (
+                <div className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2">
+                  <div className="text-zinc-400 text-xs font-bold uppercase tracking-widest bg-black/80 px-3 py-1 rounded-full backdrop-blur-sm border border-zinc-800 shadow-lg">
+                    Dealer
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* Cards */}
-            <div className="flex justify-center -space-x-4 md:-space-x-6">
-              {dealerHand.map((card, i) => (
-                <div
-                  key={card.id}
-                  className="transform transition-transform hover:-translate-y-2"
-                  style={{ zIndex: i }}
-                >
-                  {i === 1 && phase !== GamePhase.DEALER_TURN && phase !== GamePhase.ROUND_COMPLETE ? (
-                    <div className="w-[75px] h-[105px] md:w-[85px] md:h-[119px] bg-gradient-to-br from-neon-pink/20 to-neon-blue/20 rounded-lg border-2 border-neon-pink/30 flex items-center justify-center shadow-[0_0_20px_rgba(235,42,115,0.2)]">
-                      <span className="text-2xl md:text-4xl opacity-50">🂠</span>
-                    </div>
-                  ) : (
-                    <PlayingCard card={card} size="large" showCountValue={showCountValues} />
-                  )}
+              {/* Cards */}
+              <div className="flex justify-center -space-x-4 md:-space-x-6">
+                {dealerHand.map((card, i) => (
+                  <div
+                    key={card.id}
+                    className="transform transition-transform hover:-translate-y-2"
+                    style={{ zIndex: i }}
+                  >
+                    {i === 1 && phase !== GamePhase.DEALER_TURN && phase !== GamePhase.ROUND_COMPLETE ? (
+                      <div className="w-[75px] h-[105px] md:w-[85px] md:h-[119px] bg-gradient-to-br from-neon-pink/20 to-neon-blue/20 rounded-lg border-2 border-neon-pink/30 flex items-center justify-center shadow-[0_0_20px_rgba(235,42,115,0.2)]">
+                        <span className="text-2xl md:text-4xl opacity-50">🂠</span>
+                      </div>
+                    ) : (
+                      <PlayingCard card={card} size="large" showCountValue={showCountValues} />
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Dealer Value - Right Side */}
+              {dealerHand.length > 0 && (phase === GamePhase.DEALER_TURN || phase === GamePhase.ROUND_COMPLETE) && (
+                <div className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2">
+                  <div className="text-neon-blue text-glow-blue text-lg font-bold font-mono">
+                    {calculateHandValue(dealerHand).value}
+                    {calculateHandValue(dealerHand).isSoft && <span className="text-xs ml-1">(soft)</span>}
+                  </div>
                 </div>
-              ))}
+              )}
             </div>
-
-            {/* Dealer Value - Right Side */}
-            {dealerHand.length > 0 && (phase === GamePhase.DEALER_TURN || phase === GamePhase.ROUND_COMPLETE) && (
-              <div className="absolute right-8 md:right-16 lg:right-24 top-1/2 -translate-y-1/2">
-                <div className="text-neon-blue text-glow-blue text-lg font-bold font-mono">
-                  {calculateHandValue(dealerHand).value}
-                  {calculateHandValue(dealerHand).isSoft && <span className="text-xs ml-1">(soft)</span>}
-                </div>
-              </div>
-            )}
           </div>
         </div>
 
