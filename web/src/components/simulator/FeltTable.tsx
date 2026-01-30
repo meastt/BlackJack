@@ -25,8 +25,8 @@ export default function FeltTable({ children }: FeltTableProps) {
       <div className="absolute inset-0 pointer-events-none z-0">
         <svg
           className="w-full h-full min-h-full"
-          viewBox="0 0 1000 1200"
-          preserveAspectRatio="none"
+          viewBox="0 0 1000 700"
+          preserveAspectRatio="xMidYMid slice"
         >
           <defs>
             <path id="insurancePath" d="M 200,140 Q 500,80 800,140" fill="transparent" />
@@ -67,7 +67,7 @@ export default function FeltTable({ children }: FeltTableProps) {
           {/* Main Center Text */}
           <text
             x="500"
-            y="800"
+            y="350"
             className="fill-white text-5xl font-serif font-bold opacity-10"
             textAnchor="middle"
           >
@@ -75,7 +75,7 @@ export default function FeltTable({ children }: FeltTableProps) {
           </text>
           <text
             x="500"
-            y="850"
+            y="390"
             className="fill-neon-blue text-[14px] font-serif font-bold tracking-[0.2em] opacity-80"
             textAnchor="middle"
             filter="url(#glow-text)"
@@ -84,7 +84,7 @@ export default function FeltTable({ children }: FeltTableProps) {
           </text>
 
           {/* Dealer Rule Box (Left) - Wider Rectangle */}
-          <g transform="translate(80, 380) rotate(-8)">
+          <g transform="translate(80, 250) rotate(-8)">
             <rect
               width="110"
               height="50"
@@ -133,7 +133,7 @@ export default function FeltTable({ children }: FeltTableProps) {
           </g>
 
           {/* Side Bet / Bonus Circle (Right) - Pushed Further Right */}
-          <g transform="translate(810, 380) rotate(8)">
+          <g transform="translate(810, 250) rotate(8)">
             <circle
               cx="40"
               cy="25"
@@ -172,7 +172,7 @@ export default function FeltTable({ children }: FeltTableProps) {
           </g>
 
           {/* Betting Circle on Felt */}
-          <g transform="translate(500, 1120)">
+          <g transform="translate(500, 600)">
             {/* Outer Ring */}
             <circle cx="0" cy="0" r="55" stroke="#eb2a73" strokeWidth="1.5" fill="none" opacity="0.2" />
             {/* Inner Dashed */}
