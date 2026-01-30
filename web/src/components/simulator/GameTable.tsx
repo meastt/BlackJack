@@ -55,7 +55,7 @@ export default function GameTable({
           <div className="relative w-full flex justify-center">
             {/* Dealer Label - Left Side */}
             {dealerHand.length > 0 && (
-              <div className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2">
+              <div className="absolute left-8 md:left-16 lg:left-24 top-1/2 -translate-y-1/2">
                 <div className="text-zinc-400 text-xs font-bold uppercase tracking-widest bg-black/80 px-3 py-1 rounded-full backdrop-blur-sm border border-zinc-800 shadow-lg">
                   Dealer
                 </div>
@@ -83,7 +83,7 @@ export default function GameTable({
 
             {/* Dealer Value - Right Side */}
             {dealerHand.length > 0 && (phase === GamePhase.DEALER_TURN || phase === GamePhase.ROUND_COMPLETE) && (
-              <div className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2">
+              <div className="absolute right-8 md:right-16 lg:right-24 top-1/2 -translate-y-1/2">
                 <div className="text-neon-blue text-glow-blue text-lg font-bold font-mono">
                   {calculateHandValue(dealerHand).value}
                   {calculateHandValue(dealerHand).isSoft && <span className="text-xs ml-1">(soft)</span>}
