@@ -181,7 +181,7 @@ export class CardCountingEngine {
   getTrueCount(): number {
     const decksRemaining = this.getDecksRemaining();
     if (decksRemaining === 0) return 0;
-    return Math.round(this.runningCount / decksRemaining);
+    return Math.trunc(this.runningCount / decksRemaining);
   }
 
   /**

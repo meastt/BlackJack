@@ -172,7 +172,7 @@ export class DrillEngine {
   } {
     const runningCount = Math.floor(Math.random() * 20) - 10; // -10 to +10
     const decksRemaining = Math.floor(Math.random() * 50) / 10 + 0.5; // 0.5 to 5.5
-    const correctTrueCount = Math.round(runningCount / decksRemaining);
+    const correctTrueCount = Math.trunc(runningCount / decksRemaining);
 
     return {
       runningCount,

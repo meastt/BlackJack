@@ -142,10 +142,10 @@
     "pain_point": "calculating fractional values (.5) on the fly"
   }
 ]
-
 Dataset: Drills (drills.json)
 Use this data to generate pages about specific training exercises.
 
+JSON
 [
   {
     "drill_name": "True Count Conversion",
@@ -169,14 +169,14 @@ Use this data to generate pages about specific training exercises.
     "pain_point": "losing the count when the dealer speeds up"
   }
 ]
-
-
 4. AI Content Generation Prompts
 Copy these instructions into your AI Agent (Cursor/Windsurf) to generate the actual page content.
 
 Prompt 1: Generating System Pages
 "Act as a specialist in Blackjack SEO and App Marketing. I will provide you with a JSON object representing a specific Card Counting System (e.g., Hi-Lo, KO).
+
 Your Goal: Write a full Markdown page content for this system.
+
 Structure:
 
 Hook: Acknowledge the user wants to learn {system_name} but highlight the specific {pain_point} associated with it.
@@ -191,7 +191,9 @@ Tone: Professional, encouraging, authoritative. No fluff."
 
 Prompt 2: Generating Drill Pages
 "Act as a Blackjack Coach. I will provide a JSON object for a specific Drill (e.g., True Count, Speed).
+
 Your Goal: Write a landing page convincing the user that manual practice (flashcards) is obsolete.
+
 Structure:
 
 Problem: Explain why {pain_point} causes people to lose money in casinos.
@@ -203,8 +205,10 @@ SEO: Ensure the keyword {drill_name} appears in the first 100 words.
 Technical: Mention that the app simulates real casino conditions for {target_skill}."
 
 5. Technical SEO Checklist (Post-Generation)
- Cross-Linking: Ensure every /systems/ page links back to the Home Page with anchor text "Blackjack Card Counting App".
- Schema Markup: Inject SoftwareApplication JSON-LD schema into the <head> of the Homepage.
- ASO Alignment: Ensure the H1s of the landing pages match the exact keywords used in the Apple App Store "Keywords" field.
- Smart Banners: Add <meta name="apple-itunes-app" content="app-id=YOUR_ID"> to all mobile views.
+[ ] Cross-Linking: Ensure every /systems/ page links back to the Home Page with anchor text "Blackjack Card Counting App".
 
+[ ] Schema Markup: Inject SoftwareApplication JSON-LD schema into the <head> of the Homepage.
+
+[ ] ASO Alignment: Ensure the H1s of the landing pages match the exact keywords used in the Apple App Store "Keywords" field.
+
+[ ] Smart Banners: Add <meta name="apple-itunes-app" content="app-id=YOUR_ID"> to all mobile views.

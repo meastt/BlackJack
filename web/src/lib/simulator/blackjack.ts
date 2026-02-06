@@ -178,14 +178,22 @@ export function getBasicStrategyAction(
     // Always split Aces and 8s
     if (rank === 'A' || rank === '8') return 'Split';
 
-    // Never split 10s, 5s, 4s
-    if (['10', 'J', 'Q', 'K', '5', '4'].some(r => rank === r)) return 'Stand';
+    // Never split 10s
+    if (['10', 'J', 'Q', 'K'].some(r => rank === r)) return 'Stand';
 
     // Split 9s except against 7, 10, A
     if (rank === '9' && ![7, 10, 11].includes(dealerValue)) return 'Split';
 
-    // Split 2s, 3s, 6s, 7s against dealer 2-7
-    if (['2', '3', '6', '7'].includes(rank) && dealerValue >= 2 && dealerValue <= 7) {
+    // Split 4s against dealer 5-6 (DAS)
+    if (rank === '4' && dealerValue >= 5 && dealerValue <= 6) return 'Split';
+
+    // Split 2s, 3s, 7s against dealer 2-7
+    if (['2', '3', '7'].includes(rank) && dealerValue >= 2 && dealerValue <= 7) {
+      return 'Split';
+    }
+
+    // Split 6s against dealer 2-6
+    if (rank === '6' && dealerValue >= 2 && dealerValue <= 6) {
       return 'Split';
     }
   }
@@ -195,11 +203,13 @@ export function getBasicStrategyAction(
     if (playerValue >= 19) return 'Stand';
     if (playerValue === 18) {
       if (dealerValue >= 9) return 'Hit';
-      if (canDoubleHand && dealerValue >= 2 && dealerValue <= 6) return 'Double';
+      if (canDoubleHand && dealerValue >= 3 && dealerValue <= 6) return 'Double';
       return 'Stand';
     }
-    if (canDoubleHand && playerValue >= 13 && playerValue <= 17 && dealerValue >= 4 && dealerValue <= 6) {
-      return 'Double';
+    if (canDoubleHand) {
+      if (playerValue === 17 && dealerValue >= 3 && dealerValue <= 6) return 'Double';
+      if ((playerValue === 15 || playerValue === 16) && dealerValue >= 4 && dealerValue <= 6) return 'Double';
+      if ((playerValue === 13 || playerValue === 14) && dealerValue >= 5 && dealerValue <= 6) return 'Double';
     }
     return 'Hit';
   }
