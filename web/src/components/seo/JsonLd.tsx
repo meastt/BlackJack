@@ -14,7 +14,11 @@ export function OrganizationSchema({
   name = 'Protocol 21',
   url = BASE_URL,
   logo = `${BASE_URL}/images/protocol-21-logo.webp`,
-  sameAs = [],
+  sameAs = [
+    'https://twitter.com/protocol21app',
+    'https://www.instagram.com/protocol21app',
+    'https://www.youtube.com/@protocol21app',
+  ],
 }: OrganizationSchemaProps = {}) {
   const schema = {
     '@context': 'https://schema.org',
@@ -22,6 +26,8 @@ export function OrganizationSchema({
     name,
     url,
     logo,
+    description: 'The leading blackjack card counting trainer app for iOS and Android. Master card counting systems with casino-grade drills.',
+    foundingDate: '2024',
     sameAs,
     contactPoint: {
       '@type': 'ContactPoint',
@@ -85,6 +91,9 @@ export function SoftwareApplicationSchema({ platform, downloadUrl }: SoftwareApp
     downloadUrl: downloadUrl || (platform === 'iOS'
       ? 'https://apps.apple.com/app/protocol-21'
       : 'https://play.google.com/store/apps/details?id=com.protocol21'),
+    version: '1.0.0',
+    releaseNotes: 'Full-featured blackjack card counting trainer with advanced counting systems and casino-grade drills.',
+    datePublished: '2024-01-01',
     offers: {
       '@type': 'Offer',
       price: '0',
@@ -375,6 +384,36 @@ export function CourseSchema({
       courseMode: 'online',
       courseWorkload: 'PT30H',
     },
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  )
+}
+
+interface DefinedTermSchemaProps {
+  term: string
+  definition: string
+  url?: string
+  sameAs?: string[]
+}
+
+export function DefinedTermSchema({
+  term,
+  definition,
+  url,
+  sameAs,
+}: DefinedTermSchemaProps) {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'DefinedTerm',
+    name: term,
+    description: definition,
+    ...(url && { url }),
+    ...(sameAs && { sameAs }),
   }
 
   return (
