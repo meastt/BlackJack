@@ -99,7 +99,8 @@ export const metadata: Metadata = {
     ],
   },
   other: {
-    "apple-itunes-app": "app-id=XXXXXXXXX",
+    // TODO: Replace with actual App Store ID once app is published
+    // "apple-itunes-app": "app-id=YOUR_APP_STORE_ID",
     "google-play-app": "app-id=com.protocol21.app",
   },
 };
@@ -117,9 +118,9 @@ export default function RootLayout({
         <Script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-5P3CB205H1"
-          strategy="beforeInteractive"
+          strategy="afterInteractive"
         />
-        <Script id="google-analytics" strategy="beforeInteractive">
+        <Script id="google-analytics" strategy="afterInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
