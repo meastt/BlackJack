@@ -19,7 +19,8 @@
       "bundleIdentifier": "com.cardcounterai.app",
       "infoPlist": {
         "NSCameraUsageDescription": "Camera permission is required for future AR Card Counting drills.",
-        "NSMicrophoneUsageDescription": "Microphone permission is required for distraction engine features."
+        "NSMicrophoneUsageDescription": "Microphone permission is required for distraction engine features.",
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
