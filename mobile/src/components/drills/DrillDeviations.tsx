@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, Modal } from 'react-native';
 import { colors } from '../../theme/colors';
 import { Card as CardComponent } from '../Card';
+import { Button } from '../Button';
 import { Card, Rank, Suit } from '@card-counter-ai/shared';
 import { HapticEngine } from '../../utils/HapticEngine';
 import { useProgressStore, MASTERY_REQUIREMENTS } from '../../store/useProgressStore';
@@ -287,27 +288,51 @@ export const DrillDeviations: React.FC<{ navigation: any }> = ({ navigation }) =
                 {/* Controls */}
                 <View style={styles.controls}>
                     <View style={styles.row}>
-                        <TouchableOpacity style={[styles.btn, styles.hitBtn]} onPress={() => handleAction('HIT')}>
-                            <Text style={styles.btnText}>HIT</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={[styles.btn, styles.standBtn]} onPress={() => handleAction('STAND')}>
-                            <Text style={styles.btnText}>STAND</Text>
-                        </TouchableOpacity>
+                        <Button
+                            title="HIT"
+                            variant="outline"
+                            onPress={() => handleAction('HIT')}
+                            style={[styles.btn, styles.hitBtn]}
+                            textStyle={styles.btnText}
+                        />
+                        <Button
+                            title="STAND"
+                            variant="outline"
+                            onPress={() => handleAction('STAND')}
+                            style={[styles.btn, styles.standBtn]}
+                            textStyle={styles.btnText}
+                        />
                     </View>
                     <View style={styles.row}>
-                        <TouchableOpacity style={[styles.btn, styles.splitBtn]} onPress={() => handleAction('SPLIT')}>
-                            <Text style={styles.btnText}>SPLIT</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={[styles.btn, styles.doubleBtn]} onPress={() => handleAction('DOUBLE')}>
-                            <Text style={styles.btnText}>DOUBLE</Text>
-                        </TouchableOpacity>
+                        <Button
+                            title="SPLIT"
+                            variant="outline"
+                            onPress={() => handleAction('SPLIT')}
+                            style={[styles.btn, styles.splitBtn]}
+                            textStyle={styles.btnText}
+                        />
+                        <Button
+                            title="DOUBLE"
+                            variant="outline"
+                            onPress={() => handleAction('DOUBLE')}
+                            style={[styles.btn, styles.doubleBtn]}
+                            textStyle={styles.btnText}
+                        />
                     </View>
-                    <TouchableOpacity style={[styles.btn, styles.insBtn]} onPress={() => handleAction('INSURANCE')}>
-                        <Text style={styles.btnText}>INSURANCE</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[styles.btn, styles.insBtn]} onPress={() => handleAction('NO_INSURANCE')}>
-                        <Text style={styles.btnText}>NO INSURANCE</Text>
-                    </TouchableOpacity>
+                    <Button
+                        title="INSURANCE"
+                        variant="outline"
+                        onPress={() => handleAction('INSURANCE')}
+                        style={[styles.btn, styles.insBtn]}
+                        textStyle={styles.btnText}
+                    />
+                    <Button
+                        title="NO INSURANCE"
+                        variant="outline"
+                        onPress={() => handleAction('NO_INSURANCE')}
+                        style={[styles.btn, styles.insBtn]}
+                        textStyle={styles.btnText}
+                    />
                 </View>
 
             </ScrollView>
@@ -357,25 +382,27 @@ export const DrillDeviations: React.FC<{ navigation: any }> = ({ navigation }) =
 
                         <View style={styles.buttonRow}>
                             {navigation && (
-                                <TouchableOpacity
+                                <Button
+                                    title="HOME"
+                                    variant="secondary"
                                     onPress={() => {
                                         setShowResults(false);
                                         navigation.goBack();
                                     }}
                                     style={[styles.modalBtn, styles.secondaryBtn]}
-                                >
-                                    <Text style={styles.modalBtnText}>HOME</Text>
-                                </TouchableOpacity>
+                                    textStyle={styles.modalBtnText}
+                                />
                             )}
-                            <TouchableOpacity
+                            <Button
+                                title="AGAIN"
+                                variant="primary"
                                 onPress={() => {
                                     setShowResults(false);
                                     startNewSession();
                                 }}
                                 style={styles.modalBtn}
-                            >
-                                <Text style={styles.modalBtnText}>AGAIN</Text>
-                            </TouchableOpacity>
+                                textStyle={styles.modalBtnText}
+                            />
                         </View>
                     </View>
                 </View>

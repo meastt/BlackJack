@@ -118,11 +118,13 @@ const styles = StyleSheet.create({
         marginBottom: 12,
     },
     title: {
-        fontSize: 28,
-        fontWeight: 'bold',
+        fontSize: 22,
+        fontWeight: '900',
         color: colors.textPrimary,
         marginBottom: 4,
         textAlign: 'center',
+        textTransform: 'uppercase',
+        letterSpacing: 2,
     },
     subtitle: {
         fontSize: 16,

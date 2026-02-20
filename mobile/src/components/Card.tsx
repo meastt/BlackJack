@@ -108,9 +108,9 @@ const getPipPositions = (count: number): { top: number; left: number }[] => {
 // Face card symbols
 const getFaceSymbol = (rank: Rank): string => {
   const symbols: Record<string, string> = {
-    'J': '♞', // Knight/horse
-    'Q': '♛', // Crown
-    'K': '♚', // King crown
+    'J': 'J',
+    'Q': 'Q',
+    'K': 'K',
   };
   return symbols[rank] || '';
 };

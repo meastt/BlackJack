@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, StatusBar, Image } from 'react-native';
 import { colors } from '../../theme/colors';
 import { fontStyles } from '../../theme/typography';
 import { useProgressStore } from '../../store/useProgressStore';
 import { InfoIcon } from '../../components/InfoIcon';
+import { OnboardingModal, getOnboardingCompleted } from '../../components/OnboardingModal';
 import * as Haptics from 'expo-haptics';
 
 interface HomeScreenProps {
@@ -12,6 +13,17 @@ interface HomeScreenProps {
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   const { isPhaseUnlocked, phase0Complete, phase1Complete, phase3Complete, phase4Complete, phase5Complete } = useProgressStore();
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  useEffect(() => {
+    const checkOnboarding = async () => {
+      const completed = await getOnboardingCompleted();
+      if (!completed) {
+        setShowOnboarding(true);
+      }
+    };
+    checkOnboarding();
+  }, []);
 
   const renderPhaseCard = (phase: number, title: string, description: string, emoji: string, screen: string, isComplete: boolean) => {
     const unlocked = isPhaseUnlocked(phase);
@@ -57,6 +69,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <OnboardingModal
+        visible={showOnboarding}
+        onDismiss={() => setShowOnboarding(false)}
+      />
       <StatusBar barStyle="light-content" />
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {/* Tactical Header */}

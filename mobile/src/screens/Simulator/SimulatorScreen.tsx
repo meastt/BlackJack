@@ -4,8 +4,9 @@ import { colors } from '../../theme/colors';
 import { HeatMeter } from '../../components/simulator/HeatMeter';
 import { DistractionLayer } from '../../components/simulator/DistractionLayer';
 import { Card as CardComponent } from '../../components/Card';
+import { Button } from '../../components/Button';
 import { Shoe } from '@card-counter-ai/shared';
-import { Card } from '@card-counter-ai/shared';
+import { Card, Rank } from '@card-counter-ai/shared';
 import { BlackjackGameEngine } from '../../utils/BlackjackGameEngine';
 import { useSimState } from '../../store/SimState';
 import * as Haptics from 'expo-haptics';
@@ -15,7 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 
-type GamePhase = 'BETTING' | 'DEALING' | 'PLAYER_TURN' | 'DEALER_TURN' | 'RESOLUTION' | 'SHOE_SHUFFLE';
+type GamePhase = 'BETTING' | 'DEALING' | 'INSURANCE_PROMPT' | 'PLAYER_TURN' | 'DEALER_TURN' | 'RESOLUTION' | 'SHOE_SHUFFLE';
 
 export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
     // Global state
@@ -126,7 +127,7 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
         const shoe = shoeRef.current;
 
         // Check if shoe needs shuffle
-        if (shoe.getCardsRemaining() < 20) {
+        if (shoe.getCardsRemaining() < 75) {
             setGamePhase('SHOE_SHUFFLE');
             shoe.reset();
             setRunningCount(0);
@@ -183,7 +184,10 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
             setHandsPlayed(prev => prev + 1);
 
             // Check for immediate blackjack AFTER animation
-            if (BlackjackGameEngine.isBlackjack(localPlayerHand)) {
+            if (BlackjackGameEngine.canTakeInsurance(localDealerHand[0])) {
+                setGamePhase('INSURANCE_PROMPT');
+                setResultMessage('Insurance?');
+            } else if (BlackjackGameEngine.isBlackjack(localPlayerHand)) {
                 if (BlackjackGameEngine.isBlackjack(localDealerHand)) {
                     // Both have BJ - Push
                     resolveHand(localPlayerHand, localDealerHand);
@@ -217,6 +221,64 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
         setSplitHands([]);
         setActiveHandIndex(0);
         setSplitBets([]);
+    };
+
+    const handleInsuranceAccept = () => {
+        const actualBet = currentBetRef.current || currentBet;
+        const insuranceAmount = actualBet / 2;
+        if (bankroll < insuranceAmount) {
+            setResultMessage('Not enough bankroll for Insurance!');
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+            return;
+        }
+
+        setBankroll(prev => prev - insuranceAmount);
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+
+        if (BlackjackGameEngine.isBlackjack(dealerHand)) {
+            // Insurance pays 2:1
+            setBankroll(prev => prev + (insuranceAmount * 3)); // initial bet + 2x win
+            resolveHand(playerHand, dealerHand);
+        } else {
+            // Insurance lost
+            setResultMessage('Insurance Lost');
+
+            // Continue with normal flow
+            if (BlackjackGameEngine.isBlackjack(playerHand)) {
+                resolveHand(playerHand, dealerHand);
+            } else {
+                setGamePhase('PLAYER_TURN');
+                setTimeout(() => setResultMessage(''), 1500);
+            }
+        }
+    };
+
+    const handleInsuranceDecline = () => {
+        Haptics.selectionAsync();
+        if (BlackjackGameEngine.isBlackjack(dealerHand)) {
+            resolveHand(playerHand, dealerHand);
+        } else if (BlackjackGameEngine.isBlackjack(playerHand)) {
+            resolveHand(playerHand, dealerHand);
+        } else {
+            setGamePhase('PLAYER_TURN');
+            setResultMessage('');
+        }
+    };
+
+    const handleSurrender = () => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+        const actualBet = currentBetRef.current || currentBet;
+        const returnedBet = actualBet * 0.5;
+        setBankroll(prev => prev + returnedBet);
+        setGamePhase('RESOLUTION');
+        setResultMessage(`SURRENDER! -$${actualBet * 0.5}`);
+
+        updateChallengeStats({
+            handsPlayed: 1,
+            correctDecisions: 1, // Assumed correct for now
+            countingAccuracy: 1.0,
+            heatGenerated: 0,
+        });
     };
 
     // Player hits
@@ -396,7 +458,16 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
         setActiveHandIndex(0);
         setPlayerHand([]); // Clear original hand
 
-        setResultMessage('Playing first hand...');
+        // If split Aces, automatically stand
+        if (playerHand[0].rank === Rank.ACE) {
+            setResultMessage('Split Aces complete. Dealer playing...');
+            setGamePhase('DEALER_TURN');
+            setTimeout(() => {
+                resolveDealerTurnSplit([hand1, hand2], [currentBet, currentBet]);
+            }, 1000);
+        } else {
+            setResultMessage('Playing first hand...');
+        }
     };
 
     // Complete current split hand and move to next
@@ -526,11 +597,13 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
     };
 
     // Dealer plays against split hands
-    const resolveDealerTurnSplit = () => {
+    const resolveDealerTurnSplit = (overrideHands?: Card[][], overrideBets?: number[]) => {
         setResultMessage('Dealer playing...');
 
         let dealerCards = [...dealerHand];
         const shoe = shoeRef.current;
+        const activeHands = overrideHands || splitHands;
+        const activeBets = overrideBets || splitBets;
 
         // Dealer draws cards with delay for animation
         const dealerDrawCard = () => {
@@ -549,7 +622,7 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
             } else {
                 // Dealer stands, resolve both hands
                 setTimeout(() => {
-                    resolveHandSplit(dealerCards);
+                    resolveHandSplit(dealerCards, activeHands, activeBets);
                 }, 600);
             }
         };
@@ -558,12 +631,12 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
     };
 
     // Resolve split hands against dealer
-    const resolveHandSplit = (finalDealerHand: Card[]) => {
+    const resolveHandSplit = (finalDealerHand: Card[], activeHands: Card[][], activeBets: number[]) => {
         let totalPayout = 0;
         const results: string[] = [];
 
-        splitHands.forEach((hand, index) => {
-            const bet = splitBets[index];
+        activeHands.forEach((hand, index) => {
+            const bet = activeBets[index];
             const result = BlackjackGameEngine.resolveHand(hand, finalDealerHand, bet);
             const payout = bet * result.payout;
             totalPayout += payout;
@@ -582,6 +655,9 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
                 case 'LOSE':
                     message += `LOSE -$${bet}`;
                     break;
+                case 'SURRENDER':
+                    message += `SURRENDER -$${bet * 0.5}`;
+                    break;
             }
             results.push(message);
         });
@@ -589,11 +665,11 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
         setBankroll(prev => prev + totalPayout);
         setGamePhase('RESOLUTION');
 
-        const totalBet = splitBets.reduce((sum, bet) => sum + bet, 0);
+        const totalBet = activeBets.reduce((sum, bet) => sum + bet, 0);
         const netResult = totalPayout - totalBet;
 
         setResultMessage(
-            results.join('\n') + `\n\nNet: ${netResult >= 0 ? '+' : ''}$${netResult}`
+            results.join('\n') + `\n\nNet: ${netResult >= 0 ? '+' : ''}$${Math.abs(netResult)}`
         );
 
         if (netResult > 0) {
@@ -613,14 +689,14 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
         });
 
         // Update heat meter
-        const heatIncrease = splitBets.reduce((sum, bet) =>
+        const heatIncrease = activeBets.reduce((sum, bet) =>
             sum + BlackjackGameEngine.calculateHeatFromBet(bet, trueCount, MIN_BET), 0
         );
         setSuspicionLevel((prev: number) => Math.min(100, prev + heatIncrease));
-
-        // Auto-advance removed - User must tap Next Hand
-        // setTimeout(() => nextHand(), 3500);
     };
+
+    // Auto-advance removed - User must tap Next Hand
+    // setTimeout(() => nextHand(), 3500);
 
     // Add to current bet using chips
     const handleAddBet = (value: number) => {
@@ -869,9 +945,13 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
                             ]}>
                                 {resultMessage}
                             </Text>
-                            <TouchableOpacity style={styles.nextHandBtn} onPress={nextHand}>
-                                <Text style={styles.nextHandBtnText}>NEXT HAND</Text>
-                            </TouchableOpacity>
+                            <Button
+                                title="NEXT HAND"
+                                variant="primary"
+                                onPress={nextHand}
+                                style={styles.nextHandBtn}
+                                textStyle={styles.nextHandBtnText}
+                            />
                         </View>
                     </View>
                 )}
@@ -904,39 +984,67 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
                             </TouchableOpacity>
                         </View>
                     </View>
+                ) : gamePhase === 'INSURANCE_PROMPT' ? (
+                    <View style={styles.actionRow}>
+                        <Button
+                            title="YES (INSURANCE)"
+                            variant="outline"
+                            onPress={handleInsuranceAccept}
+                            style={[styles.actionBtn, styles.hitBtn]}
+                            textStyle={styles.actionBtnText}
+                        />
+                        <Button
+                            title="NO"
+                            variant="outline"
+                            onPress={handleInsuranceDecline}
+                            style={[styles.actionBtn, styles.standBtn]}
+                            textStyle={styles.actionBtnText}
+                        />
+                    </View>
                 ) : (
                     gamePhase === 'PLAYER_TURN' && (
                         <View style={styles.actionRow}>
-                            <TouchableOpacity style={[styles.actionBtn, styles.hitBtn]} onPress={handleHit}>
-                                <Text style={styles.actionBtnText}>HIT</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={[styles.actionBtn, styles.standBtn]} onPress={handleStand}>
-                                <Text style={styles.actionBtnText}>STAND</Text>
-                            </TouchableOpacity>
+                            {BlackjackGameEngine.canSurrender(playerHand) && !isSplitHand && (
+                                <Button
+                                    title="SURRENDER"
+                                    variant="outline"
+                                    onPress={handleSurrender}
+                                    style={[styles.actionBtn, styles.surrenderBtn]}
+                                    textStyle={styles.actionBtnText}
+                                />
+                            )}
+                            <Button
+                                title="HIT"
+                                variant="outline"
+                                onPress={handleHit}
+                                style={[styles.actionBtn, styles.hitBtn]}
+                                textStyle={styles.actionBtnText}
+                            />
+                            <Button
+                                title="STAND"
+                                variant="outline"
+                                onPress={handleStand}
+                                style={[styles.actionBtn, styles.standBtn]}
+                                textStyle={styles.actionBtnText}
+                            />
 
-                            <TouchableOpacity
-                                style={[
-                                    styles.actionBtn,
-                                    styles.doubleBtn,
-                                    !BlackjackGameEngine.canDouble(playerHand, bankroll >= currentBet) && styles.btnActionDisabled
-                                ]}
+                            <Button
+                                title="2X"
+                                variant="outline"
                                 onPress={handleDouble}
                                 disabled={!BlackjackGameEngine.canDouble(playerHand, bankroll >= currentBet)}
-                            >
-                                <Text style={styles.actionBtnText}>2X</Text>
-                            </TouchableOpacity>
+                                style={[styles.actionBtn, styles.doubleBtn, !BlackjackGameEngine.canDouble(playerHand, bankroll >= currentBet) && styles.btnActionDisabled]}
+                                textStyle={styles.actionBtnText}
+                            />
 
-                            <TouchableOpacity
-                                style={[
-                                    styles.actionBtn,
-                                    styles.splitBtn,
-                                    !BlackjackGameEngine.canSplit(playerHand, bankroll >= currentBet) && styles.btnActionDisabled
-                                ]}
+                            <Button
+                                title="SPLIT"
+                                variant="outline"
                                 onPress={handleSplit}
                                 disabled={!BlackjackGameEngine.canSplit(playerHand, bankroll >= currentBet)}
-                            >
-                                <Text style={styles.actionBtnText}>SPLIT</Text>
-                            </TouchableOpacity>
+                                style={[styles.actionBtn, styles.splitBtn, !BlackjackGameEngine.canSplit(playerHand, bankroll >= currentBet) && styles.btnActionDisabled]}
+                                textStyle={styles.actionBtnText}
+                            />
                         </View>
                     )
                 )}
@@ -1504,6 +1612,10 @@ const styles = StyleSheet.create({
     splitBtn: {
         backgroundColor: 'rgba(245, 158, 11, 0.15)',
         borderColor: '#f59e0b',
+    },
+    surrenderBtn: {
+        backgroundColor: 'rgba(168, 85, 247, 0.15)',
+        borderColor: '#a855f7',
     },
     btnActionDisabled: {
         opacity: 0.2,

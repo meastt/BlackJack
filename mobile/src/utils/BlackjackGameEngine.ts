@@ -10,8 +10,8 @@ export type Hand = {
 };
 
 export type GameResult = {
-  outcome: 'WIN' | 'LOSE' | 'PUSH' | 'BLACKJACK';
-  payout: number; // Multiplier: 1.0 for push, 2.5 for blackjack, 2.0 for win, 0 for loss
+  outcome: 'WIN' | 'LOSE' | 'PUSH' | 'BLACKJACK' | 'SURRENDER';
+  payout: number; // Multiplier: 1.0 for push, 2.5 for blackjack, 2.0 for win, 0.5 for surrender, 0 for loss
 };
 
 export class BlackjackGameEngine {
@@ -103,6 +103,20 @@ export class BlackjackGameEngine {
    */
   static canDouble(cards: Card[], hasEnoughMoney: boolean): boolean {
     return cards.length === 2 && hasEnoughMoney;
+  }
+
+  /**
+   * Check if player can surrender (exactly 2 cards)
+   */
+  static canSurrender(cards: Card[]): boolean {
+    return cards.length === 2;
+  }
+
+  /**
+   * Check if player can take insurance (dealer shows an Ace)
+   */
+  static canTakeInsurance(dealerUpcard: Card): boolean {
+    return dealerUpcard.rank === Rank.ACE;
   }
 
   /**

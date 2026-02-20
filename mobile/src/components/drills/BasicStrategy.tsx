@@ -12,6 +12,7 @@ import {
     Dimensions
 } from 'react-native';
 import { Card as CardComponent } from '../../components/Card';
+import { Button } from '../../components/Button';
 import { Card as CardType, Suit, Rank } from '@card-counter-ai/shared';
 import { colors } from '../../theme/colors';
 import { fontStyles } from '../../theme/typography';
@@ -369,7 +370,7 @@ export const Phase0BasicStrategy: React.FC<{ navigation?: any }> = ({ navigation
     const progress = score.total / CARDS_PER_SESSION;
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             {/* Progress Bar */}
             <View style={styles.progressBarContainer}>
                 <View style={[styles.progressBar, { width: `${progress * 100}%` }]} />
@@ -462,7 +463,10 @@ export const Phase0BasicStrategy: React.FC<{ navigation?: any }> = ({ navigation
                                 {scenario.explanation}
                             </Text>
                             {!isCorrect && (
-                                <Text style={styles.correctActionText}>Correct: {scenario.correctAction}</Text>
+                                <View style={styles.incorrectActionContainer}>
+                                    <Text style={styles.correctActionText}>Correct: {scenario.correctAction}</Text>
+                                    <Text style={styles.tapToContinueText}>TAP ANYWHERE TO CONTINUE</Text>
+                                </View>
                             )}
                         </TouchableOpacity>
                     ) : (
@@ -474,59 +478,63 @@ export const Phase0BasicStrategy: React.FC<{ navigation?: any }> = ({ navigation
             {/* Answer Buttons */}
             <View style={styles.answerSection}>
                 <View style={styles.buttonRow}>
-                    <TouchableOpacity
+                    <Button
+                        title="HIT"
+                        variant="outline"
                         style={[
                             styles.actionButton,
                             styles.hitButton,
                             userAnswer === 'HIT' && styles.selectedButton
                         ]}
+                        textStyle={[styles.actionButtonText, styles.hitText]}
                         onPress={() => handleAnswer('HIT')}
                         disabled={userAnswer !== null}
-                    >
-                        <Text style={[styles.actionButtonText, styles.hitText]}>HIT</Text>
-                    </TouchableOpacity>
+                    />
 
-                    <TouchableOpacity
+                    <Button
+                        title="STAND"
+                        variant="outline"
                         style={[
                             styles.actionButton,
                             styles.standButton,
                             userAnswer === 'STAND' && styles.selectedButton
                         ]}
+                        textStyle={[styles.actionButtonText, styles.standText]}
                         onPress={() => handleAnswer('STAND')}
                         disabled={userAnswer !== null}
-                    >
-                        <Text style={[styles.actionButtonText, styles.standText]}>STAND</Text>
-                    </TouchableOpacity>
+                    />
                 </View>
                 <View style={styles.buttonRow}>
-                    <TouchableOpacity
+                    <Button
+                        title="DOUBLE"
+                        variant="outline"
                         style={[
                             styles.actionButton,
                             styles.doubleButton,
                             userAnswer === 'DOUBLE' && styles.selectedButton
                         ]}
+                        textStyle={[styles.actionButtonText, styles.doubleText]}
                         onPress={() => handleAnswer('DOUBLE')}
                         disabled={userAnswer !== null}
-                    >
-                        <Text style={[styles.actionButtonText, styles.doubleText]}>DOUBLE</Text>
-                    </TouchableOpacity>
+                    />
 
-                    <TouchableOpacity
+                    <Button
+                        title="SPLIT"
+                        variant="outline"
                         style={[
                             styles.actionButton,
                             styles.splitButton,
                             userAnswer === 'SPLIT' && styles.selectedButton,
                             scenario.type !== 'PAIR' && styles.disabledButton
                         ]}
-                        onPress={() => handleAnswer('SPLIT')}
-                        disabled={userAnswer !== null || scenario.type !== 'PAIR'}
-                    >
-                        <Text style={[
+                        textStyle={[
                             styles.actionButtonText,
                             styles.splitText,
                             scenario.type !== 'PAIR' && styles.disabledButtonText
-                        ]}>SPLIT</Text>
-                    </TouchableOpacity>
+                        ]}
+                        onPress={() => handleAnswer('SPLIT')}
+                        disabled={userAnswer !== null || scenario.type !== 'PAIR'}
+                    />
                 </View>
             </View>
 
@@ -609,23 +617,21 @@ export const Phase0BasicStrategy: React.FC<{ navigation?: any }> = ({ navigation
                         )}
 
                         <View style={styles.modalButtons}>
-                            <TouchableOpacity
-                                style={styles.modalButtonSecondary}
+                            <Button
+                                title="Back to Menu"
+                                variant="secondary"
                                 onPress={() => navigation?.goBack()}
-                            >
-                                <Text style={styles.modalButtonSecondaryText}>Back to Menu</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={styles.modalButtonPrimary}
+                            />
+                            <Button
+                                title="Practice Again"
+                                variant="primary"
                                 onPress={startNewSession}
-                            >
-                                <Text style={styles.modalButtonPrimaryText}>Practice Again</Text>
-                            </TouchableOpacity>
+                            />
                         </View>
                     </View>
                 </View>
             </Modal>
-        </View>
+        </SafeAreaView>
     );
 };
 
@@ -833,6 +839,17 @@ const styles = StyleSheet.create({
         color: colors.success,
         marginTop: 4,
         fontWeight: 'bold',
+    },
+    incorrectActionContainer: {
+        alignItems: 'center',
+        marginTop: 4,
+        gap: 6,
+    },
+    tapToContinueText: {
+        fontSize: 10,
+        color: colors.primary,
+        fontWeight: '900',
+        letterSpacing: 2,
     },
     answerSection: {
         paddingHorizontal: 16,
