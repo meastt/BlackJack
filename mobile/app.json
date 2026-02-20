@@ -2,7 +2,7 @@
   "expo": {
     "name": "Card Counter AI",
     "slug": "card-counter-ai",
-    "version": "1.0.0",
+    "version": "1.0.5",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -17,6 +17,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.cardcounterai.app",
+      "buildNumber": "5",
       "infoPlist": {
         "NSCameraUsageDescription": "Camera permission is required for future AR Card Counting drills.",
         "NSMicrophoneUsageDescription": "Microphone permission is required for distraction engine features.",

@@ -1,6 +1,6 @@
 {
-  "name": "card-counter-ai-mobile",
-  "version": "1.0.0",
+  "name": "card-counter-app",
+  "version": "1.0.5",
   "main": "./index.js",
   "scripts": {
     "start": "expo start",

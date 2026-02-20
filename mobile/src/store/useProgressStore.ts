@@ -11,6 +11,16 @@ interface SessionResult {
     timestamp: number;
 }
 
+export interface Mission {
+    id: string;
+    title: string;
+    description: string;
+    target: number;
+    progress: number;
+    xpReward: number;
+    completed: boolean;
+}
+
 interface ProgressState {
     // Phase completion status
     phase0Complete: boolean; // Basic Strategy
@@ -42,17 +52,36 @@ interface ProgressState {
     longestStreak: number;
     lastPracticeDate: string | null;
 
+    // Progression
+    badges: string[];
+    dailyMissions: Mission[];
+    lastMissionDate: string | null;
+
     // Actions
     addSessionResult: (phase: string, result: SessionResult) => void;
     completePhase: (phase: number) => void;
     addXP: (amount: number) => void;
     updateStreak: () => void;
     resetProgress: () => void;
+    unlockBadge: (badgeId: string) => void;
+    updateMissionProgress: (missionId: string, amount: number) => void;
+    checkDailyMissions: () => void;
 
     // Getters (computed)
     isPhaseUnlocked: (phase: number) => boolean;
     getPhaseProgress: (phase: number) => { sessions: number; masteryProgress: number };
+    getCurrentLevel: () => { level: number; title: string; nextLevelXP: number; progress: number };
 }
+
+// Leveling Titles
+export const LEVEL_TITLES = [
+    { maxLevel: 10, title: "Initiate" },
+    { maxLevel: 20, title: "Operative" },
+    { maxLevel: 30, title: "Specialist" },
+    { maxLevel: 40, title: "Agent" },
+    { maxLevel: 50, title: "Ghost" },
+    { maxLevel: 999, title: "Director" },
+];
 
 // Constants for mastery requirements
 export const MASTERY_REQUIREMENTS = {
@@ -106,6 +135,9 @@ export const useProgressStore = create<ProgressState>()(
             currentStreak: 0,
             longestStreak: 0,
             lastPracticeDate: null,
+            badges: [],
+            dailyMissions: [],
+            lastMissionDate: null,
 
             // Actions
             addSessionResult: (phase, result) => set((state) => {
@@ -203,6 +235,44 @@ export const useProgressStore = create<ProgressState>()(
                 };
             }),
 
+            unlockBadge: (badgeId) => set((state) => {
+                if (!state.badges.includes(badgeId)) {
+                    return { badges: [...state.badges, badgeId] };
+                }
+                return state;
+            }),
+
+            updateMissionProgress: (missionId, amount) => set((state) => {
+                const updatedMissions = state.dailyMissions.map((mission) => {
+                    if (mission.id === missionId && !mission.completed) {
+                        const newProgress = Math.min(mission.progress + amount, mission.target);
+                        const isCompleted = newProgress >= mission.target;
+
+                        if (isCompleted) {
+                            setTimeout(() => get().addXP(mission.xpReward), 0);
+                        }
+
+                        return { ...mission, progress: newProgress, completed: isCompleted };
+                    }
+                    return mission;
+                });
+                return { dailyMissions: updatedMissions };
+            }),
+
+            checkDailyMissions: () => set((state) => {
+                const today = new Date().toISOString().split('T')[0];
+                if (state.lastMissionDate !== today) {
+                    // Generate new dailies
+                    const newMissions: Mission[] = [
+                        { id: 'daily_basic', title: 'Basic Training', description: 'Play 50 Basic Strategy hands', target: 50, progress: 0, xpReward: 150, completed: false },
+                        { id: 'daily_count', title: 'Counting Reps', description: 'Complete 2 Deck Countdown drills', target: 2, progress: 0, xpReward: 200, completed: false },
+                        { id: 'daily_perfect', title: 'Flawless', description: 'Get 1 perfect session in any phase', target: 1, progress: 0, xpReward: 300, completed: false },
+                    ];
+                    return { dailyMissions: newMissions, lastMissionDate: today };
+                }
+                return state;
+            }),
+
             resetProgress: () => set({
                 phase0Complete: false,
                 phase1Complete: false,
@@ -222,6 +292,9 @@ export const useProgressStore = create<ProgressState>()(
                 currentStreak: 0,
                 longestStreak: 0,
                 lastPracticeDate: null,
+                badges: [],
+                dailyMissions: [],
+                lastMissionDate: null,
             }),
 
             // Computed getters
@@ -265,6 +338,33 @@ export const useProgressStore = create<ProgressState>()(
                     };
                 }
                 return { sessions: 0, masteryProgress: 0 };
+            },
+
+            getCurrentLevel: () => {
+                const { totalXP } = get();
+
+                let level = 1;
+                let xpRequired = 0;
+                let nextLevelXP = 500;
+
+                while (totalXP >= nextLevelXP) {
+                    level++;
+                    xpRequired = nextLevelXP;
+                    nextLevelXP = nextLevelXP + 500 + (level * 50);
+                }
+
+                const titleObj = LEVEL_TITLES.find(t => level <= t.maxLevel) || LEVEL_TITLES[LEVEL_TITLES.length - 1];
+
+                const progressInLevel = totalXP - xpRequired;
+                const xpNeededForNext = nextLevelXP - xpRequired;
+                const progress = progressInLevel / xpNeededForNext;
+
+                return {
+                    level,
+                    title: titleObj.title,
+                    nextLevelXP,
+                    progress
+                };
             },
         }),
         {

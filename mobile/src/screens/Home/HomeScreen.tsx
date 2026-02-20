@@ -85,7 +85,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           </View>
           <View style={styles.headerTextCol}>
             <Text style={styles.headerTitle}>PROTOCOL <Text style={styles.highlight}>21</Text></Text>
-            <Text style={styles.headerSubtitle}>ADVANTAGE PLAY INTERFACE // v1.0.4</Text>
+            <Text style={styles.headerSubtitle}>ADVANTAGE PLAY INTERFACE // v1.0.5</Text>
           </View>
         </View>
 
@@ -141,6 +141,22 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
                 <Text style={styles.gridTitle}>ANALYTICS</Text>
                 <View style={[styles.gridTag, styles.tagLocked]}>
                   <Text style={styles.gridTagText}>ENCRYPTED</Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.gridCard, styles.gridCardActive]}
+              onPress={() => {
+                Haptics.selectionAsync();
+                navigation.navigate('Profile');
+              }}
+            >
+              <View style={styles.gridCardInner}>
+                <Text style={styles.gridIcon}>🎖️</Text>
+                <Text style={styles.gridTitle}>SERVICE RECORD</Text>
+                <View style={[styles.gridTag, styles.tagActive]}>
+                  <Text style={styles.gridTagText}>OPEN</Text>
                 </View>
               </View>
             </TouchableOpacity>

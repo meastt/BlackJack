@@ -13,6 +13,7 @@ import { Phase4Betting } from '../screens/GuidedLearning/Phase4Betting';
 import { Phase5Deviations } from '../screens/GuidedLearning/Phase5Deviations';
 import { SimulatorScreen } from '../screens/Simulator/SimulatorScreen';
 import { AnalyticsDashboard } from '../components/analytics/AnalyticsDashboard';
+import { ProfileScreen } from '../screens/ProfileScreen';
 import { colors } from '../theme/colors';
 
 const Stack = createStackNavigator();
@@ -29,7 +30,7 @@ export const AppNavigator = () => {
                     elevation: 0,
                     shadowOpacity: 0,
                 },
-                headerTintColor: colors.accentBlue,
+                headerTintColor: colors.accentCyan,
                 headerTitleStyle: {
                     fontWeight: '600',
                     fontSize: 17,
@@ -144,6 +145,14 @@ export const AppNavigator = () => {
                 component={AnalyticsDashboard}
                 options={{
                     title: 'Analytics',
+                    headerTitleAlign: 'center',
+                }}
+            />
+            <Stack.Screen
+                name="Profile"
+                component={ProfileScreen}
+                options={{
+                    title: 'Service Record',
                     headerTitleAlign: 'center',
                 }}
             />
