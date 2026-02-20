@@ -119,10 +119,9 @@ export default async function SystemPage({ params }: SystemPageProps) {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                         <div>
                             <div className="flex flex-wrap gap-3 mb-6">
-                                <span className={`badge ${
-                                    system.difficulty_level === 'Beginner' ? 'badge-beginner' :
-                                    system.difficulty_level === 'Intermediate' ? 'badge-intermediate' : 'badge-advanced'
-                                }`}>
+                                <span className={`badge ${system.difficulty_level === 'Beginner' ? 'badge-beginner' :
+                                        system.difficulty_level === 'Intermediate' ? 'badge-intermediate' : 'badge-advanced'
+                                    }`}>
                                     {system.difficulty_level}
                                 </span>
                                 <span className="px-3 py-1 bg-surface border border-surface-border rounded-full text-sm text-text-secondary">
@@ -239,10 +238,9 @@ export default async function SystemPage({ params }: SystemPageProps) {
                                     className="card group"
                                 >
                                     <div className="flex justify-between items-start mb-4">
-                                        <span className={`badge ${
-                                            related.difficulty_level === 'Beginner' ? 'badge-beginner' :
-                                            related.difficulty_level === 'Intermediate' ? 'badge-intermediate' : 'badge-advanced'
-                                        }`}>
+                                        <span className={`badge ${related.difficulty_level === 'Beginner' ? 'badge-beginner' :
+                                                related.difficulty_level === 'Intermediate' ? 'badge-intermediate' : 'badge-advanced'
+                                            }`}>
                                             {related.difficulty_level}
                                         </span>
                                         <span className="text-xs text-text-muted font-mono">{related.count_type}</span>
@@ -269,7 +267,7 @@ export default async function SystemPage({ params }: SystemPageProps) {
                             </h2>
                             <p className="text-text-secondary max-w-lg mx-auto mb-8 leading-relaxed">
                                 Download Protocol 21 and start practicing with casino-grade drills.
-                                Available free for iOS and Android.
+                                Available free for iOS and Android. Find out why it's the number one <Link href="/" className="text-primary hover:underline font-semibold">Blackjack Card Counting App</Link>.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                 <Link href="/download" className="btn btn-primary px-8">

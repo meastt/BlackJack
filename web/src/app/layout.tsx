@@ -99,8 +99,7 @@ export const metadata: Metadata = {
     ],
   },
   other: {
-    // TODO: Replace with actual App Store ID once app is published
-    // "apple-itunes-app": "app-id=YOUR_APP_STORE_ID",
+    "apple-itunes-app": "app-id=YOUR_APP_STORE_ID", // TODO: Replace with actual App Store ID once published
     "google-play-app": "app-id=com.protocol21.app",
   },
 };

@@ -274,7 +274,7 @@ export default async function DrillPage({ params }: DrillPageProps) {
               </h2>
               <p className="text-text-secondary max-w-lg mx-auto mb-8 leading-relaxed">
                 Download Protocol 21 and start practicing {drill.target_skill.toLowerCase()} with instant feedback.
-                Free for iOS and Android.
+                Free for iOS and Android. Find out why it's the number one <Link href="/" className="text-primary hover:underline font-semibold">Blackjack Card Counting App</Link>.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/download" className="btn btn-primary px-8">

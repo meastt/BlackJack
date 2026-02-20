@@ -140,6 +140,30 @@ li {
     0 0 60px -20px rgba(255, 45, 124, 0.6);
 }
 
+/* Base Button Styles */
+.btn {
+  @apply inline-flex items-center justify-center font-bold tracking-wide transition-all duration-300 rounded-lg text-center;
+}
+
+.btn-primary {
+  @apply bg-primary hover:bg-primary-dark text-white shadow-lg;
+  box-shadow: 0 4px 14px 0 rgba(255, 45, 124, 0.39);
+}
+
+.btn-primary:hover {
+  @apply -translate-y-0.5;
+  box-shadow: 0 6px 20px rgba(255, 45, 124, 0.5);
+}
+
+.btn-outline {
+  @apply bg-transparent border-2 border-primary text-primary hover:bg-primary hover:text-white;
+}
+
+.btn-outline:hover {
+  @apply -translate-y-0.5;
+  box-shadow: 0 4px 14px 0 rgba(255, 45, 124, 0.39);
+}
+
 /* Badge System */
 .badge {
   @apply inline-flex items-center px-sm py-xs rounded-lg text-xs font-semibold uppercase tracking-wider;

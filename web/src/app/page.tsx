@@ -49,14 +49,14 @@ export default function Home() {
 
           {/* Headline */}
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight" style={{ marginBottom: '2.5rem' }}>
-            <span className="text-gradient">Master the Count.</span>
+            <span className="text-gradient">Protocol 21:</span>
             <br />
-            <span className="text-white/90">Beat the House.</span>
+            <span className="text-white/90">The Pro Blackjack Trainer App.</span>
           </h1>
 
           {/* Subheadline */}
           <p className="text-lg md:text-xl text-text-secondary max-w-2xl leading-relaxed text-center" style={{ margin: '0 auto 3rem auto' }}>
-            Protocol 21 is the only card counting trainer built for serious advantage players.
+            Master the count and beat the house. The ultimate Blackjack Card Counting App built for serious advantage players.
             Casino-grade drills. Six proven systems. Your edge starts here.
           </p>
 
@@ -77,7 +77,7 @@ export default function Home() {
           </div>
 
           <div className="flex justify-center mt-12">
-            <div className="w-full max-w-4xl rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+            <div className="w-full max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-2xl border border-white/10">
               <Image
                 src="/protocol-21-hero1.webp"
                 alt="Protocol 21 App Interface"
@@ -122,7 +122,7 @@ export default function Home() {
             <h2 className="section-title">
               <span className="text-gradient">Supported Systems</span>
             </h2>
-            <div className="w-full max-w-4xl rounded-xl overflow-hidden mt-8">
+            <div className="w-full max-w-4xl mx-auto rounded-xl overflow-hidden mt-8">
               <Image
                 src="/protocol-21-card-shoe.webp"
                 alt="Blackjack Card Shoe"
@@ -177,7 +177,7 @@ export default function Home() {
       <section className="section bg-surface">
         <div className="container">
           <div className="section-header">
-            <div className="w-full max-w-4xl rounded-xl overflow-hidden mb-12">
+            <div className="w-full max-w-4xl mx-auto rounded-xl overflow-hidden mb-12">
               <Image
                 src="/protocol-21-true-count.webp"
                 alt="True Count Training"
@@ -324,7 +324,7 @@ export default function Home() {
           <div className="max-w-3xl mx-auto w-full">
             <div className="space-y-4 w-full">
               {faqs.map((faq, index) => (
-                <details key={index} className="card group">
+                <details key={index} className="group bg-surface/50 border border-surface-border rounded-xl p-5 transition-all">
                   <summary className="flex justify-between items-center cursor-pointer list-none">
                     <h3 className="text-lg font-semibold pr-4">{faq.question}</h3>
                     <svg className="w-5 h-5 text-text-muted group-open:rotate-180 transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
