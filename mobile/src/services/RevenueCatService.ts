@@ -3,8 +3,8 @@ import Purchases, { PurchasesPackage } from 'react-native-purchases';
 
 // IMPORTANT: Replace these with your actual RevenueCat API keys from the Dashboard
 const API_KEYS = {
-    apple: "YOUR_APPLE_API_KEY",
-    google: "YOUR_GOOGLE_API_KEY",
+    apple: process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY || "YOUR_APPLE_API_KEY",
+    google: process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY || "YOUR_GOOGLE_API_KEY",
 };
 
 export const ENTITLEMENT_ID = 'ProCounter'; // The exact string identifier configured in RevenueCat
