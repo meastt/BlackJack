@@ -10,7 +10,7 @@ interface InfoIconProps {
   color?: string;
 }
 
-export const InfoIcon: React.FC<InfoIconProps> = ({ tipKey, size = 20, color = colors.accentBlue }) => {
+export const InfoIcon: React.FC<InfoIconProps> = ({ tipKey, size = 20, color = colors.accentCyan }) => {
   const [showModal, setShowModal] = useState(false);
   const tip = LocalTips.getTip(tipKey);
 
@@ -136,13 +136,13 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
   },
   gotItButton: {
-    backgroundColor: colors.accentBlue,
+    backgroundColor: colors.accentCyan,
     margin: 20,
     marginTop: 10,
     paddingVertical: 14,
     borderRadius: 12,
     alignItems: 'center',
-    shadowColor: colors.accentBlue,
+    shadowColor: colors.accentCyan,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,

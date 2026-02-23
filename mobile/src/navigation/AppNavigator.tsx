@@ -14,6 +14,7 @@ import { Phase5Deviations } from '../screens/GuidedLearning/Phase5Deviations';
 import { SimulatorScreen } from '../screens/Simulator/SimulatorScreen';
 import { AnalyticsDashboard } from '../components/analytics/AnalyticsDashboard';
 import { ProfileScreen } from '../screens/ProfileScreen';
+import { PaywallScreen } from '../screens/PaywallScreen';
 import { colors } from '../theme/colors';
 
 const Stack = createStackNavigator();
@@ -154,6 +155,14 @@ export const AppNavigator = () => {
                 options={{
                     title: 'Service Record',
                     headerTitleAlign: 'center',
+                }}
+            />
+            <Stack.Screen
+                name="Paywall"
+                component={PaywallScreen}
+                options={{
+                    headerShown: false,
+                    presentation: 'modal',
                 }}
             />
         </Stack.Navigator>

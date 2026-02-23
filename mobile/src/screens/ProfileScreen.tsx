@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Animated } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Animated, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BlurView } from 'expo-blur';
+import { useNavigation } from '@react-navigation/native';
 import { useProgressStore } from '../store/useProgressStore';
 import { colors } from '../theme/colors';
 
@@ -16,6 +17,7 @@ const BADGE_DB = [
 ];
 
 export function ProfileScreen() {
+    const navigation = useNavigation();
     const insets = useSafeAreaInsets();
     const {
         totalXP,
@@ -37,6 +39,9 @@ export function ProfileScreen() {
         <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: insets.bottom + 40 }}>
             {/* Header / Clearance Level */}
             <View style={[styles.header, { paddingTop: insets.top + 20 }]}>
+                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+                    <Text style={styles.backText}>←</Text>
+                </TouchableOpacity>
                 <Text style={styles.subtitle}>SERVICE RECORD</Text>
                 <Text style={styles.title}>{title}</Text>
 
@@ -109,6 +114,21 @@ const styles = StyleSheet.create({
         paddingBottom: 30,
         borderBottomWidth: 1,
         borderBottomColor: 'rgba(255,255,255,0.05)',
+        position: 'relative',
+    },
+    backButton: {
+        position: 'absolute',
+        left: 10,
+        width: 40,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 10,
+    },
+    backText: {
+        color: THEME.colors.primary,
+        fontSize: 24,
+        fontWeight: '300',
     },
     subtitle: {
         fontSize: 12,

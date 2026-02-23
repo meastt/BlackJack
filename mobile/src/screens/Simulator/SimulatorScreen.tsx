@@ -15,12 +15,14 @@ import { TacticalChip, ChipValue } from '../../components/simulator/TacticalChip
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useRevenueCatStore } from '../../store/useRevenueCatStore';
 
 type GamePhase = 'BETTING' | 'DEALING' | 'INSURANCE_PROMPT' | 'PLAYER_TURN' | 'DEALER_TURN' | 'RESOLUTION' | 'SHOE_SHUFFLE';
 
 export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
     // Global state
     const { setSuspicionLevel, updateChallengeStats, checkCount, setRunningCount: setGlobalRC, getAccuracy } = useSimState();
+    const { isPremium } = useRevenueCatStore();
     const insets = useSafeAreaInsets();
 
     // Game state
@@ -79,7 +81,14 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
 
     // Reset shoe when deck count changes
     useEffect(() => {
-        shoeRef.current = new Shoe(deckCount);
+        // Enforce limits for free users
+        let activeDecks = deckCount;
+        if (!isPremium && deckCount > 2) {
+            activeDecks = 2;
+            setDeckCount(2);
+        }
+
+        shoeRef.current = new Shoe(activeDecks);
         setRunningCount(0);
         setTrueCount(0);
         // Also reset the hand if we're in betting phase
@@ -1117,12 +1126,22 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
                             </View>
 
                             <View style={styles.settingItem}>
-                                <Text style={styles.settingLabel}>Chaos Mode (Distractions)</Text>
+                                <Text style={styles.settingLabel}>
+                                    Chaos Mode (Distractions)
+                                    {!isPremium && <Text style={{ color: colors.primary, fontSize: 10 }}> [PRO]</Text>}
+                                </Text>
                                 <TouchableOpacity
-                                    onPress={() => setIsDistractionActive(!isDistractionActive)}
-                                    style={[styles.miniToggle, isDistractionActive && styles.miniToggleActive]}
+                                    onPress={() => {
+                                        if (isPremium) {
+                                            setIsDistractionActive(!isDistractionActive);
+                                        } else {
+                                            setShowSettings(false);
+                                            navigation.navigate('Paywall');
+                                        }
+                                    }}
+                                    style={[styles.miniToggle, isDistractionActive && isPremium && styles.miniToggleActive, !isPremium && { opacity: 0.5 }]}
                                 >
-                                    <View style={[styles.miniToggleCircle, isDistractionActive && styles.miniToggleCircleActive]} />
+                                    <View style={[styles.miniToggleCircle, isDistractionActive && isPremium && styles.miniToggleCircleActive]} />
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -1130,17 +1149,36 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
                         <View style={styles.settingsGroup}>
                             <Text style={styles.groupLabel}>CASINO RULES</Text>
                             <View style={styles.settingItem}>
-                                <Text style={styles.settingLabel}>Decks in Shoe</Text>
+                                <Text style={styles.settingLabel}>
+                                    Decks in Shoe
+                                    {!isPremium && <Text style={{ color: colors.primary, fontSize: 10 }}> [PRO unlocks 6 & 8]</Text>}
+                                </Text>
                                 <View style={styles.deckSelector}>
-                                    {[1, 2, 6, 8].map(d => (
-                                        <TouchableOpacity
-                                            key={d}
-                                            onPress={() => setDeckCount(d)}
-                                            style={[styles.deckOption, deckCount === d && styles.deckOptionActive]}
-                                        >
-                                            <Text style={[styles.deckOptionText, deckCount === d && styles.deckOptionTextActive]}>{d}</Text>
-                                        </TouchableOpacity>
-                                    ))}
+                                    {[1, 2, 6, 8].map(d => {
+                                        const isLocked = !isPremium && d > 2;
+                                        return (
+                                            <TouchableOpacity
+                                                key={d}
+                                                onPress={() => {
+                                                    if (isLocked) {
+                                                        setShowSettings(false);
+                                                        navigation.navigate('Paywall');
+                                                    } else {
+                                                        setDeckCount(d);
+                                                    }
+                                                }}
+                                                style={[
+                                                    styles.deckOption,
+                                                    deckCount === d && styles.deckOptionActive,
+                                                    isLocked && { opacity: 0.3, borderStyle: 'dashed' }
+                                                ]}
+                                            >
+                                                <Text style={[styles.deckOptionText, deckCount === d && styles.deckOptionTextActive]}>
+                                                    {d}{isLocked ? ' 🔒' : ''}
+                                                </Text>
+                                            </TouchableOpacity>
+                                        );
+                                    })}
                                 </View>
                             </View>
                         </View>
@@ -1217,7 +1255,7 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
                 </View>
             </Modal>
 
-            <DistractionLayer isActive={isDistractionActive} />
+            <DistractionLayer isActive={isDistractionActive && isPremium} />
         </View>
     );
 };
@@ -1386,6 +1424,9 @@ const styles = StyleSheet.create({
         zIndex: 50,
         elevation: 5,
         backgroundColor: 'transparent',
+        width: '100%',
+        maxWidth: 800,
+        alignSelf: 'center',
     },
     hudBadge: {
         backgroundColor: 'rgba(0,0,0,0.4)',

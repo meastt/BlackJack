@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, Sta
 import { colors } from '../../theme/colors';
 import { fontStyles } from '../../theme/typography';
 import { useProgressStore } from '../../store/useProgressStore';
+import { useRevenueCatStore } from '../../store/useRevenueCatStore';
 import { InfoIcon } from '../../components/InfoIcon';
 import { OnboardingModal, getOnboardingCompleted } from '../../components/OnboardingModal';
 import * as Haptics from 'expo-haptics';
@@ -13,6 +14,7 @@ interface HomeScreenProps {
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   const { isPhaseUnlocked, phase0Complete, phase1Complete, phase3Complete, phase4Complete, phase5Complete } = useProgressStore();
+  const { isPremium } = useRevenueCatStore();
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => {
@@ -33,6 +35,11 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         onPress={() => {
           if (unlocked) {
             Haptics.selectionAsync();
+            // Phase 0 is always free. Phase 1-5 requires Pro
+            if (phase > 0 && !isPremium) {
+              navigation.navigate('Paywall');
+              return;
+            }
             navigation.navigate(screen);
           }
         }}
@@ -75,97 +82,103 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
       />
       <StatusBar barStyle="light-content" />
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        {/* Tactical Header */}
-        <View style={styles.header}>
-          <View style={styles.logoContainer}>
-            <Image
-              source={require('../../../assets/icon.png')}
-              style={styles.logo}
-            />
-          </View>
-          <View style={styles.headerTextCol}>
-            <Text style={styles.headerTitle}>PROTOCOL <Text style={styles.highlight}>21</Text></Text>
-            <Text style={styles.headerSubtitle}>ADVANTAGE PLAY INTERFACE // v1.0.5</Text>
-          </View>
-        </View>
-
-        {/* Training Modules */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <View style={styles.sectionIndicator} />
-            <Text style={styles.sectionTitle}>TRAINING_MODULES</Text>
+        <View style={styles.maxWidthContainer}>
+          {/* Tactical Header */}
+          <View style={styles.header}>
+            <View style={styles.logoContainer}>
+              <Image
+                source={require('../../../assets/icon.png')}
+                style={styles.logo}
+              />
+            </View>
+            <View style={styles.headerTextCol}>
+              <Text style={styles.headerTitle}>PROTOCOL <Text style={styles.highlight}>21</Text></Text>
+              <Text style={styles.headerSubtitle}>ADVANTAGE PLAY INTERFACE // v1.0.5</Text>
+            </View>
           </View>
 
-          {renderPhaseCard(0, 'BASIC STRATEGY', 'Master the fundamental math of the game.', '🧠', 'Phase0BasicStrategy', phase0Complete)}
-          {renderPhaseCard(1, 'CARD VALUES', 'Internalize Hi-Lo values for every rank.', '🃏', 'Phase1CardValues', phase1Complete)}
-          {renderPhaseCard(2, 'RUNNING COUNT', 'Maintain accuracy under simulated pressure.', '🔢', 'Phase2RunningCount', false)}
-          {renderPhaseCard(3, 'TRUE COUNT', 'Adjust for deck density and penetration.', '➗', 'Phase3TrueCount', phase3Complete)}
-          {renderPhaseCard(4, 'BETTING', 'Optimize bet sizing with Kelly Criterion.', '💰', 'Phase4Betting', phase4Complete)}
-          {renderPhaseCard(5, 'DEVIATIONS', 'Master the Illustrious 18 index plays.', '🎓', 'Phase5Deviations', phase5Complete)}
-        </View>
+          {/* Training Modules */}
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <View style={styles.sectionIndicator} />
+              <Text style={styles.sectionTitle}>TRAINING_MODULES</Text>
+            </View>
 
-        {/* Tactical Tools */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <View style={[styles.sectionIndicator, { backgroundColor: colors.primary }]} />
-            <Text style={styles.sectionTitle}>TACTICAL_TOOLS</Text>
+            {renderPhaseCard(0, 'BASIC STRATEGY', 'Master the fundamental math of the game.', '🧠', 'Phase0BasicStrategy', phase0Complete)}
+            {renderPhaseCard(1, 'CARD VALUES', 'Internalize Hi-Lo values for every rank.', '🃏', 'Phase1CardValues', phase1Complete)}
+            {renderPhaseCard(2, 'RUNNING COUNT', 'Maintain accuracy under simulated pressure.', '🔢', 'Phase2RunningCount', false)}
+            {renderPhaseCard(3, 'TRUE COUNT', 'Adjust for deck density and penetration.', '➗', 'Phase3TrueCount', phase3Complete)}
+            {renderPhaseCard(4, 'BETTING', 'Optimize bet sizing with Kelly Criterion.', '💰', 'Phase4Betting', phase4Complete)}
+            {renderPhaseCard(5, 'DEVIATIONS', 'Master the Illustrious 18 index plays.', '🎓', 'Phase5Deviations', phase5Complete)}
           </View>
 
-          <View style={styles.grid}>
-            <TouchableOpacity
-              style={[styles.gridCard, styles.gridCardActive]}
-              onPress={() => {
-                Haptics.selectionAsync();
-                navigation.navigate('Simulator');
-              }}
-            >
-              <View style={styles.gridCardInner}>
-                <Text style={styles.gridIcon}>🎰</Text>
-                <Text style={styles.gridTitle}>SIMULATOR</Text>
-                <View style={[styles.gridTag, styles.tagActive]}>
-                  <Text style={styles.gridTagText}>OPERATIONAL</Text>
+          {/* Tactical Tools */}
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <View style={[styles.sectionIndicator, { backgroundColor: colors.primary }]} />
+              <Text style={styles.sectionTitle}>TACTICAL_TOOLS</Text>
+            </View>
+
+            <View style={styles.grid}>
+              <TouchableOpacity
+                style={[styles.gridCard, styles.gridCardActive]}
+                onPress={() => {
+                  Haptics.selectionAsync();
+                  navigation.navigate('Simulator');
+                }}
+              >
+                <View style={styles.gridCardInner}>
+                  <Text style={styles.gridIcon}>🎰</Text>
+                  <Text style={styles.gridTitle}>SIMULATOR</Text>
+                  <View style={[styles.gridTag, styles.tagActive]}>
+                    <Text style={styles.gridTagText}>OPERATIONAL</Text>
+                  </View>
                 </View>
-              </View>
-              <View style={styles.gridGlow} />
-            </TouchableOpacity>
+                <View style={styles.gridGlow} />
+              </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[styles.gridCard, styles.gridCardLocked]}
-              onPress={() => {
-                Haptics.selectionAsync();
-                navigation.navigate('Analytics');
-              }}
-            >
-              <View style={styles.gridCardInner}>
-                <Text style={styles.gridIcon}>📊</Text>
-                <Text style={styles.gridTitle}>ANALYTICS</Text>
-                <View style={[styles.gridTag, styles.tagLocked]}>
-                  <Text style={styles.gridTagText}>ENCRYPTED</Text>
+              <TouchableOpacity
+                style={[styles.gridCard, isPremium ? styles.gridCardActive : styles.gridCardLocked]}
+                onPress={() => {
+                  Haptics.selectionAsync();
+                  if (!isPremium) {
+                    navigation.navigate('Paywall');
+                  } else {
+                    navigation.navigate('Analytics');
+                  }
+                }}
+              >
+                <View style={styles.gridCardInner}>
+                  <Text style={styles.gridIcon}>📊</Text>
+                  <Text style={styles.gridTitle}>ANALYTICS</Text>
+                  <View style={[styles.gridTag, isPremium ? styles.tagActive : styles.tagLocked]}>
+                    <Text style={styles.gridTagText}>{isPremium ? "OPERATIONAL" : "ENCRYPTED"}</Text>
+                  </View>
                 </View>
-              </View>
-            </TouchableOpacity>
+              </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[styles.gridCard, styles.gridCardActive]}
-              onPress={() => {
-                Haptics.selectionAsync();
-                navigation.navigate('Profile');
-              }}
-            >
-              <View style={styles.gridCardInner}>
-                <Text style={styles.gridIcon}>🎖️</Text>
-                <Text style={styles.gridTitle}>SERVICE RECORD</Text>
-                <View style={[styles.gridTag, styles.tagActive]}>
-                  <Text style={styles.gridTagText}>OPEN</Text>
+              <TouchableOpacity
+                style={[styles.gridCard, styles.gridCardActive]}
+                onPress={() => {
+                  Haptics.selectionAsync();
+                  navigation.navigate('Profile');
+                }}
+              >
+                <View style={styles.gridCardInner}>
+                  <Text style={styles.gridIcon}>🎖️</Text>
+                  <Text style={styles.gridTitle}>SERVICE RECORD</Text>
+                  <View style={[styles.gridTag, styles.tagActive]}>
+                    <Text style={styles.gridTagText}>OPEN</Text>
+                  </View>
                 </View>
-              </View>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
 
-        <View style={styles.terminal}>
-          <Text style={styles.terminalText}>// SYSTEM READY</Text>
-          <Text style={styles.terminalText}>// CONNECTING TO TABLE_E4...</Text>
+          <View style={styles.terminal}>
+            <Text style={styles.terminalText}>// SYSTEM READY</Text>
+            <Text style={styles.terminalText}>// CONNECTING TO TABLE_E4...</Text>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -178,8 +191,15 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   scrollContent: {
+    flexGrow: 1,
     padding: 24,
     paddingBottom: 60,
+  },
+  maxWidthContainer: {
+    width: '100%',
+    maxWidth: 800,
+    alignSelf: 'center',
+    flex: 1,
   },
   header: {
     marginTop: 10,
