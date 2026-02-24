@@ -258,14 +258,14 @@ export default function AndroidDownloadPage() {
           <h2 className="text-3xl md:text-4xl font-bold mb-8">What You Get</h2>
           <div className="grid md:grid-cols-2 gap-6">
             <div className="space-y-3">
-              <h3 className="text-lg font-bold mb-4">Counting Systems</h3>
+              <h3 className="text-lg font-bold mb-4">Guided Learning</h3>
               <ul className="space-y-2 text-text-secondary">
-                <li>✓ Hi-Lo System</li>
-                <li>✓ KO (Knock-Out) System</li>
-                <li>✓ Zen Count System</li>
-                <li>✓ Red 7 System</li>
-                <li>✓ Omega II System</li>
-                <li>✓ Wong Halves System</li>
+                <li>✓ Phase 0: Basic Strategy</li>
+                <li>✓ Phase 1: Card Values</li>
+                <li>✓ Phase 2: Running Count</li>
+                <li>✓ Phase 3: True Count</li>
+                <li>✓ Phase 4: Bet Sizing</li>
+                <li>✓ Phase 5: Deviations</li>
               </ul>
             </div>
 

@@ -57,7 +57,7 @@ export default function Home() {
           {/* Subheadline */}
           <p className="text-lg md:text-xl text-text-secondary max-w-2xl leading-relaxed text-center" style={{ margin: '0 auto 3rem auto' }}>
             Master the count and beat the house. The ultimate Blackjack Card Counting App built for serious advantage players.
-            Casino-grade drills. Six proven systems. Your edge starts here.
+            Casino-grade drills. A definitive 6-Phase Guided Training regimen. Your edge starts here.
           </p>
 
           {/* CTA Buttons */}
@@ -100,8 +100,8 @@ export default function Home() {
               <div className="stat-label">Accuracy Goal</div>
             </div>
             <div className="stat-item">
-              <div className="stat-value">6+</div>
-              <div className="stat-label">Counting Systems</div>
+              <div className="stat-value">6</div>
+              <div className="stat-label">Training Phases</div>
             </div>
             <div className="stat-item">
               <div className="stat-value">PRO</div>
@@ -132,7 +132,7 @@ export default function Home() {
               />
             </div>
             <p className="section-subtitle mt-8">
-              Don&apos;t just learn to count. Master the specific nuances of your chosen system with dedicated algorithms and real-time feedback.
+              Don&apos;t just learn to count. Master the industry-standard Hi-Lo system through 6 rigorous training phases, and explore resources for advanced methodologies.
             </p>
           </div>
 

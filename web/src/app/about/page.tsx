@@ -108,9 +108,9 @@ export default function AboutPage() {
       {/* Supported Systems Section */}
       <section className="section">
         <div className="container max-w-4xl">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">Supported Card Counting Systems</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">6-Phase Guided Hi-Lo Training</h2>
           <p className="text-lg text-text-secondary leading-relaxed mb-8">
-            Protocol 21 provides complete training for every major card counting system, from beginner-friendly to expert-level fractional counts.
+            Protocol 21 is structured around a rigorous 6-Phase course on the Hi-Lo system—the universal industry standard. From Basic Strategy to Illustrious 18 Deviations, you get an end-to-end masterclass. We also supply rich reference materials on alternative systems:
           </p>
           <div className="grid md:grid-cols-2 gap-6">
             <div className="border border-surface-tertiary rounded-lg p-6">
@@ -163,7 +163,7 @@ export default function AboutPage() {
               <span className="text-2xl">✓</span>
               <div>
                 <h3 className="font-bold mb-2">Progressive Learning Path</h3>
-                <p className="text-text-secondary">Start as a beginner with Hi-Lo, advance through intermediate systems, and master expert fractional counts at your own pace.</p>
+                <p className="text-text-secondary">Start as a beginner in Phase 0 (Basic Strategy) and unlock subsequent phases leading all the way up to Phase 5 (Deviations), at your own pace.</p>
               </div>
             </div>
             <div className="flex gap-4">

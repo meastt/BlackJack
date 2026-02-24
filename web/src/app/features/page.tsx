@@ -41,8 +41,8 @@ export default function FeaturesPage() {
       icon: "🔊",
     },
     {
-      title: "Six Counting Systems",
-      description: "Master Hi-Lo, KO, Zen Count, Red 7, Omega II, and Wong Halves. Each system with complete training from basics to advanced application.",
+      title: "6-Phase Masterclass",
+      description: "Progress organically from Basic Strategy to Illustrious 18 Deviations. Built around the industry-standard Hi-Lo counting system.",
       icon: "🧮",
     },
     {
@@ -106,7 +106,7 @@ export default function FeaturesPage() {
               <span className="text-gradient-gold">Protocol 21 Features</span>
             </h1>
             <p className="text-xl text-text-secondary leading-relaxed mb-8">
-              Complete professional-grade card counting training platform with casino-realistic drills, advanced analytics, and support for every major counting system.
+              Complete professional-grade card counting training platform with casino-realistic drills, advanced analytics, and a comprehensive 6-Phase masterclass.
             </p>
 
             <Link href="/download" className="btn btn-primary">
@@ -200,9 +200,9 @@ export default function FeaturesPage() {
       {/* Counting Systems Section */}
       <section className="section">
         <div className="container max-w-4xl">
-          <h2 className="text-3xl md:text-4xl font-bold mb-8">Complete Counting System Support</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-8">Counting System Reference</h2>
           <p className="text-lg text-text-secondary leading-relaxed mb-8">
-            Protocol 21 provides comprehensive training for six major card counting systems, from beginner-friendly balanced counts to expert-level fractional systems.
+            Protocol 21's primary training engine focuses heavily on mastering the Hi-Lo system (the industry standard). Additionally, we provide comprehensive reference material for six other counting methodologies:
           </p>
 
           <div className="space-y-6">
