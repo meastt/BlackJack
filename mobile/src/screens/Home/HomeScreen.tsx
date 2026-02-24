@@ -35,8 +35,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         onPress={() => {
           if (unlocked) {
             Haptics.selectionAsync();
-            // Phase 0 is always free. Phase 1-5 requires Pro
-            if (phase > 0 && !isPremium) {
+            // Phases 0-2 are free. Phase 3-5 requires Pro
+            if (phase > 2 && !isPremium) {
               navigation.navigate('Paywall');
               return;
             }

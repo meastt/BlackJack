@@ -55,12 +55,38 @@ export const PaywallScreen = () => {
         );
     }
 
-    // Find monthly and lifetime packages typically
-    const monthlyPackage = offerings.find(p => p.packageType === 'MONTHLY');
-    const lifetimePackage = offerings.find(p => p.packageType === 'LIFETIME');
+    // Sort packages: MONTHLY → ANNUAL → LIFETIME
+    const packageOrder = ['MONTHLY', 'ANNUAL', 'LIFETIME'];
+    const displayPackages = offerings.length > 0
+        ? [...offerings].sort((a, b) => packageOrder.indexOf(a.packageType) - packageOrder.indexOf(b.packageType))
+        : [];
 
-    // Fallback if packages aren't loaded yet
-    const displayPackages = offerings.length > 0 ? offerings : [];
+    const getPackageLabel = (type: string) => {
+        switch (type) {
+            case 'MONTHLY': return 'MONTHLY';
+            case 'ANNUAL': return 'ANNUAL';
+            case 'LIFETIME': return 'LIFETIME';
+            default: return type;
+        }
+    };
+
+    const getPackageSublabel = (type: string) => {
+        switch (type) {
+            case 'MONTHLY': return 'per month';
+            case 'ANNUAL': return '$2.08 / mo · billed annually';
+            case 'LIFETIME': return 'one-time payment';
+            default: return '';
+        }
+    };
+
+    const getPackageDescription = (type: string) => {
+        switch (type) {
+            case 'MONTHLY': return 'Cancel anytime.';
+            case 'ANNUAL': return 'Save over 58% vs monthly.';
+            case 'LIFETIME': return 'Pay once, master advantage play forever.';
+            default: return '';
+        }
+    };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -94,9 +120,9 @@ export const PaywallScreen = () => {
                             >
                                 <View style={styles.packageHeader}>
                                     <Text style={[styles.packageTitle, isSelected && styles.textSelected]}>
-                                        {pkg.packageType === 'LIFETIME' ? 'LIFETIME ACCESS' : 'MONTHLY SUBSCRIPTION'}
+                                        {getPackageLabel(pkg.packageType)}
                                     </Text>
-                                    {pkg.packageType === 'LIFETIME' && (
+                                    {pkg.packageType === 'ANNUAL' && (
                                         <View style={styles.bestValueBadge}>
                                             <Text style={styles.bestValueText}>BEST VALUE</Text>
                                         </View>
@@ -105,8 +131,11 @@ export const PaywallScreen = () => {
                                 <Text style={[styles.packagePrice, isSelected && styles.textSelected]}>
                                     {pkg.product.priceString}
                                 </Text>
+                                <Text style={styles.packageSublabel}>
+                                    {getPackageSublabel(pkg.packageType)}
+                                </Text>
                                 <Text style={styles.packageDescription}>
-                                    {pkg.packageType === 'LIFETIME' ? 'Pay once, master advantage play forever.' : 'Cancel anytime.'}
+                                    {getPackageDescription(pkg.packageType)}
                                 </Text>
                             </TouchableOpacity>
                         );
@@ -161,13 +190,13 @@ const styles = StyleSheet.create({
         backgroundColor: colors.background,
     },
     scrollContent: {
-        padding: 24,
-        paddingBottom: 60,
+        padding: 20,
+        paddingBottom: 20,
     },
     header: {
-        marginBottom: 40,
+        marginBottom: 20,
         alignItems: 'center',
-        marginTop: 20,
+        marginTop: 10,
     },
     badge: {
         color: colors.primary,
@@ -188,9 +217,9 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     benefitsContainer: {
-        marginBottom: 40,
+        marginBottom: 20,
         backgroundColor: colors.surface,
-        padding: 20,
+        padding: 14,
         borderRadius: 4,
         borderWidth: 1,
         borderColor: colors.border,
@@ -198,7 +227,7 @@ const styles = StyleSheet.create({
     benefitRow: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 16,
+        marginBottom: 10,
     },
     benefitIconBox: {
         width: 32,
@@ -219,15 +248,15 @@ const styles = StyleSheet.create({
         lineHeight: 18,
     },
     packagesContainer: {
-        marginBottom: 40,
+        marginBottom: 20,
     },
     packageCard: {
         backgroundColor: colors.surface,
         borderRadius: 4,
         borderWidth: 1,
         borderColor: colors.border,
-        padding: 20,
-        marginBottom: 16,
+        padding: 14,
+        marginBottom: 12,
     },
     packageCardSelected: {
         borderColor: colors.primary,
@@ -261,8 +290,13 @@ const styles = StyleSheet.create({
     },
     packagePrice: {
         fontSize: 24,
-        fontWeight: 'BOLD',
+        fontWeight: 'bold',
         color: '#FFFFFF',
+        marginBottom: 4,
+    },
+    packageSublabel: {
+        fontSize: 12,
+        color: colors.textSecondary,
         marginBottom: 4,
     },
     packageDescription: {
@@ -274,11 +308,11 @@ const styles = StyleSheet.create({
     },
     purchaseButton: {
         width: '100%',
-        marginBottom: 20,
+        marginBottom: 12,
     },
     restoreLink: {
-        padding: 10,
-        marginBottom: 10,
+        padding: 6,
+        marginBottom: 4,
     },
     restoreText: {
         color: colors.textSecondary,

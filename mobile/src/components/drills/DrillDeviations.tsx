@@ -179,7 +179,7 @@ export const DrillDeviations: React.FC<{ navigation: any }> = ({ navigation }) =
             accuracy,
             isMastery,
             consecutiveProgress: progress.masteryProgress,
-            phaseComplete: phase5Complete,
+            phaseComplete: useProgressStore.getState().phase5Complete,
         });
 
         setShowResults(true);

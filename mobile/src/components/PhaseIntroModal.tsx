@@ -7,7 +7,7 @@ import * as Haptics from 'expo-haptics';
 
 interface PhaseIntroModalProps {
     visible: boolean;
-    phase: 'phase0' | 'phase1' | 'phase2';
+    phase: 'phase0' | 'phase1' | 'phase2' | 'phase3' | 'phase4' | 'phase5';
     onStart: () => void;
 }
 
@@ -35,6 +35,30 @@ const PHASE_CONTENT = {
         what: 'Maintain a cumulative "Running Count" as cards are dealt from the deck.',
         why: 'A high positive count means the deck is rich in 10s and Aces (favorable for you). A negative count means it is poor.',
         outcome: 'You will be able to track the flow of the game across an entire shoe.',
+    },
+    phase3: {
+        title: 'True Count',
+        subtitle: 'The Real Edge',
+        icon: '⚖️',
+        what: 'Divide the Running Count by the estimated number of decks remaining in the shoe.',
+        why: 'A Running Count of +6 early in a shoe means very little, but late in a shoe means a huge advantage. True count sizes your edge.',
+        outcome: 'You will instantly convert your running tally into an actionable metric.',
+    },
+    phase4: {
+        title: 'Bet Sizing',
+        subtitle: 'Kelly Criterion in Action',
+        icon: '💰',
+        what: 'Increase your bet size proportionally to the True Count.',
+        why: 'When the odds shift in your favor, you must bet more to capitalize. Basic strategy minimizes losses, but bet sizing creates your profit.',
+        outcome: 'You will automatically and correctly size your wagers relative to your bankroll and the true count.',
+    },
+    phase5: {
+        title: 'Playing Deviations',
+        subtitle: 'The Illustrious 18',
+        icon: '🎯',
+        what: 'Learn when to deviate from Basic Strategy based on the True Count.',
+        why: 'Basic strategy assumes a neutral deck. When the deck composition changes drastically, the math dictates different plays.',
+        outcome: 'You will extract the absolute maximum value from every single hand.',
     },
 };
 

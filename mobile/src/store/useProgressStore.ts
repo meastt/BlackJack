@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { DEV_UNLOCK_ALL } from './useRevenueCatStore';
 
 // Session result for tracking mastery
 interface SessionResult {
@@ -41,6 +42,14 @@ interface ProgressState {
     // Phase 2 (Running Count) progress
     phase2Sessions: SessionResult[];
     phase2ConsecutiveMastery: number; // Need 2 at 90%+
+
+    // Phase 3 (True Count) progress
+    phase3Sessions: SessionResult[];
+    phase3ConsecutiveMastery: number; // Need 2 at 90%+
+
+    // Phase 4 (Bet Sizing) progress
+    phase4Sessions: SessionResult[];
+    phase4ConsecutiveMastery: number; // Need 2 at 90%+
 
     // Phase 5 (Deviations) progress
     phase5Sessions: SessionResult[];
@@ -101,6 +110,16 @@ export const MASTERY_REQUIREMENTS = {
         CONSECUTIVE_SESSIONS: 2,
         TIME_LIMIT_SECONDS: 60,
     },
+    PHASE_3: {
+        CHECKS_PER_SESSION: 10, // 10 true count questions per session
+        REQUIRED_ACCURACY: 0.90,
+        CONSECUTIVE_SESSIONS: 2,
+    },
+    PHASE_4: {
+        BETS_PER_SESSION: 10, // 10 betting scenarios
+        REQUIRED_ACCURACY: 0.90,
+        CONSECUTIVE_SESSIONS: 2,
+    },
     PHASE_5: {
         SCENARIOS_PER_SESSION: 20, // 20 deviation scenarios
         REQUIRED_ACCURACY: 0.90,
@@ -127,6 +146,12 @@ export const useProgressStore = create<ProgressState>()(
 
             phase2Sessions: [],
             phase2ConsecutiveMastery: 0,
+
+            phase3Sessions: [],
+            phase3ConsecutiveMastery: 0,
+
+            phase4Sessions: [],
+            phase4ConsecutiveMastery: 0,
 
             phase5Sessions: [],
             phase5ConsecutiveMastery: 0,
@@ -179,6 +204,34 @@ export const useProgressStore = create<ProgressState>()(
                         phase2Sessions: [...state.phase2Sessions, result],
                         phase2ConsecutiveMastery: newConsecutive,
                         phase2Complete: state.phase2Complete || isComplete,
+                        totalXP: state.totalXP + (isMastery ? 200 : 50) + (isComplete ? 500 : 0),
+                    };
+                }
+
+                if (phase === 'phase3') {
+                    const isMastery = result.accuracy >= MASTERY_REQUIREMENTS.PHASE_3.REQUIRED_ACCURACY;
+
+                    const newConsecutive = isMastery ? state.phase3ConsecutiveMastery + 1 : 0;
+                    const isComplete = newConsecutive >= MASTERY_REQUIREMENTS.PHASE_3.CONSECUTIVE_SESSIONS;
+
+                    return {
+                        phase3Sessions: [...state.phase3Sessions, result],
+                        phase3ConsecutiveMastery: newConsecutive,
+                        phase3Complete: state.phase3Complete || isComplete,
+                        totalXP: state.totalXP + (isMastery ? 200 : 50) + (isComplete ? 500 : 0),
+                    };
+                }
+
+                if (phase === 'phase4') {
+                    const isMastery = result.accuracy >= MASTERY_REQUIREMENTS.PHASE_4.REQUIRED_ACCURACY;
+
+                    const newConsecutive = isMastery ? state.phase4ConsecutiveMastery + 1 : 0;
+                    const isComplete = newConsecutive >= MASTERY_REQUIREMENTS.PHASE_4.CONSECUTIVE_SESSIONS;
+
+                    return {
+                        phase4Sessions: [...state.phase4Sessions, result],
+                        phase4ConsecutiveMastery: newConsecutive,
+                        phase4Complete: state.phase4Complete || isComplete,
                         totalXP: state.totalXP + (isMastery ? 200 : 50) + (isComplete ? 500 : 0),
                     };
                 }
@@ -286,6 +339,8 @@ export const useProgressStore = create<ProgressState>()(
                 phase1ConsecutiveMastery: 0,
                 phase2Sessions: [],
                 phase2ConsecutiveMastery: 0,
+                phase3Sessions: [],
+                phase3ConsecutiveMastery: 0,
                 phase5Sessions: [],
                 phase5ConsecutiveMastery: 0,
                 totalXP: 0,
@@ -299,11 +354,12 @@ export const useProgressStore = create<ProgressState>()(
 
             // Computed getters
             isPhaseUnlocked: (phase) => {
+                if (DEV_UNLOCK_ALL) return true; // ⚠️ DEV bypass
                 const state = get();
                 switch (phase) {
-                    case 0: return true; // Basic Strategy always unlocked
-                    case 1: return state.phase0Complete; // Card Values needs Basic Strategy
-                    case 2: return state.phase1Complete; // Running Count needs Card Values
+                    case 0: return true;
+                    case 1: return state.phase0Complete;
+                    case 2: return state.phase1Complete;
                     case 3: return state.phase2Complete;
                     case 4: return state.phase3Complete;
                     case 5: return state.phase4Complete;
@@ -329,6 +385,18 @@ export const useProgressStore = create<ProgressState>()(
                     return {
                         sessions: state.phase2Sessions.length,
                         masteryProgress: state.phase2ConsecutiveMastery / MASTERY_REQUIREMENTS.PHASE_2.CONSECUTIVE_SESSIONS,
+                    };
+                }
+                if (phase === 3) {
+                    return {
+                        sessions: state.phase3Sessions.length,
+                        masteryProgress: state.phase3ConsecutiveMastery / MASTERY_REQUIREMENTS.PHASE_3.CONSECUTIVE_SESSIONS,
+                    };
+                }
+                if (phase === 4) {
+                    return {
+                        sessions: state.phase4Sessions.length,
+                        masteryProgress: state.phase4ConsecutiveMastery / MASTERY_REQUIREMENTS.PHASE_4.CONSECUTIVE_SESSIONS,
                     };
                 }
                 if (phase === 5) {

@@ -4,16 +4,45 @@ import { colors } from '../../theme/colors';
 import { fontStyles } from '../../theme/typography';
 import { HapticEngine } from '../../utils/HapticEngine';
 import { HI_LO_BETTING_STRATEGY } from '@card-counter-ai/shared';
+import { useProgressStore, MASTERY_REQUIREMENTS } from '../../store/useProgressStore';
+import { PhaseIntroModal } from '../../components/PhaseIntroModal';
+
+interface SessionSummary {
+    correctChecks: number;
+    totalChecks: number;
+    accuracy: number;
+    isMastery: boolean;
+    consecutiveProgress: number;
+    phaseComplete: boolean;
+}
 
 export const Phase4Betting: React.FC<{ navigation: any }> = ({ navigation }) => {
     const [trueCount, setTrueCount] = useState(0);
-    const [streak, setStreak] = useState(0);
     const [feedback, setFeedback] = useState<'IDLE' | 'CORRECT' | 'WRONG'>('IDLE');
     const [lastAnswer, setLastAnswer] = useState(0);
 
+    // Progression State
+    const [gameState, setGameState] = useState<'PLAYING' | 'SUMMARY'>('PLAYING');
+    const [score, setScore] = useState({ correct: 0, total: 0 });
+    const [startTime, setStartTime] = useState(Date.now());
+    const [sessionSummary, setSessionSummary] = useState<SessionSummary | null>(null);
+    const [showIntro, setShowIntro] = useState(true);
+
+    const { phase4Complete, addSessionResult, updateStreak, getPhaseProgress } = useProgressStore();
+
     useEffect(() => {
+        if (!showIntro) {
+            startDemo();
+        }
+    }, [showIntro]);
+
+    const startDemo = () => {
+        setScore({ correct: 0, total: 0 });
+        setGameState('PLAYING');
+        setSessionSummary(null);
+        setStartTime(Date.now());
         nextScenario();
-    }, []);
+    };
 
     const nextScenario = () => {
         setFeedback('IDLE');
@@ -36,19 +65,61 @@ export const Phase4Betting: React.FC<{ navigation: any }> = ({ navigation }) => 
     };
 
     const handleGuess = (betUnit: number) => {
+        if (feedback !== 'IDLE') return; // Prevent double taps
+
         const correctBet = getCorrectBet(trueCount);
         setLastAnswer(correctBet);
 
-        if (betUnit === correctBet) {
+        const isCorrect = betUnit === correctBet;
+
+        if (isCorrect) {
             setFeedback('CORRECT');
-            setStreak(s => s + 1);
             HapticEngine.triggerSuccess();
-            setTimeout(nextScenario, 1000);
         } else {
             setFeedback('WRONG');
-            setStreak(0);
             HapticEngine.triggerError();
         }
+
+        const newScore = {
+            correct: score.correct + (isCorrect ? 1 : 0),
+            total: score.total + 1
+        };
+        setScore(newScore);
+
+        if (newScore.total >= MASTERY_REQUIREMENTS.PHASE_4.BETS_PER_SESSION) {
+            setTimeout(() => finishSession(newScore), 800);
+        } else {
+            setTimeout(nextScenario, 1000);
+        }
+    };
+
+    const finishSession = (finalScore: { correct: number, total: number }) => {
+        const timeInSeconds = Math.floor((Date.now() - startTime) / 1000);
+        const accuracy = finalScore.total > 0 ? finalScore.correct / finalScore.total : 0;
+
+        addSessionResult('phase4', {
+            phase: 'phase4',
+            accuracy,
+            cardsCompleted: finalScore.total,
+            timeInSeconds,
+            timestamp: Date.now(),
+        });
+
+        updateStreak();
+
+        const progress = getPhaseProgress(4);
+        const isMastery = accuracy >= MASTERY_REQUIREMENTS.PHASE_4.REQUIRED_ACCURACY;
+
+        setSessionSummary({
+            correctChecks: finalScore.correct,
+            totalChecks: finalScore.total,
+            accuracy,
+            isMastery,
+            consecutiveProgress: progress.masteryProgress,
+            phaseComplete: useProgressStore.getState().phase4Complete,
+        });
+
+        setGameState('SUMMARY');
     };
 
     return (
@@ -62,44 +133,108 @@ export const Phase4Betting: React.FC<{ navigation: any }> = ({ navigation }) => 
 
             <View style={styles.content}>
 
-                {/* Score/Streak */}
-                <View style={styles.streakContainer}>
-                    <Text style={styles.streakLabel}>STREAK</Text>
-                    <Text style={[styles.streakValue, streak > 2 && styles.streakHot]}>{streak}</Text>
-                </View>
+                {gameState === 'PLAYING' && (
+                    <>
+                        {/* Score/Streak */}
+                        <View style={styles.streakContainer}>
+                            <Text style={styles.streakLabel}>PROGRESS</Text>
+                            <Text style={styles.streakValue}>{score.total} / {MASTERY_REQUIREMENTS.PHASE_4.BETS_PER_SESSION}</Text>
+                        </View>
 
-                {/* Scenario */}
-                <View style={styles.scenarioBox}>
-                    <Text style={styles.scenarioLabel}>TRUE COUNT IS</Text>
-                    <Text style={[styles.scenarioValue, trueCount > 0 ? styles.pos : styles.neutral]}>
-                        {trueCount > 0 ? `+${trueCount}` : trueCount}
-                    </Text>
-                    <Text style={styles.instruction}>Identify correct bet size</Text>
-                </View>
+                        {/* Scenario */}
+                        <View style={styles.scenarioBox}>
+                            <Text style={styles.scenarioLabel}>TRUE COUNT IS</Text>
+                            <Text style={[styles.scenarioValue, trueCount > 0 ? styles.pos : styles.neutral]}>
+                                {trueCount > 0 ? `+${trueCount}` : trueCount}
+                            </Text>
+                            <Text style={styles.instruction}>Identify correct bet size</Text>
+                        </View>
 
-                {/* Feedback */}
-                <View style={styles.feedbackContainer}>
-                    {feedback === 'CORRECT' && <Text style={[styles.feedbackText, styles.pos]}>CORRECT: {lastAnswer} UNITS</Text>}
-                    {feedback === 'WRONG' && <Text style={[styles.feedbackText, styles.neg]}>INCORRECT: {lastAnswer} UNITS</Text>}
-                </View>
+                        {/* Feedback */}
+                        <View style={styles.feedbackContainer}>
+                            {feedback === 'CORRECT' && <Text style={[styles.feedbackText, styles.pos]}>CORRECT: {lastAnswer} UNITS</Text>}
+                            {feedback === 'WRONG' && <Text style={[styles.feedbackText, styles.neg]}>INCORRECT: {lastAnswer} UNITS</Text>}
+                        </View>
 
-                {/* Controls */}
-                <View style={styles.controls}>
-                    <View style={styles.row}>
-                        <BetButton units={1} onPress={() => handleGuess(1)} />
-                        <BetButton units={2} onPress={() => handleGuess(2)} />
+                        {/* Controls */}
+                        <View style={styles.controls}>
+                            <View style={styles.row}>
+                                <BetButton units={1} onPress={() => handleGuess(1)} />
+                                <BetButton units={2} onPress={() => handleGuess(2)} />
+                            </View>
+                            <View style={styles.row}>
+                                <BetButton units={4} onPress={() => handleGuess(4)} />
+                                <BetButton units={8} onPress={() => handleGuess(8)} />
+                            </View>
+                            <View style={styles.row}>
+                                <BetButton units={10} label="2 Hands" onPress={() => handleGuess(10)} disabled />
+                            </View>
+                        </View>
+                    </>
+                )}
+
+                {gameState === 'SUMMARY' && sessionSummary && (
+                    <View style={styles.summaryContainer}>
+                        <Text style={styles.summaryTitle}>
+                            {sessionSummary.isMastery ? '✓ MASTERY SESSION!' : 'SESSION COMPLETE'}
+                        </Text>
+
+                        <View style={styles.statsGrid}>
+                            <View style={styles.statItem}>
+                                <Text style={styles.statLabel}>ACCURACY</Text>
+                                <Text style={[styles.statValue, sessionSummary.isMastery && styles.masteryText]}>
+                                    {Math.round(sessionSummary.accuracy * 100)}%
+                                </Text>
+                            </View>
+                            <View style={styles.statItem}>
+                                <Text style={styles.statLabel}>SCORE</Text>
+                                <Text style={[styles.statValue, sessionSummary.isMastery && styles.masteryText]}>
+                                    {sessionSummary.correctChecks}/{sessionSummary.totalChecks}
+                                </Text>
+                            </View>
+                        </View>
+
+                        <View style={styles.progressBar}>
+                            <Text style={styles.progressLabel}>
+                                STREAK: {sessionSummary.phaseComplete ? MASTERY_REQUIREMENTS.PHASE_4.CONSECUTIVE_SESSIONS : Math.round(sessionSummary.consecutiveProgress * MASTERY_REQUIREMENTS.PHASE_4.CONSECUTIVE_SESSIONS)} / {MASTERY_REQUIREMENTS.PHASE_4.CONSECUTIVE_SESSIONS} QUALIFYING SESSIONS
+                            </Text>
+                            <View style={styles.progressBarBg}>
+                                <View
+                                    style={[
+                                        styles.progressBarFill,
+                                        { width: `${sessionSummary.phaseComplete ? 100 : sessionSummary.consecutiveProgress * 100}%` }
+                                    ]}
+                                />
+                            </View>
+                            <Text style={styles.progressHint}>
+                                {sessionSummary.phaseComplete
+                                    ? '🏆 PHASE 4 COMPLETE! PHASE 5 UNLOCKED!'
+                                    : `NEED ${MASTERY_REQUIREMENTS.PHASE_4.CONSECUTIVE_SESSIONS} SESSIONS AT ${MASTERY_REQUIREMENTS.PHASE_4.REQUIRED_ACCURACY * 100}%`
+                                }
+                            </Text>
+                        </View>
+
+                        <View style={styles.buttonRow}>
+                            <TouchableOpacity
+                                onPress={() => navigation.goBack()}
+                                style={[styles.submitBtn, styles.secondaryBtn, styles.rowBtn, { flex: 1 }]}
+                            >
+                                <Text style={[styles.submitText, styles.secondaryBtnText]}>HOME</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={startDemo} style={[styles.submitBtn, styles.rowBtn, { flex: 1 }]}>
+                                <Text style={styles.submitText}>TRY AGAIN</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                    <View style={styles.row}>
-                        <BetButton units={4} onPress={() => handleGuess(4)} />
-                        <BetButton units={8} onPress={() => handleGuess(8)} />
-                    </View>
-                    <View style={styles.row}>
-                        <BetButton units={10} label="2 Hands" onPress={() => handleGuess(10)} disabled />
-                        {/* 2 Hands logic implies spread, keeping simple for now */}
-                    </View>
-                </View>
+                )}
 
             </View>
+
+            <PhaseIntroModal
+                visible={showIntro}
+                phase="phase4"
+                onStart={() => setShowIntro(false)}
+            />
         </SafeAreaView>
     );
 };
@@ -249,5 +384,118 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '900',
         letterSpacing: 1.5,
-    }
+    },
+    summaryContainer: {
+        width: '100%',
+        backgroundColor: colors.surface,
+        borderRadius: 4,
+        padding: 32,
+        borderWidth: 1,
+        borderColor: colors.primary,
+        shadowColor: colors.primary,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.2,
+        shadowRadius: 20,
+        gap: 24,
+    },
+    summaryTitle: {
+        fontSize: 20,
+        color: colors.textPrimary,
+        fontWeight: '900',
+        textAlign: 'center',
+        letterSpacing: 2,
+        textTransform: 'uppercase',
+    },
+    statsGrid: {
+        flexDirection: 'row',
+        gap: 24,
+        justifyContent: 'space-between',
+    },
+    statItem: {
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: 'rgba(255, 255, 255, 0.02)',
+        paddingVertical: 16,
+        borderRadius: 2,
+        borderWidth: 1,
+        borderColor: 'rgba(255, 255, 255, 0.05)',
+    },
+    statLabel: {
+        fontSize: 9,
+        color: colors.textTertiary,
+        marginBottom: 8,
+        textTransform: 'uppercase',
+        letterSpacing: 2,
+        fontWeight: '800',
+    },
+    statValue: {
+        fontSize: 32,
+        fontWeight: '900',
+        color: '#FFFFFF',
+        fontVariant: ['tabular-nums'],
+    },
+    masteryText: {
+        color: colors.success,
+    },
+    progressBar: {
+        width: '100%',
+        marginVertical: 12,
+    },
+    progressLabel: {
+        fontSize: 10,
+        color: colors.textTertiary,
+        marginBottom: 12,
+        textAlign: 'center',
+        fontWeight: '800',
+        letterSpacing: 1.5,
+    },
+    progressBarBg: {
+        height: 4,
+        backgroundColor: colors.surfaceDark,
+        borderRadius: 2,
+        overflow: 'hidden',
+    },
+    progressBarFill: {
+        height: '100%',
+        backgroundColor: colors.success,
+    },
+    progressHint: {
+        fontSize: 10,
+        color: colors.textTertiary,
+        marginTop: 12,
+        textAlign: 'center',
+        fontWeight: '600',
+        lineHeight: 16,
+    },
+    buttonRow: {
+        flexDirection: 'row',
+        gap: 16,
+        marginTop: 8,
+    },
+    submitBtn: {
+        backgroundColor: colors.primary,
+        paddingVertical: 18,
+        paddingHorizontal: 48,
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: colors.primary,
+    },
+    submitText: {
+        color: '#FFFFFF',
+        fontWeight: '900',
+        fontSize: 14,
+        letterSpacing: 2,
+        textTransform: 'uppercase',
+    },
+    secondaryBtn: {
+        backgroundColor: colors.surface,
+        borderColor: colors.border,
+    },
+    secondaryBtnText: {
+        color: colors.textSecondary,
+    },
+    rowBtn: {
+        paddingHorizontal: 16,
+        alignItems: 'center',
+    },
 });

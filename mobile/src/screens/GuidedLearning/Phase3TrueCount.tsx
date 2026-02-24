@@ -1,9 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Dimensions, Platform } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Platform } from 'react-native';
 import { colors } from '../../theme/colors';
 import { fontStyles } from '../../theme/typography';
 import { DiscardTray } from '../../components/drills/DiscardTray';
 import { HapticEngine } from '../../utils/HapticEngine';
+import { useProgressStore, MASTERY_REQUIREMENTS } from '../../store/useProgressStore';
+import { PhaseIntroModal } from '../../components/PhaseIntroModal';
+
+interface SessionSummary {
+    correctChecks: number;
+    totalChecks: number;
+    accuracy: number;
+    isMastery: boolean;
+    consecutiveProgress: number;
+    phaseComplete: boolean;
+}
+
 
 export const Phase3TrueCount: React.FC<{ navigation: any }> = ({ navigation }) => {
     const TOTAL_DECKS = 6;
@@ -12,12 +24,28 @@ export const Phase3TrueCount: React.FC<{ navigation: any }> = ({ navigation }) =
     const [options, setOptions] = useState<number[]>([]);
     const [feedback, setFeedback] = useState<'IDLE' | 'CORRECT' | 'WRONG'>('IDLE');
 
-    // Stats for "Mastery"
-    const [streak, setStreak] = useState(0);
+    // Progression State
+    const [gameState, setGameState] = useState<'PLAYING' | 'SUMMARY'>('PLAYING');
+    const [score, setScore] = useState({ correct: 0, total: 0 });
+    const [startTime, setStartTime] = useState(Date.now());
+    const [sessionSummary, setSessionSummary] = useState<SessionSummary | null>(null);
+    const [showIntro, setShowIntro] = useState(true);
+
+    const { phase3Complete, addSessionResult, updateStreak, getPhaseProgress } = useProgressStore();
 
     useEffect(() => {
+        if (!showIntro) {
+            startDemo();
+        }
+    }, [showIntro]);
+
+    const startDemo = () => {
+        setScore({ correct: 0, total: 0 });
+        setGameState('PLAYING');
+        setSessionSummary(null);
+        setStartTime(Date.now());
         startNewRound();
-    }, []);
+    };
 
     const startNewRound = () => {
         setFeedback('IDLE');
@@ -82,19 +110,63 @@ export const Phase3TrueCount: React.FC<{ navigation: any }> = ({ navigation }) =
     };
 
     const handleGuess = (guess: number) => {
-        const correctTC = calculateTrueCount(runningCount, TOTAL_DECKS - decksDiscarded);
+        if (feedback !== 'IDLE') return; // Prevent double taps
 
-        if (guess === correctTC) {
+        const correctTC = calculateTrueCount(runningCount, TOTAL_DECKS - decksDiscarded);
+        const isCorrect = guess === correctTC;
+
+        if (isCorrect) {
             setFeedback('CORRECT');
             HapticEngine.triggerSuccess();
-            setStreak(s => s + 1);
-            setTimeout(startNewRound, 800);
         } else {
             setFeedback('WRONG');
             HapticEngine.triggerError();
-            setStreak(0);
+        }
+
+        const newScore = {
+            correct: score.correct + (isCorrect ? 1 : 0),
+            total: score.total + 1
+        };
+        setScore(newScore);
+
+        if (newScore.total >= MASTERY_REQUIREMENTS.PHASE_3.CHECKS_PER_SESSION) {
+            setTimeout(() => finishSession(newScore), 800);
+        } else {
+            // Keep going if wrong so they can learn, or skip?
+            // Usually we auto-advance on both to keep the drill moving.
+            setTimeout(startNewRound, 1000);
         }
     };
+
+    const finishSession = (finalScore: { correct: number, total: number }) => {
+        const timeInSeconds = Math.floor((Date.now() - startTime) / 1000);
+        const accuracy = finalScore.total > 0 ? finalScore.correct / finalScore.total : 0;
+
+        addSessionResult('phase3', {
+            phase: 'phase3',
+            accuracy,
+            cardsCompleted: finalScore.total,
+            timeInSeconds,
+            timestamp: Date.now(),
+        });
+
+        updateStreak();
+
+        const progress = getPhaseProgress(3);
+        const isMastery = accuracy >= MASTERY_REQUIREMENTS.PHASE_3.REQUIRED_ACCURACY;
+
+        setSessionSummary({
+            correctChecks: finalScore.correct,
+            totalChecks: finalScore.total,
+            accuracy,
+            isMastery,
+            consecutiveProgress: progress.masteryProgress,
+            phaseComplete: useProgressStore.getState().phase3Complete,
+        });
+
+        setGameState('SUMMARY');
+    };
+
 
     return (
         <SafeAreaView style={styles.container}>
@@ -103,62 +175,143 @@ export const Phase3TrueCount: React.FC<{ navigation: any }> = ({ navigation }) =
                     <Text style={styles.backText}>←</Text>
                 </TouchableOpacity>
                 <Text style={styles.title}>TRUE COUNT DRILL</Text>
-                <View style={styles.streakBadge}>
+                <View style={[styles.streakBadge, { opacity: 0 }]}>
                     <Text style={styles.streakLabel}>STREAK</Text>
-                    <Text style={styles.streakValue}>{streak}</Text>
+                    <Text style={styles.streakValue}>0</Text>
                 </View>
             </View>
 
             <View style={styles.content}>
 
-                {/* The Visuals */}
-                <View style={styles.visualRow}>
-                    <View style={styles.statBox}>
-                        <Text style={styles.statLabel}>Running Count</Text>
-                        <Text style={[
-                            styles.statValue,
-                            runningCount > 0 ? styles.pos : (runningCount < 0 ? styles.neg : styles.neutral)
-                        ]}>
-                            {runningCount > 0 ? `+${runningCount}` : runningCount}
+                {gameState === 'PLAYING' && (
+                    <>
+                        <View style={styles.progressHeader}>
+                            <Text style={styles.progressText}>
+                                CHECK {score.total + 1} OF {MASTERY_REQUIREMENTS.PHASE_3.CHECKS_PER_SESSION}
+                            </Text>
+                        </View>
+
+                        {/* The Visuals */}
+                        <View style={styles.visualRow}>
+                            <View style={styles.statBox}>
+                                <Text style={styles.statLabel}>Running Count</Text>
+                                <Text style={[
+                                    styles.statValue,
+                                    runningCount > 0 ? styles.pos : (runningCount < 0 ? styles.neg : styles.neutral)
+                                ]}>
+                                    {runningCount > 0 ? `+${runningCount}` : runningCount}
+                                </Text>
+                            </View>
+
+                            <View style={styles.divider} />
+
+                            <View style={styles.trayBox}>
+                                <DiscardTray
+                                    totalDecks={TOTAL_DECKS}
+                                    decksDiscarded={decksDiscarded}
+                                    scale={0.8}
+                                />
+                                <Text style={styles.statLabel}>Decks Remaining: {TOTAL_DECKS - decksDiscarded}</Text>
+                            </View>
+                        </View>
+
+                        <Text style={styles.equation}>
+                            TC = ⌊ {runningCount} / {TOTAL_DECKS - decksDiscarded} ⌋
                         </Text>
+
+                        {/* Feedback Area */}
+                        <View style={styles.feedbackContainer}>
+                            {feedback === 'CORRECT' && <Text style={[styles.feedback, styles.pos]}>CORRECT</Text>}
+                            {feedback === 'WRONG' && <Text style={[styles.feedback, styles.neg]}>TRY AGAIN</Text>}
+                        </View>
+
+                        {/* Input Grid */}
+                        <View style={styles.grid}>
+                            {options.map(opt => (
+                                <TouchableOpacity
+                                    key={opt}
+                                    style={[
+                                        styles.optionBtn,
+                                        feedback !== 'IDLE' && opt === calculateTrueCount(runningCount, TOTAL_DECKS - decksDiscarded) && styles.optionBtnCorrect,
+                                        feedback === 'WRONG' && opt !== calculateTrueCount(runningCount, TOTAL_DECKS - decksDiscarded) && styles.optionBtnWrong,
+                                    ]}
+                                    onPress={() => handleGuess(opt)}
+                                    disabled={feedback !== 'IDLE'}
+                                >
+                                    <Text style={[
+                                        styles.btnText,
+                                        feedback !== 'IDLE' && opt === calculateTrueCount(runningCount, TOTAL_DECKS - decksDiscarded) && { color: colors.success },
+                                        feedback === 'WRONG' && opt !== calculateTrueCount(runningCount, TOTAL_DECKS - decksDiscarded) && { color: colors.textTertiary }
+                                    ]}>{opt > 0 ? `+${opt}` : opt}</Text>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+                    </>
+                )}
+
+                {gameState === 'SUMMARY' && sessionSummary && (
+                    <View style={styles.summaryContainer}>
+                        <Text style={styles.summaryTitle}>
+                            {sessionSummary.isMastery ? '✓ MASTERY SESSION!' : 'SESSION COMPLETE'}
+                        </Text>
+
+                        <View style={styles.statsGrid}>
+                            <View style={styles.statItem}>
+                                <Text style={styles.statLabel}>ACCURACY</Text>
+                                <Text style={[styles.statValue, sessionSummary.isMastery && styles.masteryText]}>
+                                    {Math.round(sessionSummary.accuracy * 100)}%
+                                </Text>
+                            </View>
+                            <View style={styles.statItem}>
+                                <Text style={styles.statLabel}>SCORE</Text>
+                                <Text style={[styles.statValue, sessionSummary.isMastery && styles.masteryText]}>
+                                    {sessionSummary.correctChecks}/{sessionSummary.totalChecks}
+                                </Text>
+                            </View>
+                        </View>
+
+                        <View style={styles.progressBar}>
+                            <Text style={styles.progressLabel}>
+                                STREAK: {sessionSummary.phaseComplete ? MASTERY_REQUIREMENTS.PHASE_3.CONSECUTIVE_SESSIONS : Math.round(sessionSummary.consecutiveProgress * MASTERY_REQUIREMENTS.PHASE_3.CONSECUTIVE_SESSIONS)} / {MASTERY_REQUIREMENTS.PHASE_3.CONSECUTIVE_SESSIONS} QUALIFYING SESSIONS
+                            </Text>
+                            <View style={styles.progressBarBg}>
+                                <View
+                                    style={[
+                                        styles.progressBarFill,
+                                        { width: `${sessionSummary.phaseComplete ? 100 : sessionSummary.consecutiveProgress * 100}%` }
+                                    ]}
+                                />
+                            </View>
+                            <Text style={styles.progressHint}>
+                                {sessionSummary.phaseComplete
+                                    ? '🏆 PHASE 3 COMPLETE! PHASE 4 UNLOCKED!'
+                                    : `NEED ${MASTERY_REQUIREMENTS.PHASE_3.CONSECUTIVE_SESSIONS} SESSIONS AT ${MASTERY_REQUIREMENTS.PHASE_3.REQUIRED_ACCURACY * 100}%`
+                                }
+                            </Text>
+                        </View>
+
+                        <View style={styles.buttonRow}>
+                            <TouchableOpacity
+                                onPress={() => navigation.goBack()}
+                                style={[styles.submitBtn, styles.secondaryBtn, styles.rowBtn, { flex: 1 }]}
+                            >
+                                <Text style={[styles.submitText, styles.secondaryBtnText]}>HOME</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={startDemo} style={[styles.submitBtn, styles.rowBtn, { flex: 1 }]}>
+                                <Text style={styles.submitText}>TRY AGAIN</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-
-                    <View style={styles.divider} />
-
-                    <View style={styles.trayBox}>
-                        <DiscardTray
-                            totalDecks={TOTAL_DECKS}
-                            decksDiscarded={decksDiscarded}
-                            scale={0.8}
-                        />
-                        <Text style={styles.statLabel}>Decks Remaining: {TOTAL_DECKS - decksDiscarded}</Text>
-                    </View>
-                </View>
-
-                <Text style={styles.equation}>
-                    TC = ⌊ {runningCount} / {TOTAL_DECKS - decksDiscarded} ⌋
-                </Text>
-
-                {/* Feedback Area */}
-                <View style={styles.feedbackContainer}>
-                    {feedback === 'CORRECT' && <Text style={[styles.feedback, styles.pos]}>CORRECT</Text>}
-                    {feedback === 'WRONG' && <Text style={[styles.feedback, styles.neg]}>TRY AGAIN</Text>}
-                </View>
-
-                {/* Input Grid */}
-                <View style={styles.grid}>
-                    {options.map(opt => (
-                        <TouchableOpacity
-                            key={opt}
-                            style={styles.optionBtn}
-                            onPress={() => handleGuess(opt)}
-                        >
-                            <Text style={styles.btnText}>{opt > 0 ? `+${opt}` : opt}</Text>
-                        </TouchableOpacity>
-                    ))}
-                </View>
+                )}
             </View>
+
+            <PhaseIntroModal
+                visible={showIntro}
+                phase="phase3"
+                onStart={() => setShowIntro(false)}
+            />
         </SafeAreaView>
+
     );
 };
 
@@ -296,10 +449,126 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: colors.border,
     },
+    optionBtnCorrect: {
+        borderColor: colors.success,
+        backgroundColor: 'rgba(16, 185, 129, 0.05)',
+    },
+    optionBtnWrong: {
+        borderColor: colors.border,
+        opacity: 0.5,
+    },
     btnText: {
         fontSize: 36,
         fontWeight: '900',
         color: colors.primary,
         fontVariant: ['tabular-nums'],
+    },
+    progressHeader: {
+        marginBottom: 20,
+    },
+    progressText: {
+        color: colors.textTertiary,
+        fontSize: 10,
+        fontWeight: '900',
+        letterSpacing: 2,
+    },
+    summaryContainer: {
+        width: '100%',
+        backgroundColor: colors.surface,
+        borderRadius: 4,
+        padding: 32,
+        borderWidth: 1,
+        borderColor: colors.primary,
+        shadowColor: colors.primary,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.2,
+        shadowRadius: 20,
+        gap: 24,
+    },
+    summaryTitle: {
+        fontSize: 20,
+        color: colors.textPrimary,
+        fontWeight: '900',
+        textAlign: 'center',
+        letterSpacing: 2,
+        textTransform: 'uppercase',
+    },
+    statsGrid: {
+        flexDirection: 'row',
+        gap: 24,
+        justifyContent: 'space-between',
+    },
+    statItem: {
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: 'rgba(255, 255, 255, 0.02)',
+        paddingVertical: 16,
+        borderRadius: 2,
+        borderWidth: 1,
+        borderColor: 'rgba(255, 255, 255, 0.05)',
+    },
+    masteryText: {
+        color: colors.success,
+    },
+    progressBar: {
+        width: '100%',
+        marginVertical: 12,
+    },
+    progressLabel: {
+        fontSize: 10,
+        color: colors.textTertiary,
+        marginBottom: 12,
+        textAlign: 'center',
+        fontWeight: '800',
+        letterSpacing: 1.5,
+    },
+    progressBarBg: {
+        height: 4,
+        backgroundColor: colors.surfaceDark,
+        borderRadius: 2,
+        overflow: 'hidden',
+    },
+    progressBarFill: {
+        height: '100%',
+        backgroundColor: colors.success,
+    },
+    progressHint: {
+        fontSize: 10,
+        color: colors.textTertiary,
+        marginTop: 12,
+        textAlign: 'center',
+        fontWeight: '600',
+        lineHeight: 16,
+    },
+    buttonRow: {
+        flexDirection: 'row',
+        gap: 16,
+        marginTop: 8,
+    },
+    submitBtn: {
+        backgroundColor: colors.primary,
+        paddingVertical: 18,
+        paddingHorizontal: 48,
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: colors.primary,
+    },
+    submitText: {
+        color: '#FFFFFF',
+        fontWeight: '900',
+        fontSize: 14,
+        letterSpacing: 2,
+        textTransform: 'uppercase',
+    },
+    secondaryBtn: {
+        backgroundColor: colors.surface,
+        borderColor: colors.border,
+    },
+    secondaryBtnText: {
+        color: colors.textSecondary,
+    },
+    rowBtn: {
+        paddingHorizontal: 16,
+        alignItems: 'center',
     },
 });

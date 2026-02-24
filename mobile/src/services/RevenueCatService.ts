@@ -7,7 +7,7 @@ const API_KEYS = {
     google: process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY || "YOUR_GOOGLE_API_KEY",
 };
 
-export const ENTITLEMENT_ID = 'ProCounter'; // The exact string identifier configured in RevenueCat
+export const ENTITLEMENT_ID = 'Card Counting Blackjack Pro'; // The exact string identifier configured in RevenueCat
 
 export class RevenueCatService {
     static async init() {

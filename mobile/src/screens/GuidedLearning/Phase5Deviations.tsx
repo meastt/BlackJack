@@ -11,14 +11,8 @@ export const Phase5Deviations: React.FC<{ navigation: any }> = ({ navigation }) 
         <SafeAreaView style={styles.container}>
             <PhaseIntroModal
                 visible={showIntro}
-                onClose={() => setShowIntro(false)}
-                title="Phase 5: Deviations"
-                description="Master the Illustrious 18 - strategy deviations based on the True Count. These plays override Basic Strategy when the count is favorable."
-                objectives={[
-                    'Learn when to deviate from Basic Strategy',
-                    'Memorize the top 5 Illustrious 18 plays',
-                    'Pass 3 consecutive sessions at 90%+ accuracy',
-                ]}
+                phase="phase5"
+                onStart={() => setShowIntro(false)}
             />
 
             <DrillDeviations navigation={navigation} />

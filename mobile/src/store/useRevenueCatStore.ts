@@ -11,8 +11,12 @@ interface RevenueCatState {
     setInitialized: (status: boolean) => void;
 }
 
+// ⚠️ DEV ONLY — set to false before shipping to production
+export const DEV_UNLOCK_ALL = false;
+
 export const useRevenueCatStore = create<RevenueCatState>((set) => ({
-    isPremium: false,
+    isPremium: DEV_UNLOCK_ALL,
+
     offerings: [],
     isInitialized: false,
     setPremiumStatus: (status) => set({ isPremium: status }),
@@ -20,8 +24,10 @@ export const useRevenueCatStore = create<RevenueCatState>((set) => ({
     setInitialized: (status) => set({ isInitialized: status }),
 }));
 
-// Setup listener
-Purchases.addCustomerInfoUpdateListener((customerInfo) => {
-    const isPremium = typeof customerInfo.entitlements.active[ENTITLEMENT_ID] !== "undefined";
-    useRevenueCatStore.getState().setPremiumStatus(isPremium);
-});
+// Setup listener — skipped when DEV_UNLOCK_ALL is on
+if (!DEV_UNLOCK_ALL) {
+    Purchases.addCustomerInfoUpdateListener((customerInfo) => {
+        const isPremium = typeof customerInfo.entitlements.active[ENTITLEMENT_ID] !== "undefined";
+        useRevenueCatStore.getState().setPremiumStatus(isPremium);
+    });
+}

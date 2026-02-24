@@ -52,8 +52,8 @@ export const Phase2RunningCount: React.FC<{ navigation?: any }> = ({ navigation 
     const [userCount, setUserCount] = useState(0); // Input from user logic
 
     // UI State
-    const [gameState, setGameState] = useState<'IDLE' | 'DEALING' | 'CHECK' | 'FEEDBACK' | 'SUMMARY'>('IDLE');
-    const [checkReason, setCheckReason] = useState<'RANDOM' | 'END'>('RANDOM');
+    const [gameState, setGameState] = useState<'IDLE' | 'DEALING' | 'CHECK' | 'FEEDBACK' | 'WRONG' | 'SUMMARY'>('IDLE');
+    const checkReasonRef = useRef<'RANDOM' | 'END'>('RANDOM');
 
     // Animations
     const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -103,9 +103,9 @@ export const Phase2RunningCount: React.FC<{ navigation?: any }> = ({ navigation 
         // CHECKPOINT LOGIC
         // Ask for count every 10 cards OR at end of deck (let's do 10 for now)
         // Or specific random intervals. Let's do index 10 and 20.
-        if (nextIndex > 0 && (nextIndex % 10 === 0 || nextIndex >= 20)) { // Stop at 20 cards for this drill
+        if (nextIndex > 0 && (nextIndex % 10 === 0 || nextIndex >= 20)) {
             setGameState('CHECK');
-            setCheckReason(nextIndex >= 20 ? 'END' : 'RANDOM');
+            checkReasonRef.current = nextIndex >= 20 ? 'END' : 'RANDOM';
             return;
         }
 
@@ -140,8 +140,7 @@ export const Phase2RunningCount: React.FC<{ navigation?: any }> = ({ navigation 
         setScore(newScore);
 
         if (isCorrect) {
-            // If correct, continue or finish?
-            if (checkReason === 'END') {
+            if (checkReasonRef.current === 'END') {
                 finishSession(newScore);
             } else {
                 // Continue dealing
@@ -152,10 +151,11 @@ export const Phase2RunningCount: React.FC<{ navigation?: any }> = ({ navigation 
                 }, 1000);
             }
         } else {
-            // If wrong, GAME OVER for this drill? Or just feedback?
-            // "Strict" mode usually fails you. Let's just show feedback and stop for now.
-            finishSession(newScore); // End session on error for now? Or just let them finish?
-            // Actually, let's just finish logic for MVP.
+            // Show wrong feedback with correct count, then finish
+            setGameState('WRONG');
+            setTimeout(() => {
+                finishSession(newScore);
+            }, 1800);
         }
     };
 
@@ -240,6 +240,15 @@ export const Phase2RunningCount: React.FC<{ navigation?: any }> = ({ navigation 
                     </View>
                 )}
 
+                {gameState === 'WRONG' && (
+                    <View style={styles.checkContainer}>
+                        <Text style={[styles.checkTitle, { color: colors.error ?? '#EF4444' }]}>✗ INCORRECT</Text>
+                        <Text style={[styles.instructionText, { color: colors.textSecondary, marginTop: 12 }]}>
+                            CORRECT COUNT WAS: {runningCount}
+                        </Text>
+                    </View>
+                )}
+
                 {gameState === 'SUMMARY' && sessionSummary && (
                     <View style={styles.summaryContainer}>
                         <Text style={styles.summaryTitle}>
@@ -263,7 +272,7 @@ export const Phase2RunningCount: React.FC<{ navigation?: any }> = ({ navigation 
 
                         <View style={styles.progressBar}>
                             <Text style={styles.progressLabel}>
-                                MASTERY PROGRESS: {Math.round(sessionSummary.consecutiveProgress * 100)}%
+                                STREAK: {sessionSummary.phaseComplete ? 2 : Math.round(sessionSummary.consecutiveProgress * MASTERY_REQUIREMENTS.PHASE_2.CONSECUTIVE_SESSIONS)} / {MASTERY_REQUIREMENTS.PHASE_2.CONSECUTIVE_SESSIONS} QUALIFYING SESSIONS
                             </Text>
                             <View style={styles.progressBarBg}>
                                 <View
@@ -285,13 +294,13 @@ export const Phase2RunningCount: React.FC<{ navigation?: any }> = ({ navigation 
                             {navigation && (
                                 <TouchableOpacity
                                     onPress={() => navigation.goBack()}
-                                    style={[styles.submitBtn, styles.secondaryBtn]}
+                                    style={[styles.submitBtn, styles.secondaryBtn, styles.rowBtn, { flex: 1 }]}
                                 >
                                     <Text style={[styles.submitText, styles.secondaryBtnText]}>HOME</Text>
                                 </TouchableOpacity>
                             )}
-                            <TouchableOpacity onPress={startNewSession} style={styles.submitBtn}>
-                                <Text style={styles.submitText}>AGAIN</Text>
+                            <TouchableOpacity onPress={startNewSession} style={[styles.submitBtn, styles.rowBtn, { flex: 1 }]}>
+                                <Text style={styles.submitText}>TRY AGAIN</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -520,5 +529,9 @@ const styles = StyleSheet.create({
     },
     secondaryBtnText: {
         color: colors.textSecondary,
+    },
+    rowBtn: {
+        paddingHorizontal: 16,
+        alignItems: 'center',
     },
 });
