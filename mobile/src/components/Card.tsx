@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, useWindowDimensions } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { Card as CardType, Suit, Rank } from '@card-counter-ai/shared';
 import { colors, shadows } from '../theme/colors';
@@ -116,11 +116,26 @@ const getFaceSymbol = (rank: Rank): string => {
 };
 
 export const Card: React.FC<CardProps> = ({ card, size = 'medium', showBack = false, showCountImpact = false }) => {
-  const cardDimensions = {
-    small: { width: 70, height: 98, fontSize: 14, suitSize: 12, pipSize: 10, faceSize: 28, padding: 6 },
-    medium: { width: 110, height: 154, fontSize: 20, suitSize: 16, pipSize: 14, faceSize: 40, padding: 8 },
-    large: { width: 150, height: 210, fontSize: 28, suitSize: 20, pipSize: 18, faceSize: 56, padding: 10 },
+  const { width: screenWidth } = useWindowDimensions();
+  // Scale cards up on iPad (landscape or portrait iPad13 Pro = 1024pt+ wide)
+  const isTablet = screenWidth >= 768;
+  const scale = isTablet ? 1.65 : 1.0;
+
+  const baseDimensions = {
+    small: { width: 70, height: 98, fontSize: 14, suitSize: 12, pipSize: 24, faceSize: 28, padding: 6 },
+    medium: { width: 110, height: 154, fontSize: 20, suitSize: 16, pipSize: 36, faceSize: 40, padding: 8 },
+    large: { width: 150, height: 210, fontSize: 28, suitSize: 20, pipSize: 46, faceSize: 56, padding: 10 },
   }[size];
+
+  const cardDimensions = {
+    width: Math.round(baseDimensions.width * scale),
+    height: Math.round(baseDimensions.height * scale),
+    fontSize: Math.round(baseDimensions.fontSize * scale),
+    suitSize: Math.round(baseDimensions.suitSize * scale),
+    pipSize: Math.round(baseDimensions.pipSize * scale),
+    faceSize: Math.round(baseDimensions.faceSize * scale),
+    padding: Math.round(baseDimensions.padding * scale),
+  };
 
   const { width, height, fontSize, suitSize, pipSize, faceSize, padding } = cardDimensions;
 
