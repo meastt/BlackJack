@@ -25,7 +25,7 @@ This matrix dictates the URL structure, exact target keywords, and the specific 
 
 | Target URL / Slug | Primary Keyword | Search Intent | AEO/GEO Required Format | Status |
 | :--- | :--- | :--- | :--- | :--- |
-| `/deck-penetration-blackjack` | deck penetration | Informational / Pro | H2 question + 40-word bolded definition + Mathematical table. | ⏳ Pending |
+| `/deck-penetration-blackjack` | deck penetration | Informational / Pro | H2 question + 40-word bolded definition + Mathematical table. | ✅ Complete |
 | `/hi-lo-card-counting-system` | hi-lo system | Educational | Step-by-step numbered list + Interactive value chart (+1, 0, -1). | ⏳ Pending Expansion |
 | `/true-count-calculator` | true count conversion | Tool / Utility | Formula block + embedded JS widget + FAQ schema. | ✅ Complete |
 | `/card-counting-trainer-app` | best card counting app | Transactional | Comparison table (Protocol 21 vs. Competitors) + SoftwareApplication Schema. | ⏳ Pending |
@@ -61,7 +61,7 @@ To win rich snippets, specific schema markup must be injected into the `<head>` 
 
 ### 🎯 Pending Schema Implementations (Phase 2 Checklist)
 
-- [ ] **Reusable JSON-LD FAQ & Software Component:** Create a reusable Schema component that injects a combined `FAQPage` and `SoftwareApplication` JSON-LD block on all new content pages (specifically the ones in the Content Matrix). 
+- [x] **Reusable JSON-LD FAQ & Software Component:** Create a reusable Schema component that injects a combined `FAQPage` and `SoftwareApplication` JSON-LD block on all new content pages (specifically the ones in the Content Matrix). 
       *Example Payload:*
       ```json
       {
@@ -106,8 +106,8 @@ To win rich snippets, specific schema markup must be injected into the `<head>` 
 
 ## 🚀 Phase 2 Execution Checklist (Up Next)
 
-- [ ] Build a reusable JSON-LD schema component for React/Next.js to handle combined FAQ & SoftwareApplication injection.
-- [ ] Generate the `/deck-penetration-blackjack` pillar page using the provided prompt and GSC intent data.
+- [x] Build a reusable JSON-LD schema component for React/Next.js to handle combined FAQ & SoftwareApplication injection.
+- [x] Generate the `/deck-penetration-blackjack` pillar page using the provided prompt and GSC intent data.
 - [ ] Implement a "Sticky Download Banner" on all blog/system layouts that routes mobile traffic directly to the App Store/Play Store.
 - [ ] Expand the existing 6 System pages and 3 Drill pages to 1000+ words each using the AEO/GEO formats.
 - [x] Develop the highly-interactive HTML/JS **"True Count Converter"** widget to embed on utility pages (Massive signal for SEO rankings).

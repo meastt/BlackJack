@@ -423,3 +423,50 @@ export function DefinedTermSchema({
     />
   )
 }
+
+interface FAQSoftwareSchemaProps {
+  platform: 'iOS' | 'Android' | 'Web'
+  downloadUrl?: string
+  faqs: FAQItem[]
+  price?: string
+}
+
+export function FAQSoftwareSchema({ platform, downloadUrl, faqs, price = '4.99' }: FAQSoftwareSchemaProps) {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'SoftwareApplication',
+        name: 'Protocol 21: Card Counting Trainer',
+        operatingSystem: platform === 'Web' ? 'iOS, Android' : platform,
+        applicationCategory: 'EducationalApplication',
+        offers: {
+          '@type': 'Offer',
+          price: price,
+          priceCurrency: 'USD'
+        },
+        downloadUrl: downloadUrl || (platform === 'iOS'
+          ? 'https://apps.apple.com/app/protocol-21'
+          : 'https://play.google.com/store/apps/details?id=com.protocol21'),
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: faqs.map((item) => ({
+          '@type': 'Question',
+          name: item.question,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: item.answer,
+          },
+        })),
+      }
+    ]
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  )
+}

@@ -9,6 +9,7 @@ export {
   HowToSchema,
   CourseSchema,
   DefinedTermSchema,
+  FAQSoftwareSchema,
 } from './JsonLd'
 
 export { Breadcrumbs } from './Breadcrumbs'
