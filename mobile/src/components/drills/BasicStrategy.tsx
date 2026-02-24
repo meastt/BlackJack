@@ -871,6 +871,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderWidth: 2,
         backgroundColor: 'transparent',
+        paddingHorizontal: 2,
     },
     hitButton: {
         borderColor: colors.success,

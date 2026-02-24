@@ -537,6 +537,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: colors.border,
         backgroundColor: 'transparent',
+        paddingHorizontal: 2,
     },
     btnText: {
         color: '#FFFFFF',
