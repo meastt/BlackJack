@@ -17,7 +17,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.cardcounterai.app",
-      "buildNumber": "5",
+      "buildNumber": "10",
       "infoPlist": {
         "NSCameraUsageDescription": "Camera permission is required for future AR Card Counting drills.",
         "NSMicrophoneUsageDescription": "Microphone permission is required for distraction engine features.",
