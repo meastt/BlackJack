@@ -27,7 +27,7 @@ This matrix dictates the URL structure, exact target keywords, and the specific 
 | :--- | :--- | :--- | :--- | :--- |
 | `/deck-penetration-blackjack` | deck penetration | Informational / Pro | H2 question + 40-word bolded definition + Mathematical table. | ⏳ Pending |
 | `/hi-lo-card-counting-system` | hi-lo system | Educational | Step-by-step numbered list + Interactive value chart (+1, 0, -1). | ⏳ Pending Expansion |
-| `/true-count-calculator` | true count conversion | Tool / Utility | Formula block + embedded JS widget + FAQ schema. | ⏳ Pending |
+| `/true-count-calculator` | true count conversion | Tool / Utility | Formula block + embedded JS widget + FAQ schema. | ✅ Complete |
 | `/card-counting-trainer-app` | best card counting app | Transactional | Comparison table (Protocol 21 vs. Competitors) + SoftwareApplication Schema. | ⏳ Pending |
 | `/bankroll-management-blackjack` | blackjack bankroll | Informational | Risk of Ruin (RoR) data tables + bulleted rules. | ⏳ Pending |
 
@@ -110,4 +110,4 @@ To win rich snippets, specific schema markup must be injected into the `<head>` 
 - [ ] Generate the `/deck-penetration-blackjack` pillar page using the provided prompt and GSC intent data.
 - [ ] Implement a "Sticky Download Banner" on all blog/system layouts that routes mobile traffic directly to the App Store/Play Store.
 - [ ] Expand the existing 6 System pages and 3 Drill pages to 1000+ words each using the AEO/GEO formats.
-- [ ] Develop the highly-interactive HTML/JS **"True Count Converter"** widget to embed on utility pages (Massive signal for SEO rankings).
+- [x] Develop the highly-interactive HTML/JS **"True Count Converter"** widget to embed on utility pages (Massive signal for SEO rankings).
