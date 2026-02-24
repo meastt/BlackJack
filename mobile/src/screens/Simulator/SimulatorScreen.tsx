@@ -873,7 +873,7 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
                                 <View key={i} style={[styles.cardInHand, { zIndex: i, marginLeft: i > 0 ? -30 : 0 }]}>
                                     <CardComponent
                                         card={card}
-                                        size="small"
+                                        size="medium"
                                         showBack={(gamePhase === 'DEALING' || gamePhase === 'PLAYER_TURN') && i === 1}
                                         showCountImpact={showCountImpact && (gamePhase !== 'PLAYER_TURN' || i === 0)}
                                     />
@@ -911,7 +911,7 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
                                     <View key={i} style={[styles.cardInHand, { zIndex: i, marginLeft: i > 0 ? -30 : 0 }]}>
                                         <CardComponent
                                             card={card}
-                                            size="small"
+                                            size="medium"
                                             showCountImpact={showCountImpact}
                                         />
                                     </View>
@@ -931,7 +931,7 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
                                             <View key={i} style={[styles.cardInHand, { zIndex: i, marginLeft: i > 0 ? -30 : 0 }]}>
                                                 <CardComponent
                                                     card={card}
-                                                    size="small"
+                                                    size="medium"
                                                     showCountImpact={showCountImpact}
                                                 />
                                             </View>
@@ -1015,7 +1015,7 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
                         <View style={styles.actionRow}>
                             {BlackjackGameEngine.canSurrender(playerHand) && !isSplitHand && (
                                 <Button
-                                    title="SURRENDER"
+                                    title="SURR"
                                     variant="outline"
                                     onPress={handleSurrender}
                                     style={[styles.actionBtn, styles.surrenderBtn]}
