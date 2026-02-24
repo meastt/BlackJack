@@ -10,9 +10,58 @@
             "Most Popular",
             "Standard"
         ],
-        "seo_title": "Hi-Lo Card Counting App | Protocol 21 Blackjack Trainer",
-        "seo_desc": "Master the famous Hi-Lo card counting system. Protocol 21 provides the specific +1/-1 drills you need to learn Hi-Lo for iOS and Android.",
-        "pain_point": "keeping the running count during fast deals"
+        "seo_title": "Hi-Lo Card Counting System | Complete Training Guide",
+        "seo_desc": "Master the famous Hi-Lo card counting system with Protocol 21. The world's most popular balanced counting system, explained and trained with casino-grade drills for iOS and Android.",
+        "pain_point": "losing the running count during fast multi-hand casino deals",
+        "aeo_question": "What is the Hi-Lo card counting system?",
+        "aeo_answer": "The Hi-Lo system assigns +1 to low cards (2-6), 0 to neutral cards (7-9), and -1 to high cards (10-Ace). It is the world's most popular balanced card counting system because it is easy to learn and provides a reliable edge over the house in any multi-deck blackjack game.",
+        "card_values": [
+            {
+                "cards": "2, 3, 4, 5, 6",
+                "value": "+1",
+                "label": "Low"
+            },
+            {
+                "cards": "7, 8, 9",
+                "value": "0",
+                "label": "Neutral"
+            },
+            {
+                "cards": "10, J, Q, K, A",
+                "value": "-1",
+                "label": "High"
+            }
+        ],
+        "stats": [
+            {
+                "label": "Betting Correlation (BC)",
+                "value": "0.97"
+            },
+            {
+                "label": "Playing Efficiency (PE)",
+                "value": "0.51"
+            },
+            {
+                "label": "Insurance Correlation (IC)",
+                "value": "0.76"
+            },
+            {
+                "label": "System Level",
+                "value": "1 (Level 1)"
+            }
+        ],
+        "history": "The Hi-Lo system was developed by Stanford Wong in the 1960s and popularized by Peter Griffin's work in 'The Theory of Blackjack'. It was later refined by Edward Thorp. Today, Hi-Lo is used by the majority of professional card counters worldwide because its betting correlation of 0.97 is nearly optimal while remaining easy to execute at casino speeds.",
+        "vs_other": "Compared to more advanced systems like Omega II or Wong Halves, Hi-Lo sacrifices some playing efficiency (0.51 vs. 0.67) but eliminates the cognitive load that causes most counters to make critical mistakes under pressure. For the vast majority of advantage players, the net edge of a flawlessly executed Hi-Lo count will outperform a sloppily executed Omega II.",
+        "related_links": [
+            {
+                "href": "/true-count-calculator",
+                "label": "True Count Calculator"
+            },
+            {
+                "href": "/deck-penetration-blackjack",
+                "label": "Deck Penetration Guide"
+            }
+        ]
     },
     {
         "id": "ko",
@@ -25,9 +74,58 @@
             "No True Count",
             "Easiest"
         ],
-        "seo_title": "KO (Knock-Out) Blackjack System App & Trainer",
-        "seo_desc": "Learn the Knock-Out (KO) system without the math. Protocol 21 is the best app for unbalanced counting systems on mobile.",
-        "pain_point": "converting to true count (which KO eliminates)"
+        "seo_title": "KO Card Counting System | Knock-Out Blackjack Trainer",
+        "seo_desc": "Learn the KO (Knock-Out) card counting system — the easiest way to gain a casino edge without true count math. Protocol 21 is the best KO trainer app for iOS and Android.",
+        "pain_point": "the mental overhead of dividing a running count while talking, tipping, and betting",
+        "aeo_question": "What is the KO (Knock-Out) card counting system?",
+        "aeo_answer": "The KO system is an unbalanced counting system that assigns +1 to cards 2-7 and -1 to 10-Ace. Because it counts 7s as +1 (unlike Hi-Lo), the count does not return to zero at the end of a shoe, eliminating the need for true count conversion. This makes KO significantly easier to execute in live casino conditions.",
+        "card_values": [
+            {
+                "cards": "2, 3, 4, 5, 6, 7",
+                "value": "+1",
+                "label": "Low"
+            },
+            {
+                "cards": "8, 9",
+                "value": "0",
+                "label": "Neutral"
+            },
+            {
+                "cards": "10, J, Q, K, A",
+                "value": "-1",
+                "label": "High"
+            }
+        ],
+        "stats": [
+            {
+                "label": "Betting Correlation (BC)",
+                "value": "0.98"
+            },
+            {
+                "label": "Playing Efficiency (PE)",
+                "value": "0.55"
+            },
+            {
+                "label": "True Count Required",
+                "value": "No"
+            },
+            {
+                "label": "System Level",
+                "value": "1 (Unbalanced)"
+            }
+        ],
+        "history": "KO was developed by Olaf Vancura and Ken Fuchs and published in their 1998 book 'Knock-Out Blackjack'. Designed as a response to the complexity of true count conversion, it was specifically engineered to be used in 6 and 8 deck games where the casino advantage is hardest to overcome. Its unbalanced starting point (which changes based on the number of decks) is its primary innovation.",
+        "vs_other": "Unlike Hi-Lo, KO requires a deck-specific 'Initial Running Count' (IRC). For a 6-deck game, the IRC is -20. For a single deck, it is 0. Since the count is unbalanced, it drifts positive as the shoe progresses, naturally indicating when the deck is advantageous without any division. Counters who are comfortable with true count conversion may find Hi-Lo or Zen Count provide a higher long-run edge, but for players who want the simplest path to a positive EV, KO is the clear choice.",
+        "related_links": [
+            {
+                "href": "/how-to-count-cards",
+                "label": "How to Count Cards"
+            },
+            {
+                "href": "/systems/hi-lo-card-counting-app",
+                "label": "Compare to Hi-Lo"
+            }
+        ]
     },
     {
         "id": "omega2",
@@ -40,9 +138,73 @@
             "High Efficiency",
             "Ace Side Count"
         ],
-        "seo_title": "Omega II Card Counting Trainer | Advanced Blackjack App",
-        "seo_desc": "Practice the complex Omega II system with Protocol 21. Our advanced mode supports Level 2 values and Ace side-counts.",
-        "pain_point": "memorizing the complex Level 2 card values"
+        "seo_title": "Omega II Card Counting System | Advanced Blackjack Trainer",
+        "seo_desc": "Master the Omega II card counting system — the most accurate Level 2 system for professional blackjack. Protocol 21's advanced drills support multi-value card counting and Ace side counts.",
+        "pain_point": "memorizing the complex Level 2 values and maintaining an Ace side count simultaneously",
+        "aeo_question": "What is the Omega II card counting system?",
+        "aeo_answer": "Omega II is an advanced Level 2 balanced counting system that assigns different integer values to different card ranks. It counts 2s, 3s, and 7s as +1; 4s, 5s, and 6s as +2; 9s as -1; and 10s-Kings as -2. Aces are tracked via a separate side count, making it one of the most powerful and mathematically efficient card counting systems available.",
+        "card_values": [
+            {
+                "cards": "2, 3, 7",
+                "value": "+1",
+                "label": "Low-Mid"
+            },
+            {
+                "cards": "4, 5, 6",
+                "value": "+2",
+                "label": "Low"
+            },
+            {
+                "cards": "8",
+                "value": "0",
+                "label": "Neutral"
+            },
+            {
+                "cards": "9",
+                "value": "-1",
+                "label": "Mid-High"
+            },
+            {
+                "cards": "10, J, Q, K",
+                "value": "-2",
+                "label": "High"
+            },
+            {
+                "cards": "A (Side Count)",
+                "value": "0 (tracked separately)",
+                "label": "Ace"
+            }
+        ],
+        "stats": [
+            {
+                "label": "Betting Correlation (BC)",
+                "value": "0.92"
+            },
+            {
+                "label": "Playing Efficiency (PE)",
+                "value": "0.67"
+            },
+            {
+                "label": "Insurance Correlation (IC)",
+                "value": "0.85"
+            },
+            {
+                "label": "System Level",
+                "value": "2 (Advanced)"
+            }
+        ],
+        "history": "Omega II was developed by Bryce Carlson and published in his book 'Blackjack for Blood' (1994). Carlson specifically designed it to maximize playing efficiency while retaining a strong betting correlation — a notoriously difficult balance to achieve. Its high Playing Efficiency of 0.67 means it produces significantly better playing decisions than Hi-Lo (PE: 0.51) when using index deviations.",
+        "vs_other": "Omega II's primary advantage over Hi-Lo is its dramatically higher Playing Efficiency (0.67 vs. 0.51). This means its index plays (deviating from basic strategy based on count) are substantially more accurate. However, the cognitive burden of tracking +2 and -2 values while simultaneously maintaining an Ace side count is enormous. Most professional card counters choose Hi-Lo for its simplicity and reserve Omega II for single-deck or double-deck games where playing decisions matter more.",
+        "related_links": [
+            {
+                "href": "/systems/zen-count-blackjack-app",
+                "label": "Compare to Zen Count"
+            },
+            {
+                "href": "/systems/wong-halves-counting-app",
+                "label": "Compare to Wong Halves"
+            }
+        ]
     },
     {
         "id": "zen",
@@ -55,9 +217,73 @@
             "Old School",
             "Powerful"
         ],
-        "seo_title": "Zen Count Blackjack Trainer App",
-        "seo_desc": "The Zen Count requires precision. Use Protocol 21's custom drills to master this powerful Level 2 balanced system.",
-        "pain_point": "maintaining speed with multi-value cards"
+        "seo_title": "Zen Count Card Counting System | Intermediate Blackjack Trainer",
+        "seo_desc": "Master the Zen Count — a powerful balanced Level 2 system for serious blackjack players. Protocol 21 provides the custom multi-value drills you need to run Zen Count at casino speed.",
+        "pain_point": "maintaining speed and accuracy when tracking cards with two different positive values (+1 and +2)",
+        "aeo_question": "What is the Zen Count card counting system?",
+        "aeo_answer": "The Zen Count is a balanced Level 2 card counting system developed by Arnold Snyder. It assigns +1 to 2s and 3s, +2 to 4s, 5s, and 6s, 0 to 7s and 8s, -1 to 9s, and -2 to 10-value cards. Aces count as -1. It is more powerful than Hi-Lo but less complex than Omega II, making it a strong choice for serious intermediate players.",
+        "card_values": [
+            {
+                "cards": "2, 3",
+                "value": "+1",
+                "label": "Low"
+            },
+            {
+                "cards": "4, 5, 6",
+                "value": "+2",
+                "label": "Low+"
+            },
+            {
+                "cards": "7, 8",
+                "value": "0",
+                "label": "Neutral"
+            },
+            {
+                "cards": "9",
+                "value": "-1",
+                "label": "Mid-High"
+            },
+            {
+                "cards": "10, J, Q, K",
+                "value": "-2",
+                "label": "High"
+            },
+            {
+                "cards": "A",
+                "value": "-1",
+                "label": "High (Included)"
+            }
+        ],
+        "stats": [
+            {
+                "label": "Betting Correlation (BC)",
+                "value": "0.96"
+            },
+            {
+                "label": "Playing Efficiency (PE)",
+                "value": "0.63"
+            },
+            {
+                "label": "Insurance Correlation (IC)",
+                "value": "0.85"
+            },
+            {
+                "label": "System Level",
+                "value": "2 (Intermediate)"
+            }
+        ],
+        "history": "Developed by Arnold Snyder (author of 'Blackbelt in Blackjack'), the Zen Count was designed as a middle ground between the simplicity of Hi-Lo and the power of multi-level systems like Omega II. Snyder specifically incorporated Aces into the running count (at -1) so that players do not need a side count, unlike Omega II which tracks Aces separately and requires extra mental overhead.",
+        "vs_other": "Zen Count vs. Hi-Lo: The Zen Count's higher Playing Efficiency (0.63 vs. 0.51) produces noticeably better index decisions, especially on soft hands and late surrender plays. Zen Count vs. Omega II: Zen Count is slightly easier since Aces are built into the main count at -1, whereas Omega II demands a completely separate Ace side count. For a player who wants to step beyond Hi-Lo without reaching maximum difficulty, Zen Count is the ideal bridge system.",
+        "related_links": [
+            {
+                "href": "/systems/omega-ii-card-counting-app",
+                "label": "Compare to Omega II"
+            },
+            {
+                "href": "/systems/hi-lo-card-counting-app",
+                "label": "Start with Hi-Lo"
+            }
+        ]
     },
     {
         "id": "red7",
@@ -70,9 +296,63 @@
             "Arnold Snyder",
             "Simple"
         ],
-        "seo_title": "Red 7 Card Counting App | Learn Unbalanced Counting",
-        "seo_desc": "Learn Arnold Snyder's Red 7 system. Protocol 21 helps you practice the color-dependent starting counts unique to this system.",
-        "pain_point": "remembering the pivot points"
+        "seo_title": "Red 7 Card Counting System | Easy Unbalanced Blackjack Trainer",
+        "seo_desc": "Learn Arnold Snyder's Red 7 system — an easy unbalanced count that removes true count math. Protocol 21's color-sensitive drill mode makes Red 7 the easiest system to learn on mobile.",
+        "pain_point": "remembering which 7s count as +1 (red) and which count as 0 (black)",
+        "aeo_question": "What is the Red 7 card counting system?",
+        "aeo_answer": "Red 7 is an unbalanced card counting system developed by Arnold Snyder that assigns +1 to cards 2-6 and red 7s, 0 to black 7s, 8s, and 9s, and -1 to 10-value cards and Aces. By making red 7s count and black 7s neutral, it naturally creates an unbalanced count that eliminates true count conversion while providing a solid player edge.",
+        "card_values": [
+            {
+                "cards": "2, 3, 4, 5, 6",
+                "value": "+1",
+                "label": "Low"
+            },
+            {
+                "cards": "Red 7",
+                "value": "+1",
+                "label": "Color-Specific"
+            },
+            {
+                "cards": "Black 7, 8, 9",
+                "value": "0",
+                "label": "Neutral"
+            },
+            {
+                "cards": "10, J, Q, K, A",
+                "value": "-1",
+                "label": "High"
+            }
+        ],
+        "stats": [
+            {
+                "label": "Betting Correlation (BC)",
+                "value": "0.98"
+            },
+            {
+                "label": "Playing Efficiency (PE)",
+                "value": "0.54"
+            },
+            {
+                "label": "True Count Required",
+                "value": "No"
+            },
+            {
+                "label": "System Level",
+                "value": "1 (Unbalanced)"
+            }
+        ],
+        "history": "Red 7 was created by Arnold Snyder and published in his book 'Blackbelt in Blackjack'. Snyder designed it as a direct competitor to the KO system — both are unbalanced Level 1 systems, but Red 7 uses a color-sensitive rule for 7s rather than counting all 7s as +1. The primary goal was to create a system that beginners could master in days without sacrificing meaningful edge.",
+        "vs_other": "Red 7 vs. KO: Both are unbalanced Level 1 systems. The primary mechanical difference is that KO counts all 7s as +1, while Red 7 only counts red 7s as +1 (black 7s are 0). This means Red 7 requires the player to distinguish card color — an extra cognitive step that some beginners find harder than KO's simpler 'count all 7s the same' approach. However, Red 7 provides a slightly more nuanced betting pivot that some experienced players prefer.",
+        "related_links": [
+            {
+                "href": "/systems/ko-card-counting-app",
+                "label": "Compare to KO System"
+            },
+            {
+                "href": "/how-to-count-cards",
+                "label": "Card Counting Fundamentals"
+            }
+        ]
     },
     {
         "id": "halves",
@@ -85,8 +365,72 @@
             "Fractional",
             "Hardest"
         ],
-        "seo_title": "Wong Halves Blackjack Trainer | Expert Counting App",
-        "seo_desc": "Wong Halves is the hardest system to master. Protocol 21 is the only app that supports fractional values for expert drills.",
-        "pain_point": "calculating fractional values (.5) on the fly"
+        "seo_title": "Wong Halves Card Counting System | Expert Blackjack Trainer",
+        "seo_desc": "Master Wong Halves — the most powerful and most difficult card counting system ever developed. Protocol 21 is the only app that supports fractional half-value drills for expert-level training.",
+        "pain_point": "mentally tracking fractional +0.5 card values while maintaining a multi-level running count at casino speed",
+        "aeo_question": "What is the Wong Halves card counting system?",
+        "aeo_answer": "Wong Halves is a Level 3 balanced counting system developed by Stanford Wong. It uses fractional card values: 2s and 7s count as +0.5, 3s, 4s, and 6s as +1, 5s as +1.5, 8s as 0, 9s as -0.5, and 10-value cards and Aces as -1. This granular value system maximizes both betting and playing efficiency, making it the theoretically most powerful counting system in practical use.",
+        "card_values": [
+            {
+                "cards": "2, 7",
+                "value": "+0.5",
+                "label": "Low (Fractional)"
+            },
+            {
+                "cards": "3, 4, 6",
+                "value": "+1",
+                "label": "Low"
+            },
+            {
+                "cards": "5",
+                "value": "+1.5",
+                "label": "Strong Low"
+            },
+            {
+                "cards": "8",
+                "value": "0",
+                "label": "Neutral"
+            },
+            {
+                "cards": "9",
+                "value": "-0.5",
+                "label": "High (Fractional)"
+            },
+            {
+                "cards": "10, J, Q, K, A",
+                "value": "-1",
+                "label": "High"
+            }
+        ],
+        "stats": [
+            {
+                "label": "Betting Correlation (BC)",
+                "value": "0.99"
+            },
+            {
+                "label": "Playing Efficiency (PE)",
+                "value": "0.69"
+            },
+            {
+                "label": "Insurance Correlation (IC)",
+                "value": "0.91"
+            },
+            {
+                "label": "System Level",
+                "value": "3 (Expert)"
+            }
+        ],
+        "history": "Wong Halves was developed by Stanford Wong and published in 'Professional Blackjack' (1975). It was specifically designed to push the mathematical ceiling of counting systems. Stanford Wong hypothesized that using fractional values to more precisely represent the probabilistic impact of each card on the remaining deck's favorability would produce a demonstrably superior betting and playing edge — and the math proved him right.",
+        "vs_other": "Wong Halves achieves a near-perfect 0.99 Betting Correlation — essentially as good as any counting system can get. Its PE of 0.69 is the highest of any practical counting system. The cost is a staggeringly complex mental arithmetic process: players must seamlessly track fractional values like +0.5 and -0.5 in their running count while dealing, betting, and talking to a dealer. Most professional players use Hi-Lo exclusively and only study Wong Halves to understand the theoretical ceiling of advantage play.",
+        "related_links": [
+            {
+                "href": "/systems/omega-ii-card-counting-app",
+                "label": "Easier Alternative: Omega II"
+            },
+            {
+                "href": "/systems/zen-count-blackjack-app",
+                "label": "Start with Zen Count"
+            }
+        ]
     }
 ]

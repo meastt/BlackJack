@@ -3,21 +3,126 @@
         "drill_name": "True Count Conversion",
         "slug": "blackjack-true-count-practice",
         "target_skill": "Mental Math",
-        "seo_title": "Blackjack True Count Trainer App",
-        "pain_point": "dividing the running count by decks remaining instantly"
+        "seo_title": "True Count Conversion Drills | Blackjack Mental Math Trainer",
+        "pain_point": "dividing the running count by decks remaining instantly under casino pressure",
+        "aeo_question": "How do you practice true count conversion for blackjack?",
+        "aeo_answer": "To practice true count conversion, you must repeatedly drill the mental division of a running count by the estimated decks remaining in the shoe. The most effective method is a timed drill that forces you to calculate the result in under 2 seconds — the real-world window a card counter has before the next hand begins.",
+        "why": "Without accurate true count conversion, you will over-bet when you shouldn't and under-bet when the deck is stacked in your favor. This single skill — translating the raw running count into a per-deck-normalized figure — is responsible for more lost Expected Value (EV) than any other mistake in card counting. A running count of +8 with 4 decks remaining is only a True Count of +2. That same +8 with 1 deck remaining is a True Count of +8 — a wildly different betting scenario.",
+        "benchmark_stats": [
+            {
+                "metric": "Target Calculation Time",
+                "value": "< 2 seconds"
+            },
+            {
+                "metric": "Required Accuracy Rate",
+                "value": "100%"
+            },
+            {
+                "metric": "Recommended Deck Granularity",
+                "value": "Half-deck (0.5)"
+            },
+            {
+                "metric": "Minimum Drill Sessions Before Casino",
+                "value": "20"
+            }
+        ],
+        "howTo": [
+            "Start with easy half-deck rundowns: set a timer and drill RC ÷ Decks for combinations common in 6-deck games (RC +6 / 3 decks = TC +2, RC +4 / 2 decks = TC +2).",
+            "Move to fractions: RC +7 / 2 decks = TC +3.5. Most professionals floor this to TC +3. Practice knowing that floor instantly.",
+            "Practice deck estimation simultaneously. True count math is worthless if your deck estimate is off. Link both skills.",
+            "Use Protocol 21's dedicated True Count Drill mode which presents a running count and deck estimate, then scores your response in under 2 seconds."
+        ],
+        "tips": [
+            "Memorize common divisions: +4/2=+2, +6/3=+2, +8/4=+2. It is faster to pattern-match than to calculate.",
+            "Practice with 6-deck and 8-deck shoe configurations — the most common in modern casinos.",
+            "Time your responses ruthlessly. Slow is wrong in a casino.",
+            "Train with casino background noise enabled in Protocol 21 to simulate table pressure."
+        ],
+        "related_drill": "deck-estimation-drills",
+        "related_drill_label": "Deck Estimation Drills"
     },
     {
         "drill_name": "Deck Estimation",
         "slug": "deck-estimation-drills",
         "target_skill": "Visual Accuracy",
-        "seo_title": "Deck Penetration & Estimation Drills",
-        "pain_point": "guessing how many decks are in the discard tray"
+        "seo_title": "Deck Estimation Drills | Visual Card Counting Practice",
+        "pain_point": "accurately guessing how many decks remain in the discard tray without looking obvious",
+        "aeo_question": "How do card counters estimate the number of decks remaining in a shoe?",
+        "aeo_answer": "Card counters estimate decks remaining by visually assessing the height and density of cards in the discard tray next to the shoe. A single deck of 52 cards is approximately 0.75 inches thick. Experienced counters can accurately estimate remaining shoe depth to within 0.5 decks after 20-30 hours of dedicated visual practice.",
+        "why": "True count accuracy is directly dependent on your deck estimate. If you estimate 3 decks remaining when there are actually 2, your true count will be off by 33%, leading you to systematically under-bet your advantage. Casinos know most counters are weak at visual estimation and use it to their advantage by offering games with variable cut card depths. Developing this skill is what separates amateur counters from professionals.",
+        "benchmark_stats": [
+            {
+                "metric": "Target Estimation Accuracy",
+                "value": "±0.5 decks"
+            },
+            {
+                "metric": "One Deck Thickness",
+                "value": "~0.75 inches"
+            },
+            {
+                "metric": "8-Deck Full Shoe Height",
+                "value": "~6 inches"
+            },
+            {
+                "metric": "Professional Practice Hours",
+                "value": "30-50 hours"
+            }
+        ],
+        "howTo": [
+            "Start with the extremes: practice identifying 1 full deck vs 2 full decks in a discard tray. These are the two most common reference points.",
+            "Add half-deck increments. Can you tell 1.5 decks from 2.0 decks? This is the granularity you need in a 75% penetration game.",
+            "Account for card spread. Loosely arranged or bent cards appear to take up more space than a cleanly shuffled stack. Compensate for this.",
+            "Use Protocol 21's Deck Estimation drill which presents a simulated discard tray graphic and scores your estimate, giving instant visual feedback."
+        ],
+        "tips": [
+            "Anchor your mental model to casino-standard plastic discard trays — the cards are compressed more tightly than a home deck.",
+            "Count rounds played as a secondary estimation check. In a 6-deck shoe, 6 hands at a full table of 7 boxes = ~13 cards per round. Track rounds played to corroborate visual estimate.",
+            "Watch the dealer's hands. Dealers train to shuffle at precise cut points. Their hand position can reveal approximately how much of the shoe has been dealt.",
+            "Practice at home with a real discard tray and physical decks before relying on simulated drills."
+        ],
+        "related_drill": "blackjack-true-count-practice",
+        "related_drill_label": "True Count Conversion Drills"
     },
     {
         "drill_name": "Speed Count",
         "slug": "card-counting-speed-drills",
         "target_skill": "Reaction Time",
-        "seo_title": "Card Counting Speed Simulator",
-        "pain_point": "losing the count when the dealer speeds up"
+        "seo_title": "Card Counting Speed Drills | Casino-Speed Reaction Trainer",
+        "pain_point": "losing the running count when the dealer speeds up or multiple cards hit the table simultaneously",
+        "aeo_question": "How fast do you need to count cards to beat a casino dealer?",
+        "aeo_answer": "A casino blackjack dealer typically deals at a rate of 60-80 hands per hour, exposing each card for approximately 0.5 to 1.5 seconds. To count cards reliably in a live casino, a counter must be able to assign a Hi-Lo value to any card in under 0.5 seconds and cancel opposing values (e.g., K and 6 = 0) in a single glance without vocalizing.",
+        "why": "Speed is the most frequently overlooked dimension of card counting training. Most counters can count accurately at slow speeds; the collapse happens when the dealer accelerates or when adjacent cards must be counted simultaneously. Speed is also critical for 'pair cancellation' — a technique where a +1 and a -1 card appearing together are instantly recognized as zero, dramatically reducing mental workload per round. Over-training at artificially high speeds makes real casino speeds feel easy.",
+        "benchmark_stats": [
+            {
+                "metric": "Target Card Recognition Time",
+                "value": "< 0.5 seconds"
+            },
+            {
+                "metric": "Casino Dealer Speed Range",
+                "value": "60-80 hands/hour"
+            },
+            {
+                "metric": "Cards Per Round (Full Table)",
+                "value": "~13-16 cards"
+            },
+            {
+                "metric": "Recommended Training Speed Multiple",
+                "value": "1.5x casino speed"
+            }
+        ],
+        "howTo": [
+            "Begin at 50% casino dealing speed in Protocol 21. Do not advance until you achieve 100% accuracy at slow speed over 5 consecutive shoes.",
+            "Graduate to 75% speed. Introduce pair cancellation: train yourself to cancel K+5 to 0 in a single glance without tracking each card individually.",
+            "Activate the 'Casino Noise' setting. Counting in silence is a different cognitive task than counting with cocktail party chatter and slot machine sounds.",
+            "Push to 110-120% of real casino speed for training. When you remove that handicap and return to normal speed, the mental load drops dramatically."
+        ],
+        "tips": [
+            "Never vocalize the running count in your head. Train to keep a visual or spatial 'feel' for the count rather than a verbal recitation.",
+            "Practice pairs cancellation exclusively for 10 minutes per session — K+5, J+3, A+6. Cancellation eliminates the majority of mental calculations in a live game.",
+            "Train with casino background noise enabled in Protocol 21. The audio distraction is a real variable you cannot ignore.",
+            "After every 5-minute speed session, stop. Verify your count is still 100% accurate. Speed means nothing without accuracy."
+        ],
+        "related_drill": "deck-estimation-drills",
+        "related_drill_label": "Deck Estimation Drills"
     }
 ]
