@@ -1108,9 +1108,9 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
                                 </TouchableOpacity>
                             </View>
 
-                            <View style={styles.settingItem}>
+                            <View style={[styles.settingItem, { flexDirection: 'column', alignItems: 'flex-start', gap: 10 }]}>
                                 <Text style={styles.settingLabel}>Spot Check Interval</Text>
-                                <View style={styles.deckSelector}>
+                                <View style={[styles.deckSelector, { width: '100%' }]}>
                                     {[0, 5, 10, 20].map(i => (
                                         <TouchableOpacity
                                             key={i}
@@ -1148,12 +1148,12 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
 
                         <View style={styles.settingsGroup}>
                             <Text style={styles.groupLabel}>CASINO RULES</Text>
-                            <View style={styles.settingItem}>
+                            <View style={[styles.settingItem, { flexDirection: 'column', alignItems: 'flex-start', gap: 10 }]}>
                                 <Text style={styles.settingLabel}>
                                     Decks in Shoe
                                     {!isPremium && <Text style={{ color: colors.primary, fontSize: 10 }}> [PRO unlocks 6 & 8]</Text>}
                                 </Text>
-                                <View style={styles.deckSelector}>
+                                <View style={[styles.deckSelector, { width: '100%' }]}>
                                     {[1, 2, 6, 8].map(d => {
                                         const isLocked = !isPremium && d > 2;
                                         return (
@@ -1904,9 +1904,9 @@ const styles = StyleSheet.create({
     modalContent: {
         backgroundColor: colors.background,
         borderRadius: 4,
-        padding: 20,
+        padding: 24,
         width: '90%',
-        maxWidth: 360,
+        maxWidth: 520,
         borderWidth: 1,
         borderColor: colors.primary,
         shadowColor: colors.primary,

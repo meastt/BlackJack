@@ -122,9 +122,11 @@ export const Card: React.FC<CardProps> = ({ card, size = 'medium', showBack = fa
   const scale = isTablet ? 1.65 : 1.0;
 
   const baseDimensions = {
-    small: { width: 70, height: 98, fontSize: 14, suitSize: 12, pipSize: 24, faceSize: 28, padding: 6 },
-    medium: { width: 110, height: 154, fontSize: 20, suitSize: 16, pipSize: 36, faceSize: 40, padding: 8 },
-    large: { width: 150, height: 210, fontSize: 28, suitSize: 20, pipSize: 46, faceSize: 56, padding: 10 },
+    //                                                  pipSize = small grid pips on number cards
+    //                                                  centerSuitSize = big suit on Ace & face center
+    small: { width: 70, height: 98, fontSize: 14, suitSize: 12, pipSize: 10, centerSuitSize: 32, faceSize: 28, padding: 6 },
+    medium: { width: 110, height: 154, fontSize: 20, suitSize: 16, pipSize: 14, centerSuitSize: 52, faceSize: 44, padding: 8 },
+    large: { width: 150, height: 210, fontSize: 28, suitSize: 20, pipSize: 18, centerSuitSize: 72, faceSize: 62, padding: 10 },
   }[size];
 
   const cardDimensions = {
@@ -133,11 +135,12 @@ export const Card: React.FC<CardProps> = ({ card, size = 'medium', showBack = fa
     fontSize: Math.round(baseDimensions.fontSize * scale),
     suitSize: Math.round(baseDimensions.suitSize * scale),
     pipSize: Math.round(baseDimensions.pipSize * scale),
+    centerSuitSize: Math.round(baseDimensions.centerSuitSize * scale),
     faceSize: Math.round(baseDimensions.faceSize * scale),
     padding: Math.round(baseDimensions.padding * scale),
   };
 
-  const { width, height, fontSize, suitSize, pipSize, faceSize, padding } = cardDimensions;
+  const { width, height, fontSize, suitSize, pipSize, centerSuitSize, faceSize, padding } = cardDimensions;
 
   if (showBack) {
     return (
@@ -179,7 +182,8 @@ export const Card: React.FC<CardProps> = ({ card, size = 'medium', showBack = fa
         {/* Center content */}
         <View style={styles.centerContainer}>
           {isAce(card.rank) ? (
-            <Text style={[styles.aceSuit, { fontSize: faceSize * 1.4, color: suitColor }]}>
+            // Large bold center suit for Ace
+            <Text style={[styles.aceSuit, { fontSize: centerSuitSize, color: suitColor }]}>
               {suitSymbol}
             </Text>
           ) : isFace ? (
@@ -187,7 +191,8 @@ export const Card: React.FC<CardProps> = ({ card, size = 'medium', showBack = fa
               <Text style={[styles.faceSymbol, { fontSize: faceSize, color: suitColor, opacity: 0.8 }]}>
                 {getFaceSymbol(card.rank)}
               </Text>
-              <Text style={[styles.faceSuit, { fontSize: pipSize * 1.5, color: suitColor, opacity: 0.5 }]}>
+              {/* Large suit symbol below face letter */}
+              <Text style={[styles.faceSuit, { fontSize: centerSuitSize * 0.55, color: suitColor, opacity: 0.5 }]}>
                 {suitSymbol}
               </Text>
             </View>
