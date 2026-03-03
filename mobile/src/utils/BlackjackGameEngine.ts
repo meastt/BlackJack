@@ -31,17 +31,7 @@ export class BlackjackGameEngine {
         value += 10;
       } else {
         // Number cards: TWO through NINE
-        const numValue = {
-          [Rank.TWO]: 2,
-          [Rank.THREE]: 3,
-          [Rank.FOUR]: 4,
-          [Rank.FIVE]: 5,
-          [Rank.SIX]: 6,
-          [Rank.SEVEN]: 7,
-          [Rank.EIGHT]: 8,
-          [Rank.NINE]: 9,
-        }[card.rank];
-        value += numValue || 0;
+        value += parseInt(card.rank, 10);
       }
     }
 
@@ -83,16 +73,7 @@ export class BlackjackGameEngine {
         return 10;
       }
       if (c.rank === Rank.ACE) return 1;
-      return {
-        [Rank.TWO]: 2,
-        [Rank.THREE]: 3,
-        [Rank.FOUR]: 4,
-        [Rank.FIVE]: 5,
-        [Rank.SIX]: 6,
-        [Rank.SEVEN]: 7,
-        [Rank.EIGHT]: 8,
-        [Rank.NINE]: 9,
-      }[c.rank] || 0;
+      return parseInt(c.rank, 10) || 0;
     };
 
     return getValue(c1) === getValue(c2);
