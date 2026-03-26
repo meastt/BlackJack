@@ -5,6 +5,7 @@ import { useSimState } from '../../store/SimState';
 import { runShadowSession } from '@card-counter-ai/shared';
 import { colors } from '../../theme/colors';
 import { fontStyles } from '../../theme/typography';
+import { MetricChip } from '../metrics/MetricChip';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const CHART_HEIGHT = 200;
@@ -12,20 +13,23 @@ const CHART_WIDTH = SCREEN_WIDTH - 40;
 
 export const AnalyticsDashboard: React.FC = () => {
   const {
-    bankroll,
-    bankrollHistory,
+    edgeScore,
+    edgeHistory,
     evTracking,
+    metrics,
+    getReadinessTier,
     logicErrors,
     speedErrors
   } = useSimState();
 
-  const [simBankroll, setSimBankroll] = useState(bankroll);
+  const [simBankroll, setSimBankroll] = useState(edgeScore);
   const [ror, setRor] = useState(0);
   const [isSimulating, setIsSimulating] = useState(false);
+  const readinessTier = getReadinessTier();
 
   useEffect(() => {
-    setSimBankroll(bankroll);
-  }, [bankroll]);
+    setSimBankroll(edgeScore);
+  }, [edgeScore]);
 
   useEffect(() => {
     calculateRoR();
@@ -47,46 +51,51 @@ export const AnalyticsDashboard: React.FC = () => {
   };
 
   const chartPath = useMemo(() => {
-    if (bankrollHistory.length < 2) return '';
-    const maxVal = Math.max(...bankrollHistory, bankroll * 1.5);
-    const minVal = Math.min(...bankrollHistory, 0);
+    if (edgeHistory.length < 2) return '';
+    const maxVal = Math.max(...edgeHistory, edgeScore * 1.2);
+    const minVal = Math.min(...edgeHistory, 0);
     const range = maxVal - minVal || 1;
-    const points = bankrollHistory.map((val, index) => {
-      const x = (index / (bankrollHistory.length - 1)) * CHART_WIDTH;
+    const points = edgeHistory.map((val, index) => {
+      const x = (index / (edgeHistory.length - 1)) * CHART_WIDTH;
       const y = CHART_HEIGHT - ((val - minVal) / range) * CHART_HEIGHT;
       return `${x},${y}`;
     });
     return `M ${points.join(' L ')}`;
-  }, [bankrollHistory]);
+  }, [edgeHistory, edgeScore]);
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>ANALYTICS // PERFORMANCE</Text>
+      <Text style={styles.title}>ANALYTICS // EDGE PERFORMANCE</Text>
 
-      {/* EV Stats */}
+      {/* Edge Stats */}
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>EXPECTED VALUE TRACKING</Text>
+        <Text style={styles.cardTitle}>EDGE QUALITY TRACKING</Text>
         <View style={styles.row}>
           <View>
-            <Text style={styles.statLabel}>THEORETICAL_WIN</Text>
+            <Text style={styles.statLabel}>EDGE_CAPTURED</Text>
             <Text style={[styles.statValue, { color: colors.success }]}>
               +{evTracking.theoreticalWin.toFixed(1)} UNITS
             </Text>
           </View>
           <View>
-            <Text style={styles.statLabel}>COST_OF_MISTAKES</Text>
+            <Text style={styles.statLabel}>ERROR_COST</Text>
             <Text style={[styles.statValue, { color: colors.error }]}>
               -{evTracking.mistakesCost.toFixed(1)} UNITS
             </Text>
           </View>
         </View>
+        <View style={styles.metricsRow}>
+          <MetricChip label="TIER" value={readinessTier} />
+          <MetricChip label="INTEGRITY" value={`${metrics.countIntegrity}%`} />
+          <MetricChip label="LATENCY" value={`${metrics.decisionLatencyMs}ms`} />
+        </View>
       </View>
 
-      {/* Bankroll Chart */}
+      {/* Edge Trajectory */}
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>BANKROLL_TRAJECTORY</Text>
+        <Text style={styles.cardTitle}>EDGE_TRAJECTORY</Text>
         <View style={styles.chartContainer}>
-          {bankrollHistory.length > 1 ? (
+          {edgeHistory.length > 1 ? (
             <Svg height={CHART_HEIGHT} width={CHART_WIDTH}>
               <Line x1="0" y1={CHART_HEIGHT} x2={CHART_WIDTH} y2={CHART_HEIGHT} stroke={colors.border} strokeWidth="1" />
               <Path d={chartPath} stroke={colors.primary} strokeWidth="2" fill="none" />
@@ -95,7 +104,7 @@ export const AnalyticsDashboard: React.FC = () => {
             <Text style={styles.placeholder}>[ INSUFFICIENT DATA ]</Text>
           )}
         </View>
-        <Text style={styles.currentBankroll}>ACTIVE BANKROLL: ${bankroll}</Text>
+        <Text style={styles.currentBankroll}>ACTIVE EDGE SCORE: {edgeScore.toFixed(0)}</Text>
       </View>
 
       {/* RoR Simulator */}
@@ -104,21 +113,21 @@ export const AnalyticsDashboard: React.FC = () => {
         <Text style={[styles.rorValue, { color: ror > 0.1 ? colors.error : colors.primary }]}>
           {(ror * 100).toFixed(1)}%
         </Text>
-        <Text style={styles.rorSubtitle}>Probability of capital depletion at active play-rate</Text>
+        <Text style={styles.rorSubtitle}>Probability of edge collapse at active decision error-rate</Text>
 
         <View style={styles.divider} />
 
-        <Text style={styles.label}>WHATS_IF ANALYSIS // DENSITY</Text>
+        <Text style={styles.label}>WHAT-IF ANALYSIS // EDGE RESILIENCE</Text>
         <View style={styles.simControls}>
           <TouchableOpacity onPress={() => adjustSimBankroll(0.9)} style={styles.btn}>
             <Text style={styles.btnText}>-10%</Text>
           </TouchableOpacity>
-          <Text style={styles.simValue}>${simBankroll}</Text>
+          <Text style={styles.simValue}>{simBankroll.toFixed(0)}</Text>
           <TouchableOpacity onPress={() => adjustSimBankroll(1.1)} style={styles.btn}>
             <Text style={styles.btnText}>+10%</Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.hint}>Adjust capital to recalculate ROR variables based on simulated error rate.</Text>
+        <Text style={styles.hint}>Adjust edge capital assumptions to recalculate resilience against error drift.</Text>
       </View>
     </ScrollView>
   );
@@ -261,4 +270,11 @@ const styles = StyleSheet.create({
     lineHeight: 15,
     fontWeight: '500',
   },
+  metricsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginTop: 14,
+  },
 });
+  const readinessTier = getReadinessTier();

@@ -106,7 +106,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
 
             {renderPhaseCard(0, 'BASIC STRATEGY', 'Master the fundamental math of the game.', '🧠', 'Phase0BasicStrategy', phase0Complete)}
             {renderPhaseCard(1, 'CARD VALUES', 'Internalize Hi-Lo values for every rank.', '🃏', 'Phase1CardValues', phase1Complete)}
-            {renderPhaseCard(2, 'RUNNING COUNT', 'Maintain accuracy under simulated pressure.', '🔢', 'Phase2RunningCount', false)}
+            {renderPhaseCard(2, 'RUNNING COUNT', 'Maintain accuracy under timed training pressure.', '🔢', 'Phase2RunningCount', false)}
             {renderPhaseCard(3, 'TRUE COUNT', 'Adjust for deck density and penetration.', '➗', 'Phase3TrueCount', phase3Complete)}
             {renderPhaseCard(4, 'BETTING', 'Optimize bet sizing with Kelly Criterion.', '💰', 'Phase4Betting', phase4Complete)}
             {renderPhaseCard(5, 'DEVIATIONS', 'Master the Illustrious 18 index plays.', '🎓', 'Phase5Deviations', phase5Complete)}
@@ -124,14 +124,14 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
                 style={[styles.gridCard, styles.gridCardActive]}
                 onPress={() => {
                   Haptics.selectionAsync();
-                  navigation.navigate('Simulator');
+                  navigation.navigate('DecisionLab');
                 }}
               >
                 <View style={styles.gridCardInner}>
-                  <Text style={styles.gridIcon}>🎰</Text>
-                  <Text style={styles.gridTitle}>SIMULATOR</Text>
+                  <Text style={styles.gridIcon}>🧪</Text>
+                  <Text style={styles.gridTitle}>DECISION LAB</Text>
                   <View style={[styles.gridTag, styles.tagActive]}>
-                    <Text style={styles.gridTagText}>OPERATIONAL</Text>
+                    <Text style={styles.gridTagText}>READY</Text>
                   </View>
                 </View>
                 <View style={styles.gridGlow} />

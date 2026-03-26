@@ -1,27 +1,61 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, ActivityIndicator, Image } from 'react-native';
 import { colors } from '../theme/colors';
 import { fontStyles } from '../theme/typography';
 import { Button } from '../components/Button';
 import { useRevenueCatStore } from '../store/useRevenueCatStore';
 import { RevenueCatService } from '../services/RevenueCatService';
+import { AnalyticsService } from '../services/analyticsService';
 import { PurchasesPackage } from 'react-native-purchases';
 import { useNavigation } from '@react-navigation/native';
 import * as Haptics from 'expo-haptics';
 
 export const PaywallScreen = () => {
     const navigation = useNavigation();
-    const { offerings, isPremium } = useRevenueCatStore();
+    const { offerings, isPremium, setOfferings } = useRevenueCatStore();
     const [loading, setLoading] = useState(false);
+    const [isRefreshingOfferings, setIsRefreshingOfferings] = useState(false);
+    const [offeringsError, setOfferingsError] = useState<string | null>(null);
+    const [purchaseError, setPurchaseError] = useState<string | null>(null);
     const [selectedPackage, setSelectedPackage] = useState<PurchasesPackage | null>(null);
+
+    useEffect(() => {
+        if (offerings.length === 0) {
+            setOfferingsError('Unable to load Pro plans right now. Check your connection and retry.');
+            AnalyticsService.trackEvent('paywall_error_shown', { error_type: 'empty_offerings' });
+        } else {
+            setOfferingsError(null);
+            setPurchaseError(null);
+        }
+    }, [offerings.length]);
+
+    const withTimeout = async <T,>(promise: Promise<T>, timeoutMs = 15000): Promise<T> => {
+        let timeoutId: ReturnType<typeof setTimeout>;
+        const timeoutPromise = new Promise<never>((_, reject) => {
+            timeoutId = setTimeout(() => reject(new Error('Request timed out')), timeoutMs);
+        });
+        try {
+            return await Promise.race([promise, timeoutPromise]);
+        } finally {
+            clearTimeout(timeoutId!);
+        }
+    };
 
     const handlePurchase = async () => {
         if (!selectedPackage) return;
 
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
         setLoading(true);
+        setPurchaseError(null);
 
-        const success = await RevenueCatService.purchasePackage(selectedPackage);
+        let success = false;
+        try {
+            success = await withTimeout(RevenueCatService.purchasePackage(selectedPackage));
+        } catch (error) {
+            success = false;
+            setPurchaseError('Purchase request timed out. Please retry or continue with free training.');
+            AnalyticsService.trackEvent('paywall_error_shown', { error_type: 'purchase_timeout' });
+        }
 
         setLoading(false);
 
@@ -30,12 +64,23 @@ export const PaywallScreen = () => {
             navigation.goBack(); // Return to previous screen after successful purchase
         } else {
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+            if (!purchaseError) {
+                setPurchaseError('Unable to complete purchase right now. Please retry.');
+                AnalyticsService.trackEvent('paywall_error_shown', { error_type: 'purchase_failed' });
+            }
         }
     };
 
     const handleRestore = async () => {
         setLoading(true);
-        const success = await RevenueCatService.restorePurchases();
+        setPurchaseError(null);
+        let success = false;
+        try {
+            success = await withTimeout(RevenueCatService.restorePurchases());
+        } catch (error) {
+            setPurchaseError('Restore request timed out. Please retry.');
+            AnalyticsService.trackEvent('paywall_error_shown', { error_type: 'restore_timeout' });
+        }
         setLoading(false);
 
         if (success) {
@@ -43,6 +88,10 @@ export const PaywallScreen = () => {
             navigation.goBack();
         } else {
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+            if (!purchaseError) {
+                setPurchaseError('No purchases restored yet. Please retry or continue with free training.');
+                AnalyticsService.trackEvent('paywall_error_shown', { error_type: 'restore_failed' });
+            }
         }
     };
 
@@ -88,6 +137,13 @@ export const PaywallScreen = () => {
         }
     };
 
+    const handleRetryOfferings = async () => {
+        setIsRefreshingOfferings(true);
+        const refreshedOfferings = await RevenueCatService.getOfferings();
+        setOfferings(refreshedOfferings);
+        setIsRefreshingOfferings(false);
+    };
+
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
@@ -100,8 +156,8 @@ export const PaywallScreen = () => {
                 <View style={styles.benefitsContainer}>
                     <BenefitItem icon="🔓" text="Unlock Phases 1-5 (Running Count, True Count, Deviations)" />
                     <BenefitItem icon="⚡️" text="Specialized Drills (Speed, Deck Countdown, Discards)" />
-                    <BenefitItem icon="🎰" text="Chaos Mode Simulator (6-8 Decks, Heat Meter, Distractions)" />
-                    <BenefitItem icon="📊" text="Advanced Analytics & Ev Tracking" />
+                    <BenefitItem icon="🧪" text="Decision Lab scenarios with adaptive training pressure" />
+                    <BenefitItem icon="📊" text="Advanced analytics, edge tracking, and error-cost metrics" />
                     <BenefitItem icon="✈️" text="Full offline capability for practice anywhere" />
                 </View>
 
@@ -142,17 +198,42 @@ export const PaywallScreen = () => {
                     })}
 
                     {displayPackages.length === 0 && (
-                        <ActivityIndicator size="large" color={colors.primary} style={{ marginVertical: 40 }} />
+                        <View style={styles.emptyOfferingsState}>
+                            {isRefreshingOfferings ? (
+                                <ActivityIndicator size="large" color={colors.primary} style={{ marginBottom: 16 }} />
+                            ) : (
+                                <Text style={styles.emptyOfferingsTitle}>Plans unavailable</Text>
+                            )}
+                            <Text style={styles.emptyOfferingsText}>
+                                {offeringsError ?? 'No plans are available at the moment.'}
+                            </Text>
+                            <Button
+                                title={isRefreshingOfferings ? 'Retrying...' : 'Retry loading plans'}
+                                onPress={handleRetryOfferings}
+                                variant="outline"
+                                disabled={isRefreshingOfferings}
+                                style={styles.retryButton}
+                            />
+                            <TouchableOpacity onPress={() => navigation.goBack()} disabled={isRefreshingOfferings}>
+                                <Text style={styles.continueFreeText}>Continue with free training</Text>
+                            </TouchableOpacity>
+                        </View>
                     )}
                 </View>
 
                 <View style={styles.footer}>
+                    {purchaseError && (
+                        <View style={styles.transactionErrorBox}>
+                            <Text style={styles.transactionErrorText}>{purchaseError}</Text>
+                        </View>
+                    )}
+
                     <Button
                         title={loading ? "Processing..." : "UNLOCK NOW"}
                         onPress={handlePurchase}
                         variant="accent"
                         size="large"
-                        disabled={!selectedPackage || loading}
+                        disabled={!selectedPackage || loading || displayPackages.length === 0}
                         style={styles.purchaseButton}
                     />
 
@@ -162,6 +243,10 @@ export const PaywallScreen = () => {
 
                     <TouchableOpacity onPress={() => navigation.goBack()} style={styles.cancelLink} disabled={loading}>
                         <Text style={styles.cancelText}>Cancel</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.continueFreeLink} disabled={loading}>
+                        <Text style={styles.continueFreeText}>Continue with free training</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>
@@ -303,8 +388,54 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: colors.textTertiary,
     },
+    emptyOfferingsState: {
+        marginVertical: 10,
+        padding: 16,
+        borderWidth: 1,
+        borderColor: colors.border,
+        borderRadius: 4,
+        backgroundColor: colors.surface,
+        alignItems: 'center',
+    },
+    emptyOfferingsTitle: {
+        color: colors.error,
+        fontSize: 14,
+        fontWeight: '800',
+        marginBottom: 10,
+        letterSpacing: 0.5,
+    },
+    emptyOfferingsText: {
+        color: colors.textSecondary,
+        textAlign: 'center',
+        fontSize: 13,
+        lineHeight: 18,
+        marginBottom: 14,
+    },
+    retryButton: {
+        width: '100%',
+        marginBottom: 12,
+    },
+    continueFreeText: {
+        color: colors.textSecondary,
+        fontSize: 13,
+        textDecorationLine: 'underline',
+    },
     footer: {
         alignItems: 'center',
+    },
+    transactionErrorBox: {
+        width: '100%',
+        borderWidth: 1,
+        borderColor: colors.error,
+        backgroundColor: 'rgba(239, 68, 68, 0.08)',
+        borderRadius: 4,
+        padding: 10,
+        marginBottom: 12,
+    },
+    transactionErrorText: {
+        color: colors.textPrimary,
+        fontSize: 12,
+        lineHeight: 18,
     },
     purchaseButton: {
         width: '100%',
@@ -325,5 +456,9 @@ const styles = StyleSheet.create({
     cancelText: {
         color: colors.textTertiary,
         fontSize: 14,
+    },
+    continueFreeLink: {
+        paddingTop: 8,
+        paddingBottom: 16,
     }
 });

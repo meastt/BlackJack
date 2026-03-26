@@ -12,10 +12,12 @@ import { Phase3TrueCount } from '../screens/GuidedLearning/Phase3TrueCount';
 import { Phase4Betting } from '../screens/GuidedLearning/Phase4Betting';
 import { Phase5Deviations } from '../screens/GuidedLearning/Phase5Deviations';
 import { SimulatorScreen } from '../screens/Simulator/SimulatorScreen';
+import { DecisionLabScreen } from '../screens/DecisionLab/DecisionLabScreen';
 import { AnalyticsDashboard } from '../components/analytics/AnalyticsDashboard';
 import { ProfileScreen } from '../screens/ProfileScreen';
 import { PaywallScreen } from '../screens/PaywallScreen';
 import { colors } from '../theme/colors';
+import { trainingModeEnabled } from '../config/featureFlags';
 
 const Stack = createStackNavigator();
 
@@ -105,11 +107,22 @@ export const AppNavigator = () => {
                     headerShown: false,
                 }}
             />
+            {!trainingModeEnabled && (
+                <Stack.Screen
+                    name="Simulator"
+                    component={SimulatorScreen}
+                    options={{
+                        title: 'Casino Simulator',
+                        headerTitleAlign: 'center',
+                        headerShown: false,
+                    }}
+                />
+            )}
             <Stack.Screen
-                name="Simulator"
-                component={SimulatorScreen}
+                name="DecisionLab"
+                component={DecisionLabScreen}
                 options={{
-                    title: 'Casino Simulator',
+                    title: 'Decision Lab',
                     headerTitleAlign: 'center',
                     headerShown: false,
                 }}

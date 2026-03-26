@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DEV_UNLOCK_ALL } from './useRevenueCatStore';
+import { AnalyticsService } from '../services/analyticsService';
 
 // Session result for tracking mastery
 interface SessionResult {
@@ -253,6 +254,7 @@ export const useProgressStore = create<ProgressState>()(
             }),
 
             completePhase: (phase) => set((state) => {
+                AnalyticsService.trackEvent('phase_completed', { phase });
                 const key = `phase${phase}Complete` as keyof ProgressState;
                 return { ...state, [key]: true };
             }),

@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { EdgeSessionSummary, ScenarioResult, getReadinessTier } from '../types/trainingMetrics';
+import { AnalyticsService } from '../services/analyticsService';
 
 interface SimState {
   // State variables
@@ -15,6 +17,17 @@ interface SimState {
     theoreticalWin: number; // Total EV gained from correct plays
     mistakesCost: number; // EV lost from mistakes
   };
+  edgeScore: number;
+  edgeHistory: number[];
+  metrics: {
+    evCaptured: number;
+    mistakeCost: number;
+    decisionLatencyMs: number;
+    countIntegrity: number;
+  };
+  scenarioResults: ScenarioResult[];
+  lastSessionSummary: EdgeSessionSummary | null;
+  performanceStreak: number;
   bankrollHistory: number[];
   accuracyHistory: { correct: boolean, timestamp: number }[];
   isProMode?: boolean;
@@ -40,6 +53,9 @@ interface SimState {
   trackEV: (isCorrect: boolean, type: 'INSURANCE' | 'DEVIATION' | 'BASIC') => void;
   validateBet: (amount: number) => void;
   updateBankroll: (delta: number) => void;
+  recordScenarioResult: (result: ScenarioResult) => void;
+  finalizeEdgeSession: (startedAt: number) => EdgeSessionSummary;
+  getReadinessTier: () => ReturnType<typeof getReadinessTier>;
   checkCount: (userRc: number, userTc: number, actualTc: number) => { isCorrectRc: boolean; isCorrectTc: boolean };
   resetSimState: () => void;
 
@@ -64,6 +80,17 @@ export const useSimState = create<SimState>()(
       logicErrors: 0,
       speedErrors: 0,
       evTracking: { theoreticalWin: 0, mistakesCost: 0 },
+      edgeScore: 500,
+      edgeHistory: [500],
+      metrics: {
+        evCaptured: 0,
+        mistakeCost: 0,
+        decisionLatencyMs: 0,
+        countIntegrity: 100,
+      },
+      scenarioResults: [],
+      lastSessionSummary: null,
+      performanceStreak: 0,
       bankrollHistory: [1000],
       accuracyHistory: [],
 
@@ -137,6 +164,77 @@ export const useSimState = create<SimState>()(
         };
       }),
 
+      recordScenarioResult: (result) => set((state) => {
+        const isPerfectScenario = result.correctCount && result.correctDecision && result.correctSizing;
+        const currentStreak = isPerfectScenario ? state.performanceStreak + 1 : 0;
+        const streakDecay = isPerfectScenario ? 0 : Math.min(20, state.performanceStreak * 2);
+
+        const outcomeScore =
+          (result.correctCount ? 12 : -8) +
+          (result.correctDecision ? 15 : -12) +
+          (result.correctSizing ? 10 : -9);
+
+        const evContribution = (result.evDelta * 6) - (result.mistakePenalty * 7);
+        const latencyPenalty = Math.min(6, Math.floor(result.decisionLatencyMs / 1800));
+        const delta = outcomeScore + evContribution - latencyPenalty - streakDecay;
+
+        const nextEdgeScore = Math.max(0, Math.min(1000, state.edgeScore + delta));
+        const totalScenarios = state.scenarioResults.length + 1;
+        const nextCountIntegrity = Math.round(
+          ((state.metrics.countIntegrity * state.scenarioResults.length) + (result.correctCount ? 100 : 0)) / totalScenarios
+        );
+        const nextDecisionLatency = Math.round(
+          ((state.metrics.decisionLatencyMs * state.scenarioResults.length) + result.decisionLatencyMs) / totalScenarios
+        );
+
+        return {
+          edgeScore: nextEdgeScore,
+          edgeHistory: [...state.edgeHistory, nextEdgeScore],
+          metrics: {
+            evCaptured: state.metrics.evCaptured + Math.max(0, result.evDelta),
+            mistakeCost: state.metrics.mistakeCost + result.mistakePenalty,
+            decisionLatencyMs: nextDecisionLatency,
+            countIntegrity: nextCountIntegrity,
+          },
+          scenarioResults: [...state.scenarioResults, result],
+          performanceStreak: currentStreak,
+        };
+      }),
+
+      finalizeEdgeSession: (startedAt) => {
+        const state = get();
+        const completedAt = Date.now();
+        const scenariosCompleted = state.scenarioResults.length;
+        const edgeScoreStart = state.edgeHistory[0] ?? state.edgeScore;
+        const edgeScoreEnd = state.edgeScore;
+        const edgeScoreDelta = edgeScoreEnd - edgeScoreStart;
+        const countIntegrity = state.metrics.countIntegrity;
+        const decisionLatencyMsAvg = state.metrics.decisionLatencyMs;
+        const readinessTier = getReadinessTier(edgeScoreEnd);
+
+        const summary: EdgeSessionSummary = {
+          startedAt,
+          completedAt,
+          scenariosCompleted,
+          edgeScoreStart,
+          edgeScoreEnd,
+          edgeScoreDelta,
+          evCaptured: state.metrics.evCaptured,
+          mistakeCost: state.metrics.mistakeCost,
+          countIntegrity,
+          decisionLatencyMsAvg,
+          readinessTier,
+        };
+
+        set({ lastSessionSummary: summary });
+        return summary;
+      },
+
+      getReadinessTier: () => {
+        const { edgeScore } = get();
+        return getReadinessTier(edgeScore);
+      },
+
       checkCount: (userRc, userTc, actualTc) => {
         const state = get();
         const isCorrectRc = userRc === state.runningCount;
@@ -166,6 +264,17 @@ export const useSimState = create<SimState>()(
         logicErrors: 0,
         speedErrors: 0,
         evTracking: { theoreticalWin: 0, mistakesCost: 0 },
+        edgeScore: 500,
+        edgeHistory: [500],
+        metrics: {
+          evCaptured: 0,
+          mistakeCost: 0,
+          decisionLatencyMs: 0,
+          countIntegrity: 100,
+        },
+        scenarioResults: [],
+        lastSessionSummary: null,
+        performanceStreak: 0,
         bankrollHistory: [1000],
         accuracyHistory: [],
       }),
@@ -210,6 +319,7 @@ export const useSimState = create<SimState>()(
         if (s.shoesCompleted >= 2 && countAccuracy === 1 && decisionAccuracy > 0.98 && heatSafe) {
           success = true;
           set({ certificationStatus: 'PRO', challengeStats: { ...s, isActive: false } as any });
+          AnalyticsService.trackEvent('certification_attempt', { success: true });
         } else {
           success = false;
           // Determine Rubric Feedback
@@ -229,6 +339,7 @@ export const useSimState = create<SimState>()(
           }
 
           set({ challengeStats: { ...s, isActive: false } as any });
+          AnalyticsService.trackEvent('certification_attempt', { success: false, failReason });
         }
 
         return { success, rubric: { failReason, improvementTip } };
@@ -281,7 +392,34 @@ export const useSimState = create<SimState>()(
     }),
     {
       name: 'sim-storage',
+      version: 2,
       storage: createJSONStorage(() => AsyncStorage),
+      migrate: (persistedState: any, version) => {
+        if (!persistedState) return persistedState;
+
+        // v1 -> v2: map legacy bankroll-centric progression into edge-centric defaults.
+        if (version < 2) {
+          const bankroll = typeof persistedState.bankroll === 'number' ? persistedState.bankroll : 1000;
+          const normalizedEdgeScore = Math.max(0, Math.min(1000, Math.round((bankroll / 2000) * 1000)));
+
+          return {
+            ...persistedState,
+            edgeScore: persistedState.edgeScore ?? normalizedEdgeScore,
+            edgeHistory: persistedState.edgeHistory ?? [normalizedEdgeScore],
+            metrics: persistedState.metrics ?? {
+              evCaptured: persistedState.evTracking?.theoreticalWin ?? 0,
+              mistakeCost: persistedState.evTracking?.mistakesCost ?? 0,
+              decisionLatencyMs: 0,
+              countIntegrity: 100,
+            },
+            scenarioResults: persistedState.scenarioResults ?? [],
+            lastSessionSummary: persistedState.lastSessionSummary ?? null,
+            performanceStreak: persistedState.performanceStreak ?? 0,
+          };
+        }
+
+        return persistedState;
+      },
       // Optional: ignore properties that shouldn't persist
       // partialize: (state) => ({ bankroll: state.bankroll, ... }) 
     }
