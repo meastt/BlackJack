@@ -99,6 +99,19 @@ export function ProfileScreen() {
                     })}
                 </View>
             </View>
+
+            <View style={styles.section}>
+                <Text style={styles.sectionTitle}>TRAINING NOTICE</Text>
+                <View style={styles.disclaimerCard}>
+                    <Text style={styles.disclaimerText}>
+                        Card Counter AI is an educational skill-training app focused on count accuracy,
+                        decision quality, and advantage-play readiness.
+                    </Text>
+                    <Text style={styles.disclaimerText}>
+                        This app does not provide real-money gambling, betting services, or simulated wagering operations.
+                    </Text>
+                </View>
+            </View>
         </ScrollView>
     );
 }
@@ -314,5 +327,18 @@ const styles = StyleSheet.create({
         color: THEME.colors.textSecondary,
         fontSize: 11,
         textAlign: 'center',
+    },
+    disclaimerCard: {
+        backgroundColor: THEME.colors.surface,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: THEME.colors.border,
+        padding: 14,
+        gap: 10,
+    },
+    disclaimerText: {
+        color: THEME.colors.textSecondary,
+        fontSize: 12,
+        lineHeight: 18,
     },
 });

@@ -48,9 +48,9 @@ const PHASE_CONTENT = {
         title: 'Bet Sizing',
         subtitle: 'Kelly Criterion in Action',
         icon: '💰',
-        what: 'Increase your bet size proportionally to the True Count.',
-        why: 'When the odds shift in your favor, you must bet more to capitalize. Basic strategy minimizes losses, but bet sizing creates your profit.',
-        outcome: 'You will automatically and correctly size your wagers relative to your bankroll and the true count.',
+        what: 'Select the correct stake band based on True Count and risk tolerance.',
+        why: 'When edge quality improves, sizing discipline determines long-term performance. Basic strategy reduces errors, and sizing controls growth stability.',
+        outcome: 'You will consistently choose training-appropriate stake bands relative to count quality and session goals.',
     },
     phase5: {
         title: 'Playing Deviations',
