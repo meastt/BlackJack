@@ -22,9 +22,8 @@ export class ApiService {
       console.error('Failed to get coach advice:', error);
       // Return fallback response
       return {
-        advice: 'Unable to get coaching advice at this time. Please try again later.',
-        confidence: 0,
-        reasoning: 'Service temporarily unavailable',
+        message: 'Unable to get coaching advice at this time. Please try again later.',
+        timestamp: new Date(),
       };
     }
   }
@@ -41,9 +40,8 @@ export class ApiService {
     } catch (error) {
       console.error('Failed to analyze session:', error);
       return {
-        advice: 'Session analysis unavailable. Continue practicing!',
-        confidence: 0,
-        reasoning: 'Analysis service temporarily unavailable',
+        message: 'Session analysis unavailable. Continue practicing!',
+        timestamp: new Date(),
       };
     }
   }
@@ -64,7 +62,7 @@ export class ApiService {
           countingAccuracy: 0,
           basicStrategyAccuracy: 0,
           sessions: [],
-        } as UserStats;
+        } as unknown as UserStats;
       }
       return stats;
     } catch (error) {
@@ -77,7 +75,7 @@ export class ApiService {
         countingAccuracy: 0,
         basicStrategyAccuracy: 0,
         sessions: [],
-      } as UserStats;
+      } as unknown as UserStats;
     }
   }
 

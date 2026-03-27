@@ -199,7 +199,7 @@ export const Deviations: React.FC = () => {
       // Logic: If deviation.trigger is positive, we need TC >= trigger.
       // If trigger is negative (e.g. <= -2), logic might differ, but usually "Index" means >=.
       if (trueCountGroundTruth >= deviation.trigger) {
-        correctAction = deviation.action;
+        correctAction = deviation.action as Action;
         isDeviationRequired = true;
       }
     }

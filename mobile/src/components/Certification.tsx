@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, Modal, Image } from 'react-native';
-import { useSimState } from '../../store/SimState';
-import { colors } from '../../theme/colors';
-import { fontStyles } from '../../theme/typography';
+import { useSimState } from '../store/SimState';
+import { colors } from '../theme/colors';
+import { fontStyles } from '../theme/typography';
 import { AnalyticsDashboard } from './analytics/AnalyticsDashboard';
 
 export const Certification: React.FC = () => {
@@ -75,11 +75,11 @@ export const Certification: React.FC = () => {
                     • No Heat Spikes ({'>'}80%)
                 </Text>
 
-                {challengeStats.isActive ? (
+                {challengeStats?.isActive ? (
                     <View style={styles.activeStats}>
-                        <Text style={styles.stat}>Shoes: {challengeStats.shoesCompleted}/2</Text>
-                        <Text style={styles.stat}>Hands: {challengeStats.totalHands}</Text>
-                        <Text style={styles.stat}>Errors: {challengeStats.decisionErrors}</Text>
+                        <Text style={styles.stat}>Shoes: {challengeStats?.shoesCompleted}/2</Text>
+                        <Text style={styles.stat}>Hands: {challengeStats?.totalHands}</Text>
+                        <Text style={styles.stat}>Errors: {challengeStats?.decisionErrors}</Text>
                         <TouchableOpacity style={styles.finishBtn} onPress={handleFinish}>
                             <Text style={styles.btnText}>Finish / Claim</Text>
                         </TouchableOpacity>

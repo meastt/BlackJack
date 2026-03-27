@@ -277,4 +277,3 @@ const styles = StyleSheet.create({
     marginTop: 14,
   },
 });
-  const readinessTier = getReadinessTier();

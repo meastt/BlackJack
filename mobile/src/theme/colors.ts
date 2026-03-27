@@ -47,6 +47,14 @@ export const colors = {
   glassBorder: 'rgba(255, 255, 255, 0.1)',
   overlay: 'rgba(5, 5, 5, 0.85)', // Deep Void Overlay
   disabled: 'rgba(255, 255, 255, 0.1)',
+
+  // Aliases (used by drill components)
+  accentGreen: '#10b981',       // = accentEmerald
+  accentRed: '#f43f5e',         // = accentRose
+  accentBlue: '#3b82f6',        // = info
+  incorrect: '#ef4444',         // = error
+  text: '#FFFFFF',              // = textPrimary
+  textMuted: '#9ca3af',         // = textSecondary
 };
 
 export const gradients = {
