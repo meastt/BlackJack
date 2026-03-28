@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import SimulatorContainer from '@/components/simulator/SimulatorContainer';
 
 export const metadata: Metadata = {
-  title: 'Free Blackjack Simulator - Practice Card Counting Online | Protocol 21',
+  title: 'Free Blackjack Simulator - Practice Card Counting Online | Card Counting Protocol 21',
   description: 'Play blackjack online with our free simulator. Practice card counting with $10K bankroll, adjustable training wheels, and real-time count feedback. Choose your difficulty.',
   keywords: [
     'blackjack simulator',
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     'counting simulator',
   ],
   openGraph: {
-    title: 'Free Blackjack Simulator - Protocol 21',
+    title: 'Free Blackjack Simulator - Card Counting Protocol 21',
     description: 'Practice blackjack and card counting with adjustable training wheels. Start with $10K and customize your experience.',
     type: 'website',
   },
@@ -31,7 +31,7 @@ export default function SimulatorPage() {
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'SoftwareApplication',
-            name: 'Protocol 21 Card Counting Simulator',
+            name: 'Card Counting Protocol 21 — Online Simulator',
             applicationCategory: 'GameApplication',
             offers: {
               '@type': 'Offer',

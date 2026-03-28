@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Terms of Service | Protocol 21",
-  description: "Terms of Service for Protocol 21, the blackjack card counting trainer app for iOS and Android.",
+  title: "Terms of Service | Card Counting Protocol 21",
+  description: "Terms of Service for Card Counting Protocol 21, the blackjack card counting trainer app for iOS and Android.",
 };
 
 export default function TermsOfService() {
@@ -24,7 +24,7 @@ export default function TermsOfService() {
           <section>
             <h2 className="text-2xl font-bold mb-6 text-white">1. Acceptance of Terms</h2>
             <p className="text-body">
-              By downloading, installing, or using Protocol 21 (&quot;the App&quot;), you agree to be bound
+              By downloading, installing, or using Card Counting Protocol 21 (&quot;the App&quot;), you agree to be bound
               by these Terms of Service. If you do not agree to these terms, please do not use the App.
             </p>
           </section>
@@ -32,7 +32,7 @@ export default function TermsOfService() {
           <section>
             <h2 className="text-2xl font-bold mb-6 text-white">2. Description of Service</h2>
             <p className="text-body">
-              Protocol 21 is an educational application designed to help users learn and practice
+              Card Counting Protocol 21 is an educational application designed to help users learn and practice
               card counting techniques for blackjack. The App provides training drills, simulations,
               and educational content about various card counting systems.
             </p>
@@ -52,7 +52,7 @@ export default function TermsOfService() {
           <section>
             <h2 className="text-2xl font-bold mb-6 text-white">4. Free Service</h2>
             <p className="text-body">
-              Protocol 21 is currently offered free of charge. We reserve the right to introduce
+              Card Counting Protocol 21 is currently offered free of charge. We reserve the right to introduce
               premium features or modify the pricing structure in the future, with appropriate notice
               to users.
             </p>
@@ -62,7 +62,7 @@ export default function TermsOfService() {
             <h2 className="text-2xl font-bold mb-6 text-white">5. Intellectual Property</h2>
             <p className="text-body">
               All content, features, and functionality of the App (including but not limited to text,
-              graphics, logos, and software) are owned by Protocol 21 and are protected by copyright,
+              graphics, logos, and software) are owned by Card Counting Protocol 21 and are protected by copyright,
               trademark, and other intellectual property laws.
             </p>
           </section>
@@ -80,7 +80,7 @@ export default function TermsOfService() {
           <section>
             <h2 className="text-2xl font-bold mb-6 text-white">7. Limitation of Liability</h2>
             <p className="text-body">
-              To the fullest extent permitted by law, Protocol 21 shall not be liable for any
+              To the fullest extent permitted by law, Card Counting Protocol 21 shall not be liable for any
               indirect, incidental, special, consequential, or punitive damages, including but not
               limited to loss of profits, data, or other intangible losses, resulting from your use
               or inability to use the App, or any gambling activities you may engage in.
@@ -119,7 +119,7 @@ export default function TermsOfService() {
       <footer className="footer">
         <div className="container">
           <p className="footer-brand mb-2">
-            &copy; {new Date().getFullYear()} Protocol 21. All rights reserved.
+            &copy; {new Date().getFullYear()} Card Counting Protocol 21. All rights reserved.
           </p>
           <p className="footer-brand">
             Built by fellow degens in the desert at{" "}

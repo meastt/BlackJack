@@ -1,6 +1,6 @@
-# Card Counter AI - Progressive Mastery System
+# Card Counting Protocol 21 - Progressive Mastery System
 
-**Card Counter AI** is a professional-grade training simulator designed to transition users from "Basic Strategy" to "Advantage Play" (Card Counting) by automating cognitive load. It uses a "Muscle Memory" approach to build specific skills in isolation before combining them in a chaotic casino simulator.
+**Card Counting Protocol 21** is a professional-grade training simulator designed to transition users from "Basic Strategy" to "Advantage Play" (Card Counting) by automating cognitive load. It uses a "Muscle Memory" approach to build specific skills in isolation before combining them in a chaotic casino simulator.
 
 ## 🚀 Features
 
@@ -48,6 +48,63 @@ Putting it all together in a realistic environment.
     ```bash
     npm test
     ```
+
+---
+
+## 📱 App Store Connect (iOS) — EAS CLI
+
+Production iOS builds and uploads use [Expo Application Services (EAS)](https://docs.expo.dev/eas/). Run these from the **`mobile`** directory (where `eas.json` and `app.json` live).
+
+**Prerequisites**
+
+- [EAS CLI](https://docs.expo.dev/build/setup/): `npm install -g eas-cli` (or use `npx eas-cli` below instead of `eas`).
+- Logged in: `eas login`
+- Apple Developer Program membership; for submit, App Store Connect API key or Apple ID with appropriate access (EAS will prompt or use configured credentials).
+
+**Build only** (creates an `.ipa` on Expo’s servers; does not upload to App Store Connect):
+
+```bash
+cd mobile
+eas build --platform ios --profile production
+```
+
+Equivalent npm script:
+
+```bash
+cd mobile
+npm run build:ios
+```
+
+**Submit only** (uploads an existing build to App Store Connect — use after the build finishes and when you are ready to release):
+
+```bash
+cd mobile
+eas submit --platform ios --profile production
+```
+
+To pick a specific build interactively, omit flags and follow the prompts. To submit the latest successful iOS production build non-interactively:
+
+```bash
+cd mobile
+eas submit --platform ios --profile production --latest
+```
+
+Equivalent npm script (submit only):
+
+```bash
+cd mobile
+npm run submit:ios
+```
+
+**Build and auto-submit in one command** (only when you want upload immediately):
+
+```bash
+cd mobile
+eas build --platform ios --profile production --auto-submit
+# or: npm run build:ios:submit
+```
+
+The `production` profile in `mobile/eas.json` is wired for iOS submit with the configured App Store Connect app id. It uses `appVersionSource: "remote"` and `autoIncrement: true` for production iOS builds, so EAS may coordinate version/build with App Store Connect; still keep `app.json`, native projects, and ASC in agreement before you submit.
 
 ---
 

@@ -13,8 +13,8 @@ export const metadata: Metadata = {
     canonical: `${BASE_URL}/blog`,
   },
   openGraph: {
-    title: "Card Counting Blog - Protocol 21",
-    description: "Expert blackjack card counting guides and strategies. Learn from the Protocol 21 team.",
+    title: "Card Counting Blog - Card Counting Protocol 21",
+    description: "Expert blackjack card counting guides and strategies. Learn from the Card Counting Protocol 21 team.",
     url: `${BASE_URL}/blog`,
     type: "website",
     images: [
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Card Counting Blog - Protocol 21",
+    title: "Card Counting Blog - Card Counting Protocol 21",
     description: "Expert blackjack card counting guides and strategies.",
     images: [`${BASE_URL}/images/best-guide-to-blackjack-card-couting-apps-FI.webp`],
   },
@@ -56,7 +56,7 @@ export default function BlogIndex() {
               <span className="text-gradient-gold">Card Counting Blog</span>
             </h1>
             <p className="text-xl text-text-secondary leading-relaxed mb-8">
-              Expert guides, strategies, and training tips from the Protocol 21 team.
+              Expert guides, strategies, and training tips from the Card Counting Protocol 21 team.
               Everything you need to master card counting and beat the house.
             </p>
 
@@ -162,11 +162,11 @@ export default function BlogIndex() {
                 Ready to Practice What You&apos;ve Learned?
               </h2>
               <p className="text-text-secondary max-w-lg mx-auto mb-6">
-                Download Protocol 21 and start training with casino-grade drills.
+                Download Card Counting Protocol 21 and start training with casino-grade drills.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/download" className="btn btn-primary px-8">
-                  Download Protocol 21
+                  Download Card Counting Protocol 21
                 </Link>
                 <Link href="/systems" className="btn btn-outline px-8">
                   View Counting Systems
@@ -180,7 +180,7 @@ export default function BlogIndex() {
       <footer className="footer">
         <div className="container">
           <p className="footer-brand mb-2">
-            &copy; {new Date().getFullYear()} Protocol 21. All rights reserved.
+            &copy; {new Date().getFullYear()} Card Counting Protocol 21. All rights reserved.
           </p>
           <p className="footer-brand">
             Built by fellow degens in the desert at{" "}

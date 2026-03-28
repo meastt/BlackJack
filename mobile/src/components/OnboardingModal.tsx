@@ -52,7 +52,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
         <View style={styles.modalContent}>
           <View style={styles.header}>
             <Text style={styles.icon}>🎯</Text>
-            <Text style={styles.title}>WELCOME TO PROTOCOL 21</Text>
+            <Text style={styles.title}>WELCOME TO CARD COUNTING PROTOCOL 21</Text>
             <Text style={styles.subtitle}>ADVANTAGE PLAY INTERFACE</Text>
           </View>
 

@@ -31,7 +31,7 @@ extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
 }
 expoAutolinking.useExpoModules()
 
-rootProject.name = 'Card Counter AI'
+rootProject.name = 'Card Counting Protocol 21'
 
 expoAutolinking.useExpoVersionCatalog()
 

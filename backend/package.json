@@ -1,7 +1,7 @@
 {
   "name": "@card-counter-ai/backend",
   "version": "1.0.0",
-  "description": "Serverless backend for Card Counter AI",
+  "description": "Serverless backend for Card Counting Protocol 21",
   "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon --watch src --exec ts-node src/index.ts",

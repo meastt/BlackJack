@@ -15,11 +15,11 @@ const faqs = [
   },
   {
     question: "How long does it take to learn card counting?",
-    answer: "With consistent daily practice using Protocol 21, most users develop basic Hi-Lo proficiency in 2-4 weeks. Achieving casino-ready speed and accuracy (counting at 1+ cards per second with 99% accuracy) typically takes 2-3 months.",
+    answer: "With consistent daily practice using Card Counting Protocol 21, most users develop basic Hi-Lo proficiency in 2-4 weeks. Achieving casino-ready speed and accuracy (counting at 1+ cards per second with 99% accuracy) typically takes 2-3 months.",
   },
   {
-    question: "Is Protocol 21 really free?",
-    answer: "Yes! Protocol 21 is free to download with core features including Hi-Lo training, basic drills, and shoe simulation. Pro features like advanced systems and detailed analytics are available with an optional subscription.",
+    question: "Is Card Counting Protocol 21 really free?",
+    answer: "Yes! Card Counting Protocol 21 is free to download with core features including Hi-Lo training, basic drills, and shoe simulation. Pro features like advanced systems and detailed analytics are available with an optional subscription.",
   },
   {
     question: "What's the difference between running count and true count?",
@@ -27,7 +27,7 @@ const faqs = [
   },
   {
     question: "Can I practice card counting on my phone?",
-    answer: "Absolutely! Protocol 21 is available for both iOS and Android. Mobile practice lets you train during commutes, breaks, or whenever you have a few minutes. Consistent daily practice is key to building automatic counting skills.",
+    answer: "Absolutely! Card Counting Protocol 21 is available for both iOS and Android. Mobile practice lets you train during commutes, breaks, or whenever you have a few minutes. Consistent daily practice is key to building automatic counting skills.",
   },
 ];
 
@@ -49,7 +49,7 @@ export default function Home() {
 
           {/* Headline */}
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight" style={{ marginBottom: '2.5rem' }}>
-            <span className="text-gradient">Protocol 21:</span>
+            <span className="text-gradient">Card Counting Protocol 21:</span>
             <br />
             <span className="text-white/90">The Pro Blackjack Trainer App.</span>
           </h1>
@@ -80,7 +80,7 @@ export default function Home() {
             <div className="w-full max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-2xl border border-white/10">
               <Image
                 src="/protocol-21-hero1.webp"
-                alt="Protocol 21 App Interface"
+                alt="Card Counting Protocol 21 App Interface"
                 width={896}
                 height={504}
                 className="w-full h-auto"
@@ -250,7 +250,7 @@ export default function Home() {
                 Ready to Get Your Edge?
               </h2>
               <p className="text-text-secondary max-w-lg leading-relaxed text-center" style={{ margin: '0 auto 2.5rem auto' }}>
-                Join thousands of advantage players who trust Protocol 21 for their training.
+                Join thousands of advantage players who trust Card Counting Protocol 21 for their training.
                 Start your journey to consistent profits today.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -274,7 +274,7 @@ export default function Home() {
               <span className="text-gradient">Built for Serious Players</span>
             </h2>
             <p className="section-subtitle">
-              Protocol 21 isn&apos;t another blackjack game. It&apos;s a professional-grade training system
+              Card Counting Protocol 21 isn&apos;t another blackjack game. It&apos;s a professional-grade training system
               designed by advantage players, for advantage players.
             </p>
           </div>
@@ -302,7 +302,7 @@ export default function Home() {
             </ul>
             <div className="text-center w-full">
               <Link href="/download" className="btn btn-primary">
-                Get Protocol 21 Free
+                Get Card Counting Protocol 21 Free
               </Link>
             </div>
           </div>
@@ -317,7 +317,7 @@ export default function Home() {
               <span className="text-gradient">Frequently Asked Questions</span>
             </h2>
             <p className="section-subtitle">
-              Common questions about card counting and Protocol 21.
+              Common questions about card counting and Card Counting Protocol 21.
             </p>
           </div>
 
@@ -353,7 +353,7 @@ export default function Home() {
         <div className="container">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12 text-center md:text-left">
             <div>
-              <h4 className="font-bold mb-4 text-white">Protocol 21</h4>
+              <h4 className="font-bold mb-4 text-white">Card Counting Protocol 21</h4>
               <p className="text-text-muted text-sm">
                 The best blackjack card counting trainer for iOS and Android.
               </p>
@@ -388,7 +388,7 @@ export default function Home() {
           </div>
           <div className="border-t border-surface-border pt-8 text-center">
             <p className="footer-brand mb-2">
-              &copy; {new Date().getFullYear()} Protocol 21. All rights reserved.
+              &copy; {new Date().getFullYear()} Card Counting Protocol 21. All rights reserved.
             </p>
             <p className="footer-brand">
               Built by fellow degens in the desert at{" "}

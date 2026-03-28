@@ -1,11 +1,11 @@
-# Protocol 21 / Card Counter AI — App Store Metadata & Screenshot Draft
+# Card Counting Protocol 21 — App Store Metadata & Screenshot Draft
 
 ## Naming Alignment (for App Review consistency)
-- **App Store Product Name:** Card Counter AI
-- **On-device iOS Display Name:** Card Counter AI
-- **In-app brand header:** Protocol 21 (brand system), with Card Counter AI as product identity.
+- **App Store Product Name:** Card Counting Protocol 21
+- **On-device iOS Display Name:** Card Counting Protocol 21
+- **In-app brand header:** Card Counting Protocol 21 (aligned with store and home-screen name).
 
-Rationale: keep marketplace and on-device names consistent while preserving Protocol 21 as the internal training brand language.
+Rationale: one consistent product name on device, in the app, and in App Store Connect.
 
 ---
 
@@ -22,7 +22,7 @@ Train core blackjack advantage-play skills with structured drills, decision-qual
 ---
 
 ## Description (draft)
-Card Counter AI is an educational training app for blackjack advantage play.
+Card Counting Protocol 21 is an educational training app for blackjack advantage play.
 
 Build real card-counting discipline through guided modules:
 - Basic strategy
@@ -79,4 +79,4 @@ card counting,blackjack trainer,true count,basic strategy,advantage play,casino 
 ---
 
 ## Review Notes Snippet (ready to paste)
-Card Counter AI is an educational card-counting training app. This version does not include simulated wagering gameplay or playable casino blackjack rounds. Reviewer path: Home -> Training Modules -> Decision Lab -> Analytics -> Paywall.
+Card Counting Protocol 21 is an educational card-counting training app. This version does not include simulated wagering gameplay or playable casino blackjack rounds. Reviewer path: Home -> Training Modules -> Decision Lab -> Analytics -> Paywall.

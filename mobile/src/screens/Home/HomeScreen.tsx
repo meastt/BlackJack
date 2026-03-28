@@ -92,8 +92,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
               />
             </View>
             <View style={styles.headerTextCol}>
-              <Text style={styles.headerTitle}>PROTOCOL <Text style={styles.highlight}>21</Text></Text>
-              <Text style={styles.headerSubtitle}>ADVANTAGE PLAY INTERFACE // v1.0.5</Text>
+              <Text style={styles.headerTitle}>
+                CARD COUNTING PROTOCOL <Text style={styles.highlight}>21</Text>
+              </Text>
+              <Text style={styles.headerSubtitle}>ADVANTAGE PLAY INTERFACE // v1.1.0</Text>
             </View>
           </View>
 

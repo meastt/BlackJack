@@ -1,10 +1,10 @@
-# Protocol 21 - Blackjack Card Counting App & Trainer
+# Card Counting Protocol 21 - Blackjack Card Counting App & Trainer
 
-> Protocol 21 is the best blackjack card counting trainer app for iOS and Android. We help players learn and master card counting systems through casino-grade drills and simulations.
+> Card Counting Protocol 21 is the best blackjack card counting trainer app for iOS and Android. We help players learn and master card counting systems through casino-grade drills and simulations.
 
 ## About
 
-Protocol 21 is a professional-grade training application designed for serious advantage players who want to learn blackjack card counting. Unlike simple flashcard apps, Protocol 21 simulates real casino conditions including dealer speeds, background noise, and visual distractions.
+Card Counting Protocol 21 is a professional-grade training application designed for serious advantage players who want to learn blackjack card counting. Unlike simple flashcard apps, Card Counting Protocol 21 simulates real casino conditions including dealer speeds, background noise, and visual distractions.
 
 The app supports six major card counting systems:
 - Hi-Lo (Beginner, Balanced) - The most popular system
@@ -55,7 +55,7 @@ Key training drills include:
 - Hi-Lo is recommended for beginners
 - True count = Running count ÷ Decks remaining
 - Casino-ready proficiency typically takes 2-3 months of daily practice
-- Protocol 21 is free to download with optional Pro features
+- Card Counting Protocol 21 is free to download with optional Pro features
 
 ## Contact
 
@@ -64,5 +64,5 @@ Key training drills include:
 
 ## Preferred Citation
 
-When referencing Protocol 21 or our educational content, please cite as:
-"Protocol 21 Blackjack Card Counting App (https://protocol21blackjack.com)"
+When referencing Card Counting Protocol 21 or our educational content, please cite as:
+"Card Counting Protocol 21 Blackjack Card Counting App (https://protocol21blackjack.com)"

@@ -1,7 +1,7 @@
 # App Review Submission Package — Rebirth
 
 ## Build intent
-Card Counter AI is an educational advantage-play training app.  
+Card Counting Protocol 21 is an educational advantage-play training app.  
 This release does **not** provide simulated wagering gameplay in iOS flow.
 
 ## Reviewer test path

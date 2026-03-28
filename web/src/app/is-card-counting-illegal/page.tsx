@@ -316,11 +316,11 @@ export default function IsCardCountingIllegalPage() {
             </p>
 
             <p className="text-text-secondary leading-relaxed mb-8">
-              If you're interested in developing card counting skills, focus on mastery through proper training. Protocol 21 helps you develop the skills you need to become a successful counter.
+              If you're interested in developing card counting skills, focus on mastery through proper training. Card Counting Protocol 21 helps you develop the skills you need to become a successful counter.
             </p>
 
             <Link href="/download" className="btn btn-primary">
-              Start Training with Protocol 21
+              Start Training with Card Counting Protocol 21
             </Link>
           </section>
         </div>
@@ -344,7 +344,7 @@ export default function IsCardCountingIllegalPage() {
               <p className="text-text-secondary text-sm">Compare different card counting methodologies.</p>
             </Link>
             <Link href="/about" className="border border-surface-tertiary rounded-lg p-6 hover:border-gold-500 transition">
-              <h3 className="font-bold mb-2">About Protocol 21</h3>
+              <h3 className="font-bold mb-2">About Card Counting Protocol 21</h3>
               <p className="text-text-secondary text-sm">Learn about our mission and expertise.</p>
             </Link>
           </div>

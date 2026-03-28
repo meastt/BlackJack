@@ -6,13 +6,13 @@ import { Breadcrumbs, SoftwareApplicationSchema } from "@/components/seo";
 const BASE_URL = "https://protocol21blackjack.com";
 
 export const metadata: Metadata = {
-  title: "Download Protocol 21 for Android - Card Counting App",
-  description: "Download Protocol 21 free on Android. The #1 blackjack card counting trainer for smartphones and tablets with Hi-Lo, KO, Omega II systems, true count drills, and casino simulation.",
+  title: "Download Card Counting Protocol 21 for Android - Card Counting App",
+  description: "Download Card Counting Protocol 21 free on Android. The #1 blackjack card counting trainer for smartphones and tablets with Hi-Lo, KO, Omega II systems, true count drills, and casino simulation.",
   alternates: {
     canonical: `${BASE_URL}/download/android`,
   },
   openGraph: {
-    title: "Protocol 21 for Android - Blackjack Card Counting Trainer",
+    title: "Card Counting Protocol 21 for Android - Blackjack Card Counting Trainer",
     description: "Master card counting on Android with professional-grade training drills and proven counting systems. Free download for phones and tablets.",
     url: `${BASE_URL}/download/android`,
     type: "website",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
         url: `${BASE_URL}/images/protocol-21-hero1.webp`,
         width: 1200,
         height: 630,
-        alt: "Protocol 21 Android App",
+        alt: "Card Counting Protocol 21 Android App",
       },
     ],
   },
@@ -48,7 +48,7 @@ export default function AndroidDownloadPage() {
 
           <div className="max-w-4xl">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-              <span className="text-gradient-gold">Protocol 21 for Android</span>
+              <span className="text-gradient-gold">Card Counting Protocol 21 for Android</span>
             </h1>
             <p className="text-xl text-text-secondary leading-relaxed mb-8">
               Download the #1 blackjack card counting trainer for Android. Master Hi-Lo, KO, Omega II, and other counting systems with casino-grade training drills. Free for all Android devices.
@@ -185,8 +185,8 @@ export default function AndroidDownloadPage() {
             <div className="flex gap-6">
               <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gold-500 flex items-center justify-center text-white font-bold text-xl">2</div>
               <div>
-                <h3 className="text-lg font-bold mb-2">Search for Protocol 21</h3>
-                <p className="text-text-secondary">Use the search feature to find "Protocol 21 Blackjack Counter".</p>
+                <h3 className="text-lg font-bold mb-2">Search for Card Counting Protocol 21</h3>
+                <p className="text-text-secondary">Use the search feature to find &quot;Card Counting Protocol 21&quot; (or your exact Play Store title).</p>
               </div>
             </div>
 
@@ -202,7 +202,7 @@ export default function AndroidDownloadPage() {
               <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gold-500 flex items-center justify-center text-white font-bold text-xl">4</div>
               <div>
                 <h3 className="text-lg font-bold mb-2">Accept Permissions</h3>
-                <p className="text-text-secondary">Review and accept app permissions. Protocol 21 only requests necessary permissions for functionality.</p>
+                <p className="text-text-secondary">Review and accept app permissions. Card Counting Protocol 21 only requests necessary permissions for functionality.</p>
               </div>
             </div>
 
@@ -210,7 +210,7 @@ export default function AndroidDownloadPage() {
               <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gold-500 flex items-center justify-center text-white font-bold text-xl">5</div>
               <div>
                 <h3 className="text-lg font-bold mb-2">Launch & Begin Training</h3>
-                <p className="text-text-secondary">Once installation completes, tap "Open" to start Protocol 21 and begin card counting training.</p>
+                <p className="text-text-secondary">Once installation completes, tap "Open" to start Card Counting Protocol 21 and begin card counting training.</p>
               </div>
             </div>
           </div>
@@ -222,7 +222,7 @@ export default function AndroidDownloadPage() {
         <div className="container max-w-4xl">
           <h2 className="text-3xl md:text-4xl font-bold mb-8">Device Compatibility</h2>
           <p className="text-lg text-text-secondary leading-relaxed mb-8">
-            Protocol 21 works on a wide range of Android devices, from budget smartphones to high-end tablets.
+            Card Counting Protocol 21 works on a wide range of Android devices, from budget smartphones to high-end tablets.
           </p>
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-surface-secondary rounded-lg p-6">
@@ -289,7 +289,7 @@ export default function AndroidDownloadPage() {
         <div className="container max-w-4xl text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Start Training?</h2>
           <p className="text-lg text-text-secondary leading-relaxed mb-8 max-w-2xl mx-auto">
-            Download Protocol 21 free on Android today. Master blackjack card counting with the #1 trainer app for smartphones and tablets.
+            Download Card Counting Protocol 21 free on Android today. Master blackjack card counting with the #1 trainer app for smartphones and tablets.
           </p>
 
           <div className="flex flex-wrap justify-center gap-4">

@@ -2,7 +2,7 @@
 
 ## System Overview
 
-Card Counter AI is a **self-contained mobile application** that teaches card counting through progressive skill-building with AI coaching. The app runs entirely on-device with direct API calls - no backend server required.
+Card Counting Protocol 21 is a **self-contained mobile application** that teaches card counting through progressive skill-building with AI coaching. The app runs entirely on-device with direct API calls - no backend server required.
 
 ## Architecture Principles
 

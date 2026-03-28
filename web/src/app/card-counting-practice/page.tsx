@@ -399,7 +399,7 @@ export default function CardCountingPracticePage() {
 
             <h3 className="text-2xl font-bold mb-4">Why Use Training Software?</h3>
             <p className="text-text-secondary leading-relaxed mb-4">
-              While you can practice with a physical deck, training software like Protocol 21 accelerates progress dramatically:
+              While you can practice with a physical deck, training software like Card Counting Protocol 21 accelerates progress dramatically:
             </p>
             <ul className="space-y-2 text-text-secondary ml-6 list-disc mb-6">
               <li>Instant feedback on accuracy</li>
@@ -467,7 +467,7 @@ export default function CardCountingPracticePage() {
               <h3 className="text-2xl font-bold mb-4">Your Action Plan</h3>
               <ol className="space-y-3 text-text-secondary">
                 <li><strong>1. Choose your system:</strong> Start with Hi-Lo if unsure</li>
-                <li><strong>2. Get training software:</strong> Protocol 21 provides everything you need</li>
+                <li><strong>2. Get training software:</strong> Card Counting Protocol 21 provides everything you need</li>
                 <li><strong>3. Start with Stage 1:</strong> Master card recognition until automatic</li>
                 <li><strong>4. Progress systematically:</strong> Complete each stage before advancing</li>
                 <li><strong>5. Practice consistently:</strong> 60-90 minutes daily minimum</li>
@@ -489,10 +489,10 @@ export default function CardCountingPracticePage() {
 
             <div className="border-t-2 border-surface-tertiary pt-8">
               <p className="text-text-secondary leading-relaxed mb-6">
-                Ready to start your card counting training? Protocol 21 provides the tools, drills, and structured progression you need to master card counting efficiently.
+                Ready to start your card counting training? Card Counting Protocol 21 provides the tools, drills, and structured progression you need to master card counting efficiently.
               </p>
               <Link href="/download" className="btn btn-primary">
-                Download Protocol 21 Free
+                Download Card Counting Protocol 21 Free
               </Link>
             </div>
           </section>
@@ -517,7 +517,7 @@ export default function CardCountingPracticePage() {
               <p className="text-text-secondary text-sm">Compare Hi-Lo, KO, Omega II, and more.</p>
             </Link>
             <Link href="/features" className="border border-surface-tertiary rounded-lg p-6 hover:border-gold-500 transition">
-              <h3 className="font-bold mb-2">Protocol 21 Features</h3>
+              <h3 className="font-bold mb-2">Card Counting Protocol 21 Features</h3>
               <p className="text-text-secondary text-sm">Explore our training drills and tools.</p>
             </Link>
           </div>

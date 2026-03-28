@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Protocol 21",
-  description: "Privacy Policy for Protocol 21, the blackjack card counting trainer app. We respect your privacy and do not collect personal data.",
+  title: "Privacy Policy | Card Counting Protocol 21",
+  description: "Privacy Policy for Card Counting Protocol 21, the blackjack card counting trainer app. We respect your privacy and do not collect personal data.",
 };
 
 export default function PrivacyPolicy() {
@@ -24,7 +24,7 @@ export default function PrivacyPolicy() {
           <section className="card">
             <h2 className="text-2xl font-bold mb-4 text-primary mt-0">The Short Version</h2>
             <p className="text-text-secondary leading-relaxed text-lg mb-0">
-              Protocol 21 does not collect, store, or share any personal data. Period.
+              Card Counting Protocol 21 does not collect, store, or share any personal data. Period.
               Your practice sessions, scores, and progress stay on your device.
             </p>
           </section>
@@ -32,7 +32,7 @@ export default function PrivacyPolicy() {
           <section>
             <h2 className="text-2xl font-bold mb-6 text-white">1. Information We Collect</h2>
             <p className="text-body">
-              <strong className="text-white">We don&apos;t collect any personal information.</strong> Protocol 21
+              <strong className="text-white">We don&apos;t collect any personal information.</strong> Card Counting Protocol 21
               is designed to work entirely offline. All your training data, progress, and settings
               are stored locally on your device and never transmitted to our servers.
             </p>
@@ -50,7 +50,7 @@ export default function PrivacyPolicy() {
           <section>
             <h2 className="text-2xl font-bold mb-6 text-white">3. Third-Party Services</h2>
             <p className="text-body">
-              Protocol 21 does not integrate with any third-party analytics, advertising, or
+              Card Counting Protocol 21 does not integrate with any third-party analytics, advertising, or
               tracking services. We don&apos;t use cookies, pixels, or any form of user tracking
               on our app or website.
             </p>
@@ -59,7 +59,7 @@ export default function PrivacyPolicy() {
           <section>
             <h2 className="text-2xl font-bold mb-6 text-white">4. App Store Data</h2>
             <p className="text-body">
-              When you download Protocol 21 from the Apple App Store or Google Play Store,
+              When you download Card Counting Protocol 21 from the Apple App Store or Google Play Store,
               those platforms may collect their own data according to their respective privacy
               policies. We do not have access to this information.
             </p>
@@ -68,7 +68,7 @@ export default function PrivacyPolicy() {
           <section>
             <h2 className="text-2xl font-bold mb-6 text-white">5. Children&apos;s Privacy</h2>
             <p className="text-body">
-              Protocol 21 is intended for users 18 years of age or older. We do not knowingly
+              Card Counting Protocol 21 is intended for users 18 years of age or older. We do not knowingly
               collect information from children. The app is designed for adult educational purposes
               related to card counting and gambling strategy.
             </p>
@@ -97,7 +97,7 @@ export default function PrivacyPolicy() {
       <footer className="footer">
         <div className="container">
           <p className="footer-brand mb-2">
-            &copy; {new Date().getFullYear()} Protocol 21. All rights reserved.
+            &copy; {new Date().getFullYear()} Card Counting Protocol 21. All rights reserved.
           </p>
           <p className="footer-brand">
             Built by fellow degens in the desert at{" "}

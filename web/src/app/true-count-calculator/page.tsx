@@ -159,14 +159,14 @@ export default function TrueCountCalculatorPage() {
                         <div className="bg-primary/10 border border-primary/20 rounded-lg p-8 text-center shadow-lg mt-12 mb-8">
                             <h3 className="text-2xl font-bold mb-4">Ready to train this skill in real-time?</h3>
                             <p className="text-text-secondary leading-relaxed mb-6">
-                                Reading about true counts is easy. Doing the mental division while a dealer is throwing cards at you at 60 MPH is entirely different. Protocol 21 is the ultimate tool to practice this exact concept. Our dedicated <strong>True Count Drills</strong> and <strong>Deck Estimation</strong> mini-games force you to learn half-deck granularity visually, letting you drill offline with no scammy in-app coins.
+                                Reading about true counts is easy. Doing the mental division while a dealer is throwing cards at you at 60 MPH is entirely different. Card Counting Protocol 21 is the ultimate tool to practice this exact concept. Our dedicated <strong>True Count Drills</strong> and <strong>Deck Estimation</strong> mini-games force you to learn half-deck granularity visually, letting you drill offline with no scammy in-app coins.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                 <Link href="/download/ios" className="btn btn-primary px-8 py-3 text-sm font-bold uppercase tracking-wide">
-                                    Train with Protocol 21 (iOS)
+                                    Train with Card Counting Protocol 21 (iOS)
                                 </Link>
                                 <Link href="/download/android" className="btn btn-outline px-8 py-3 text-sm font-bold uppercase tracking-wide">
-                                    Train with Protocol 21 (Android)
+                                    Train with Card Counting Protocol 21 (Android)
                                 </Link>
                             </div>
                         </div>

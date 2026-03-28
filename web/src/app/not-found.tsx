@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Page Not Found",
-  description: "The page you're looking for doesn't exist. Explore Protocol 21's card counting guides, systems, and drills.",
+  description: "The page you're looking for doesn't exist. Explore Card Counting Protocol 21's card counting guides, systems, and drills.",
   robots: {
     index: false,
     follow: true,

@@ -1,4 +1,4 @@
-// Protocol 21 Theme - Tactical, Precision, Stealth
+// Card Counting Protocol 21 theme — tactical, precision, stealth
 
 export const colors = {
   // Primary Brand (The Edge)

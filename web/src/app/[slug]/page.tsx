@@ -207,7 +207,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <div className="relative z-10">
             <h3 className="text-xl font-bold mb-2">Ready to Practice?</h3>
             <p className="text-text-secondary mb-6">
-              Download Protocol 21 and start mastering card counting with our casino-grade training drills.
+              Download Card Counting Protocol 21 and start mastering card counting with our casino-grade training drills.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link href="/download/ios" className="btn btn-primary">
@@ -224,7 +224,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       <footer className="footer">
         <div className="container">
           <p className="footer-brand mb-2">
-            &copy; {new Date().getFullYear()} Protocol 21. All rights reserved.
+            &copy; {new Date().getFullYear()} Card Counting Protocol 21. All rights reserved.
           </p>
           <p className="footer-brand">
             Built by fellow degens in the desert at{" "}

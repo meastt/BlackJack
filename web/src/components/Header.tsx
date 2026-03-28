@@ -22,7 +22,7 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
             <div className="text-2xl font-bold">
-              <span className="text-gradient">Protocol 21</span>
+              <span className="text-gradient">Card Counting Protocol 21</span>
             </div>
           </Link>
 

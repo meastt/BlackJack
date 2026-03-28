@@ -6,13 +6,13 @@ import { Breadcrumbs, SoftwareApplicationSchema } from "@/components/seo";
 const BASE_URL = "https://protocol21blackjack.com";
 
 export const metadata: Metadata = {
-  title: "Download Protocol 21 for iPhone & iPad - iOS App",
-  description: "Download Protocol 21 free on iPhone and iPad. The #1 blackjack card counting trainer for iOS with Hi-Lo, KO, Omega II systems, true count drills, and real-time analytics.",
+  title: "Download Card Counting Protocol 21 for iPhone & iPad - iOS App",
+  description: "Download Card Counting Protocol 21 free on iPhone and iPad. The #1 blackjack card counting trainer for iOS with Hi-Lo, KO, Omega II systems, true count drills, and real-time analytics.",
   alternates: {
     canonical: `${BASE_URL}/download/ios`,
   },
   openGraph: {
-    title: "Protocol 21 for iPhone & iPad - iOS Card Counting App",
+    title: "Card Counting Protocol 21 for iPhone & iPad - iOS Card Counting App",
     description: "Master card counting on iOS with casino-grade training drills and proven counting systems. Free download for iPhone and iPad.",
     url: `${BASE_URL}/download/ios`,
     type: "website",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
         url: `${BASE_URL}/images/protocol-21-hero1.webp`,
         width: 1200,
         height: 630,
-        alt: "Protocol 21 iOS App",
+        alt: "Card Counting Protocol 21 iOS App",
       },
     ],
   },
@@ -48,7 +48,7 @@ export default function iOSDownloadPage() {
 
           <div className="max-w-4xl">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-              <span className="text-gradient-gold">Protocol 21 for iPhone & iPad</span>
+              <span className="text-gradient-gold">Card Counting Protocol 21 for iPhone & iPad</span>
             </h1>
             <p className="text-xl text-text-secondary leading-relaxed mb-8">
               Download the #1 blackjack card counting trainer for iOS. Master Hi-Lo, KO, Omega II, and other counting systems with casino-grade training drills. Free for iPhone and iPad.
@@ -127,7 +127,7 @@ export default function iOSDownloadPage() {
               <span className="text-3xl">♿</span>
               <div>
                 <h3 className="text-lg font-bold mb-2">Accessibility Features</h3>
-                <p className="text-text-secondary">Full VoiceOver support, adjustable text sizes, and accessibility options ensure Protocol 21 works for everyone.</p>
+                <p className="text-text-secondary">Full VoiceOver support, adjustable text sizes, and accessibility options ensure Card Counting Protocol 21 works for everyone.</p>
               </div>
             </div>
 
@@ -185,8 +185,8 @@ export default function iOSDownloadPage() {
             <div className="flex gap-6">
               <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gold-500 flex items-center justify-center text-white font-bold text-xl">2</div>
               <div>
-                <h3 className="text-lg font-bold mb-2">Search for Protocol 21</h3>
-                <p className="text-text-secondary">Use the search tab to find "Protocol 21 Blackjack Counter".</p>
+                <h3 className="text-lg font-bold mb-2">Search for Card Counting Protocol 21</h3>
+                <p className="text-text-secondary">Use the search tab to find "Card Counting Protocol 21 Blackjack Counter".</p>
               </div>
             </div>
 
@@ -210,7 +210,7 @@ export default function iOSDownloadPage() {
               <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gold-500 flex items-center justify-center text-white font-bold text-xl">5</div>
               <div>
                 <h3 className="text-lg font-bold mb-2">Launch & Start Training</h3>
-                <p className="text-text-secondary">Tap "Open" to launch Protocol 21 and begin your card counting training.</p>
+                <p className="text-text-secondary">Tap "Open" to launch Card Counting Protocol 21 and begin your card counting training.</p>
               </div>
             </div>
           </div>
@@ -254,7 +254,7 @@ export default function iOSDownloadPage() {
         <div className="container max-w-4xl text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Start Training?</h2>
           <p className="text-lg text-text-secondary leading-relaxed mb-8 max-w-2xl mx-auto">
-            Download Protocol 21 free on iOS today. Master blackjack card counting with the #1 trainer app for iPhone and iPad.
+            Download Card Counting Protocol 21 free on iOS today. Master blackjack card counting with the #1 trainer app for iPhone and iPad.
           </p>
 
           <div className="flex flex-wrap justify-center gap-4">

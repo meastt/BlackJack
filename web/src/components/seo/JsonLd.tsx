@@ -11,7 +11,7 @@ interface OrganizationSchemaProps {
 }
 
 export function OrganizationSchema({
-  name = 'Protocol 21',
+  name = 'Card Counting Protocol 21',
   url = BASE_URL,
   logo = `${BASE_URL}/images/protocol-21-logo.webp`,
   sameAs = [
@@ -48,8 +48,8 @@ export function WebSiteSchema() {
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'Protocol 21',
-    alternateName: 'Protocol 21 Blackjack Card Counting App',
+    name: 'Card Counting Protocol 21',
+    alternateName: 'Blackjack Card Counting Trainer',
     url: BASE_URL,
     description: 'The best blackjack card counting trainer app for iOS and Android. Master Hi-Lo, KO, Omega II, and more counting systems.',
     potentialAction: {
@@ -62,7 +62,7 @@ export function WebSiteSchema() {
     },
     publisher: {
       '@type': 'Organization',
-      name: 'Protocol 21',
+      name: 'Card Counting Protocol 21',
       url: BASE_URL,
     },
   }
@@ -84,14 +84,14 @@ export function SoftwareApplicationSchema({ platform, downloadUrl }: SoftwareApp
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: 'Protocol 21',
+    name: 'Card Counting Protocol 21',
     applicationCategory: 'GameApplication',
     applicationSubCategory: 'Card Counting Trainer',
     operatingSystem: platform,
     downloadUrl: downloadUrl || (platform === 'iOS'
       ? 'https://apps.apple.com/app/protocol-21'
       : 'https://play.google.com/store/apps/details?id=com.protocol21'),
-    version: '1.0.0',
+    version: '1.1.0',
     releaseNotes: 'Full-featured blackjack card counting trainer with advanced counting systems and casino-grade drills.',
     datePublished: '2024-01-01',
     offers: {
@@ -107,7 +107,7 @@ export function SoftwareApplicationSchema({ platform, downloadUrl }: SoftwareApp
       bestRating: '5',
       worstRating: '1',
     },
-    description: 'Master blackjack card counting with Protocol 21. Casino-grade drills, multiple counting systems, and true count practice.',
+    description: 'Master blackjack card counting with Card Counting Protocol 21. Casino-grade drills, multiple counting systems, and true count practice.',
     screenshot: `${BASE_URL}/images/protocol-21-hero1.webp`,
     featureList: [
       'Hi-Lo Card Counting System',
@@ -148,7 +148,7 @@ export function BlogPostingSchema({
   slug,
   datePublished,
   dateModified,
-  author = 'Protocol 21 Team',
+  author = 'Card Counting Protocol 21 Team',
   image,
   readTime,
 }: BlogPostingSchemaProps) {
@@ -167,7 +167,7 @@ export function BlogPostingSchema({
     },
     publisher: {
       '@type': 'Organization',
-      name: 'Protocol 21',
+      name: 'Card Counting Protocol 21',
       logo: {
         '@type': 'ImageObject',
         url: `${BASE_URL}/images/protocol-21-logo.webp`,
@@ -223,11 +223,11 @@ export function ArticleSchema({
     dateModified: dateModified || datePublished,
     author: {
       '@type': 'Organization',
-      name: 'Protocol 21',
+      name: 'Card Counting Protocol 21',
     },
     publisher: {
       '@type': 'Organization',
-      name: 'Protocol 21',
+      name: 'Card Counting Protocol 21',
       logo: {
         '@type': 'ImageObject',
         url: `${BASE_URL}/images/protocol-21-logo.webp`,
@@ -365,7 +365,7 @@ interface CourseSchemaProps {
 export function CourseSchema({
   name,
   description,
-  provider = 'Protocol 21',
+  provider = 'Card Counting Protocol 21',
   url,
 }: CourseSchemaProps) {
   const schema = {
@@ -437,7 +437,7 @@ export function FAQSoftwareSchema({ platform, downloadUrl, faqs, price = '4.99' 
     '@graph': [
       {
         '@type': 'SoftwareApplication',
-        name: 'Protocol 21: Card Counting Trainer',
+        name: 'Card Counting Protocol 21: Card Counting Trainer',
         operatingSystem: platform === 'Web' ? 'iOS, Android' : platform,
         applicationCategory: 'EducationalApplication',
         offers: {

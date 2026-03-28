@@ -48,7 +48,7 @@ app.use(errorHandler);
 // Start server (only if not in serverless environment)
 if (process.env.NODE_ENV !== 'production') {
   app.listen(PORT, () => {
-    console.log(`🃏 Card Counter AI Backend running on port ${PORT}`);
+    console.log(`🃏 Card Counting Protocol 21 backend running on port ${PORT}`);
     console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
   });
 }

@@ -854,7 +854,7 @@ export const SimulatorScreen: React.FC<{ navigation: any }> = ({ navigation }) =
                 {/* Table Markings & Text */}
                 {/* Top Title Banner */}
                 <View style={styles.tableTitleContainer}>
-                    <Text style={styles.tableTextTitle}>PROTOCOL 21</Text>
+                    <Text style={styles.tableTextTitle}>CARD COUNTING PROTOCOL 21</Text>
                 </View>
 
                 {/* Bottom Table Rules */}

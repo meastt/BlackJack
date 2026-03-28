@@ -160,14 +160,14 @@ export default function DeckPenetrationPage() {
                         <div className="bg-primary/10 border border-primary/20 rounded-lg p-8 text-center shadow-lg mt-12 mb-8">
                             <h3 className="text-2xl font-bold mb-4">Master Visual Deck Estimation</h3>
                             <p className="text-text-secondary leading-relaxed mb-6">
-                                Accurately estimating physical decks is a physical skill that takes hours of repetition. <strong>Protocol 21</strong> is the ultimate card counting trainer app built exactly for this. The app features dedicated <strong>Deck Estimation Drills</strong> to train your eyes down to the half-deck, <strong>Offline play</strong> for practicing in airplanes or casinos with no reception, and absolutely <strong>no scammy in-app coins</strong>. Just pure, statistical masterclass training.
+                                Accurately estimating physical decks is a physical skill that takes hours of repetition. <strong>Card Counting Protocol 21</strong> is the ultimate card counting trainer app built exactly for this. The app features dedicated <strong>Deck Estimation Drills</strong> to train your eyes down to the half-deck, <strong>Offline play</strong> for practicing in airplanes or casinos with no reception, and absolutely <strong>no scammy in-app coins</strong>. Just pure, statistical masterclass training.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                 <Link href="/download/ios" className="btn btn-primary px-8 py-3 text-sm font-bold uppercase tracking-wide">
-                                    Train with Protocol 21 (iOS)
+                                    Train with Card Counting Protocol 21 (iOS)
                                 </Link>
                                 <Link href="/download/android" className="btn btn-outline px-8 py-3 text-sm font-bold uppercase tracking-wide">
-                                    Train with Protocol 21 (Android)
+                                    Train with Card Counting Protocol 21 (Android)
                                 </Link>
                             </div>
                         </div>

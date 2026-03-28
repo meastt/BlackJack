@@ -6,13 +6,13 @@ import { SoftwareApplicationSchema, Breadcrumbs, FAQSchema } from "@/components/
 const BASE_URL = "https://protocol21blackjack.com";
 
 export const metadata: Metadata = {
-  title: "Download Protocol 21 - Free Card Counting App for iOS & Android",
-  description: "Download Protocol 21 free for iOS and Android. The #1 blackjack card counting trainer with Hi-Lo, KO, Omega II systems, true count drills, and casino simulation.",
+  title: "Download Card Counting Protocol 21 - Free Card Counting App for iOS & Android",
+  description: "Download Card Counting Protocol 21 free for iOS and Android. The #1 blackjack card counting trainer with Hi-Lo, KO, Omega II systems, true count drills, and casino simulation.",
   alternates: {
     canonical: `${BASE_URL}/download`,
   },
   openGraph: {
-    title: "Download Protocol 21 - Free Card Counting App",
+    title: "Download Card Counting Protocol 21 - Free Card Counting App",
     description: "The #1 blackjack card counting trainer. Free for iOS and Android.",
     url: `${BASE_URL}/download`,
     type: "website",
@@ -21,13 +21,13 @@ export const metadata: Metadata = {
         url: `${BASE_URL}/images/protocol-21-hero1.webp`,
         width: 1200,
         height: 630,
-        alt: "Download Protocol 21 App",
+        alt: "Download Card Counting Protocol 21 App",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Download Protocol 21 - Free Card Counting App",
+    title: "Download Card Counting Protocol 21 - Free Card Counting App",
     description: "The #1 blackjack card counting trainer for iOS & Android.",
     images: [`${BASE_URL}/images/protocol-21-hero1.webp`],
   },
@@ -93,24 +93,24 @@ const features = [
 
 const faqs = [
   {
-    question: "Is Protocol 21 really free?",
-    answer: "Yes! Protocol 21 is free to download with core features including Hi-Lo training, basic drills, and shoe simulation. Pro features like advanced systems (Omega II, Wong Halves) and detailed analytics require a subscription.",
+    question: "Is Card Counting Protocol 21 really free?",
+    answer: "Yes! Card Counting Protocol 21 is free to download with core features including Hi-Lo training, basic drills, and shoe simulation. Pro features like advanced systems (Omega II, Wong Halves) and detailed analytics require a subscription.",
   },
   {
-    question: "Which platforms does Protocol 21 support?",
-    answer: "Protocol 21 is available for iOS (iPhone and iPad) and Android devices. We're also working on a web version for desktop practice.",
+    question: "Which platforms does Card Counting Protocol 21 support?",
+    answer: "Card Counting Protocol 21 is available for iOS (iPhone and iPad) and Android devices. We're also working on a web version for desktop practice.",
   },
   {
     question: "Can I learn card counting from scratch with this app?",
-    answer: "Absolutely. Protocol 21 includes tutorials for beginners starting with Hi-Lo, the most popular and accessible counting system. Our progressive drill system takes you from basics to casino-ready.",
+    answer: "Absolutely. Card Counting Protocol 21 includes tutorials for beginners starting with Hi-Lo, the most popular and accessible counting system. Our progressive drill system takes you from basics to casino-ready.",
   },
   {
     question: "Is card counting legal?",
-    answer: "Yes, card counting is completely legal. It's a mental skill that uses probability and memory. However, casinos are private businesses and may ask skilled counters to leave. Protocol 21 is a training tool for educational purposes.",
+    answer: "Yes, card counting is completely legal. It's a mental skill that uses probability and memory. However, casinos are private businesses and may ask skilled counters to leave. Card Counting Protocol 21 is a training tool for educational purposes.",
   },
   {
     question: "How long does it take to learn card counting?",
-    answer: "With consistent practice using Protocol 21, most users develop basic Hi-Lo proficiency in 2-4 weeks. Casino-ready speed and accuracy typically takes 2-3 months of daily practice.",
+    answer: "With consistent practice using Card Counting Protocol 21, most users develop basic Hi-Lo proficiency in 2-4 weeks. Casino-ready speed and accuracy typically takes 2-3 months of daily practice.",
   },
 ];
 
@@ -136,7 +136,7 @@ export default function DownloadPage() {
               </div>
 
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-                <span className="text-gradient-gold">Download Protocol 21</span>
+                <span className="text-gradient-gold">Download Card Counting Protocol 21</span>
               </h1>
 
               <p className="text-xl text-text-secondary leading-relaxed mb-8">
@@ -177,7 +177,7 @@ export default function DownloadPage() {
             <div className="relative w-full h-80 md:h-[500px] rounded-xl overflow-hidden">
               <Image
                 src="/images/protocol-21-hero1.webp"
-                alt="Protocol 21 blackjack card counting app"
+                alt="Card Counting Protocol 21 blackjack card counting app"
                 fill
                 className="object-cover"
                 priority
@@ -196,7 +196,7 @@ export default function DownloadPage() {
               <span className="text-gradient">Everything You Need to Win</span>
             </h2>
             <p className="section-subtitle">
-              Protocol 21 isn&apos;t just another blackjack game. It&apos;s a complete training system
+              Card Counting Protocol 21 isn&apos;t just another blackjack game. It&apos;s a complete training system
               designed to build the skills you need for real advantage play.
             </p>
           </div>
@@ -229,7 +229,7 @@ export default function DownloadPage() {
             <div className="relative h-64 md:h-80 rounded-xl overflow-hidden">
               <Image
                 src="/images/protocol-21-card-shoe.webp"
-                alt="Protocol 21 card shoe simulation"
+                alt="Card Counting Protocol 21 card shoe simulation"
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 400px"
@@ -238,7 +238,7 @@ export default function DownloadPage() {
             <div className="relative h-64 md:h-80 rounded-xl overflow-hidden">
               <Image
                 src="/images/protocol-21-true-count.webp"
-                alt="True count training in Protocol 21"
+                alt="True count training in Card Counting Protocol 21"
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 400px"
@@ -247,7 +247,7 @@ export default function DownloadPage() {
             <div className="relative h-64 md:h-80 rounded-xl overflow-hidden">
               <Image
                 src="/images/Skill-increased-blackjack-counting-cards.webp"
-                alt="Skill progression in Protocol 21"
+                alt="Skill progression in Card Counting Protocol 21"
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 400px"
@@ -263,7 +263,7 @@ export default function DownloadPage() {
           <div className="section-header">
             <h2 className="section-title">Frequently Asked Questions</h2>
             <p className="section-subtitle">
-              Common questions about Protocol 21 and card counting.
+              Common questions about Card Counting Protocol 21 and card counting.
             </p>
           </div>
 
@@ -298,7 +298,7 @@ export default function DownloadPage() {
               </h2>
               <p className="text-text-secondary max-w-lg mx-auto mb-8 leading-relaxed">
                 Stop gambling. Start playing with a mathematical advantage.
-                Download Protocol 21 free today.
+                Download Card Counting Protocol 21 free today.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a
@@ -327,7 +327,7 @@ export default function DownloadPage() {
       <footer className="footer">
         <div className="container">
           <p className="footer-brand mb-2">
-            &copy; {new Date().getFullYear()} Protocol 21. All rights reserved.
+            &copy; {new Date().getFullYear()} Card Counting Protocol 21. All rights reserved.
           </p>
           <p className="footer-brand">
             Built by fellow degens in the desert at{" "}

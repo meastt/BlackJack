@@ -1,4 +1,4 @@
-# Protocol 21 iOS Rebirth Plan
+# Card Counting Protocol 21 — iOS Rebirth Plan
 
 ## Status: Engineering Complete — Ready for Submission Prep
 
@@ -11,7 +11,7 @@ The build submitted 2026-02-26 was rejected for four reasons:
 1. **Simulated gambling from individual account** — Simulator screen presented playable blackjack rounds with fake-money betting.
 2. **IAP products not submitted** — Monthly/annual/lifetime subscriptions were not attached to the app version for review.
 3. **IAP UX bug** — Indefinite loading spinner when triggering Unlock Pro on iPad.
-4. **Metadata mismatch** — Store name "Protocol 21: Blackjack Trainer" vs device name "Card Counter AI".
+4. **Metadata mismatch** — Store name "Protocol 21: Blackjack Trainer" vs prior on-device name (resolved: **Card Counting Protocol 21** everywhere).
 
 ---
 
@@ -24,8 +24,8 @@ The build submitted 2026-02-26 was rejected for four reasons:
 - Simulator code preserved for Android builds
 
 ### App Naming Alignment
-- `app.json` name set to "Card Counter AI"
-- `Info.plist` CFBundleDisplayName set to "Card Counter AI"
+- `app.json` name set to "Card Counting Protocol 21"
+- `Info.plist` CFBundleDisplayName set to "Card Counting Protocol 21"
 - Consistent across device and planned marketplace name
 
 ### Gambling Language Removal
@@ -74,12 +74,12 @@ The build submitted 2026-02-26 was rejected for four reasons:
 - [ ] Create release build and upload to App Store Connect
 
 ### App Store Connect Configuration
-- [ ] Change **product name** from "Protocol 21: Blackjack Trainer" to "Card Counter AI"
+- [ ] Change **product name** in App Store Connect to **Card Counting Protocol 21** (replace legacy titles such as "Protocol 21: Blackjack Trainer" if still present)
 - [ ] Update **content rating** — remove gambling/simulated gambling flags
 - [ ] **Attach IAP products** (monthly, annual, lifetime) to the app version
 - [ ] Add a **review screenshot** to each IAP product (screenshot of PaywallScreen showing offerings)
 - [ ] Upload **6 marketing screenshots** (new prompts drafted, no casino/gambling imagery)
 - [ ] Paste **subtitle** (pick from: "Advantage Play Skills Trainer" / "Card Counting Drills & Analytics" / "Blackjack AP Training System")
 - [ ] Paste **description** and **keywords** from `APP_STORE_METADATA_SCREENSHOT_PLAN.md`
-- [ ] Paste **reviewer notes**: "Card Counter AI is an educational card-counting training app. This version does not include simulated wagering gameplay or playable casino blackjack rounds. Reviewer path: Home -> Training Modules -> Decision Lab -> Analytics -> Paywall."
+- [ ] Paste **reviewer notes**: "Card Counting Protocol 21 is an educational card-counting training app. This version does not include simulated wagering gameplay or playable casino blackjack rounds. Reviewer path: Home -> Training Modules -> Decision Lab -> Analytics -> Paywall."
 - [ ] Final sandbox IAP verification in App Store Connect before hitting Submit

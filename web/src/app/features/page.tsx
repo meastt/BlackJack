@@ -5,13 +5,13 @@ import { Breadcrumbs, ArticleSchema } from "@/components/seo";
 const BASE_URL = "https://protocol21blackjack.com";
 
 export const metadata: Metadata = {
-  title: "Protocol 21 Features - Advanced Card Counting Training Tools",
-  description: "Explore Protocol 21's comprehensive features: true count drills, speed counting, deck estimation, casino simulation, progress tracking, and support for 6 counting systems.",
+  title: "Card Counting Protocol 21 Features - Advanced Card Counting Training Tools",
+  description: "Explore Card Counting Protocol 21's comprehensive features: true count drills, speed counting, deck estimation, casino simulation, progress tracking, and support for 6 counting systems.",
   alternates: {
     canonical: `${BASE_URL}/features`,
   },
   openGraph: {
-    title: "Protocol 21 Features - Card Counting Training Tools",
+    title: "Card Counting Protocol 21 Features - Card Counting Training Tools",
     description: "Master advanced card counting with casino-grade drills, real-time feedback, and scientifically-designed training modules.",
     url: `${BASE_URL}/features`,
     type: "website",
@@ -85,8 +85,8 @@ export default function FeaturesPage() {
   return (
     <main className="min-h-screen">
       <ArticleSchema
-        title="Protocol 21 Features - Advanced Card Counting Training"
-        description="Complete feature overview of Protocol 21's card counting trainer app including drills, analytics, and casino simulation."
+        title="Card Counting Protocol 21 Features - Advanced Card Counting Training"
+        description="Complete feature overview of Card Counting Protocol 21's card counting trainer app including drills, analytics, and casino simulation."
         url={`${BASE_URL}/features`}
         datePublished="2024-01-15"
       />
@@ -103,7 +103,7 @@ export default function FeaturesPage() {
 
           <div className="max-w-4xl">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-              <span className="text-gradient-gold">Protocol 21 Features</span>
+              <span className="text-gradient-gold">Card Counting Protocol 21 Features</span>
             </h1>
             <p className="text-xl text-text-secondary leading-relaxed mb-8">
               Complete professional-grade card counting training platform with casino-realistic drills, advanced analytics, and a comprehensive 6-Phase masterclass.
@@ -141,7 +141,7 @@ export default function FeaturesPage() {
             <div>
               <h3 className="text-2xl font-bold mb-4">🎯 True Count Drills</h3>
               <p className="text-text-secondary leading-relaxed mb-4">
-                The foundation of professional card counting. Protocol 21 provides intensive true count conversion training with:
+                The foundation of professional card counting. Card Counting Protocol 21 provides intensive true count conversion training with:
               </p>
               <ul className="space-y-2 text-text-secondary ml-4 list-disc">
                 <li>Rapid-fire card sequences requiring instant true count calculation</li>
@@ -202,7 +202,7 @@ export default function FeaturesPage() {
         <div className="container max-w-4xl">
           <h2 className="text-3xl md:text-4xl font-bold mb-8">Counting System Reference</h2>
           <p className="text-lg text-text-secondary leading-relaxed mb-8">
-            Protocol 21's primary training engine focuses heavily on mastering the Hi-Lo system (the industry standard). Additionally, we provide comprehensive reference material for six other counting methodologies:
+            Card Counting Protocol 21's primary training engine focuses heavily on mastering the Hi-Lo system (the industry standard). Additionally, we provide comprehensive reference material for six other counting methodologies:
           </p>
 
           <div className="space-y-6">
@@ -244,7 +244,7 @@ export default function FeaturesPage() {
         <div className="container max-w-4xl">
           <h2 className="text-3xl md:text-4xl font-bold mb-8">Advanced Analytics & Tracking</h2>
           <p className="text-lg text-text-secondary leading-relaxed mb-8">
-            Protocol 21's comprehensive analytics help you measure progress and identify areas for improvement:
+            Card Counting Protocol 21's comprehensive analytics help you measure progress and identify areas for improvement:
           </p>
 
           <div className="grid md:grid-cols-2 gap-6">
@@ -296,12 +296,12 @@ export default function FeaturesPage() {
         <div className="container max-w-4xl text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Master Card Counting?</h2>
           <p className="text-lg text-text-secondary leading-relaxed mb-8 max-w-2xl mx-auto">
-            Protocol 21 combines professional-grade training tools with proven card counting systems. Download free today and start your path to advantage play.
+            Card Counting Protocol 21 combines professional-grade training tools with proven card counting systems. Download free today and start your path to advantage play.
           </p>
 
           <div className="flex flex-wrap justify-center gap-4">
             <Link href="/download" className="btn btn-primary">
-              Download Protocol 21
+              Download Card Counting Protocol 21
             </Link>
             <Link href="/systems" className="btn btn-outline">
               Learn Systems

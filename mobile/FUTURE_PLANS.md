@@ -1,6 +1,6 @@
-# Protocol 21: Global Expansion & Rules Roadmap
+# Card Counting Protocol 21: Global Expansion & Rules Roadmap
 
-This document outlines the strategic plan for localizing **Protocol 21** and implementing regional blackjack rule variations to ensure the trainer remains accurate for international users.
+This document outlines the strategic plan for localizing **Card Counting Protocol 21** and implementing regional blackjack rule variations to ensure the trainer remains accurate for international users.
 
 ---
 

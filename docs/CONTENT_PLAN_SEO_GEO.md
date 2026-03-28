@@ -1,6 +1,6 @@
-# Protocol 21: App Launch Content Strategy (2026)
+# Card Counting Protocol 21: App Launch Content Strategy (2026)
 
-> **Context:** This document serves as the master blueprint for the "Protocol 21" website. It contains the keyword strategy, site architecture, data schemas, and prompt instructions for AI agents to generate high-ranking content.
+> **Context:** This document serves as the master blueprint for the "Card Counting Protocol 21" website. It contains the keyword strategy, site architecture, data schemas, and prompt instructions for AI agents to generate high-ranking content.
 > **App Niche:** Mobile Blackjack Card Counting Trainer (iOS & Android).
 > **Launch Date:** January 2026.
 
@@ -54,10 +54,10 @@
 ### A. Static Core Pages (Manual High-Value)
 | URL Path | Page Type | Primary Keyword | H1 Strategy |
 | :--- | :--- | :--- | :--- |
-| `/` | Homepage | "Blackjack Card Counting App" | Protocol 21: The Pro Blackjack Trainer App |
+| `/` | Homepage | "Blackjack Card Counting App" | Card Counting Protocol 21: The Pro Blackjack Trainer App |
 | `/features` | Product | "Blackjack Trainer Features" | Features: Drills, Systems & Stats |
-| `/download/ios` | Landing | "Card Counter App iPhone" | Download Protocol 21 for iOS |
-| `/download/android` | Landing | "Card Counting App Android" | Download Protocol 21 for Android |
+| `/download/ios` | Landing | "Card Counter App iPhone" | Download Card Counting Protocol 21 for iOS |
+| `/download/android` | Landing | "Card Counting App Android" | Download Card Counting Protocol 21 for Android |
 
 ### B. Programmatic Collections (pSEO)
 *These pages are generated dynamically using the datasets below.*
@@ -82,8 +82,8 @@
     "difficulty_level": "Beginner",
     "count_type": "Balanced",
     "tags": ["Level 1", "Most Popular", "Standard"],
-    "seo_title": "Hi-Lo Card Counting App | Protocol 21 Blackjack Trainer",
-    "seo_desc": "Master the famous Hi-Lo card counting system. Protocol 21 provides the specific +1/-1 drills you need to learn Hi-Lo for iOS and Android.",
+    "seo_title": "Hi-Lo Card Counting App | Card Counting Protocol 21 Blackjack Trainer",
+    "seo_desc": "Master the famous Hi-Lo card counting system. Card Counting Protocol 21 provides the specific +1/-1 drills you need to learn Hi-Lo for iOS and Android.",
     "pain_point": "keeping the running count during fast deals"
   },
   {
@@ -94,7 +94,7 @@
     "count_type": "Unbalanced",
     "tags": ["Level 1", "No True Count", "Easiest"],
     "seo_title": "KO (Knock-Out) Blackjack System App & Trainer",
-    "seo_desc": "Learn the Knock-Out (KO) system without the math. Protocol 21 is the best app for unbalanced counting systems on mobile.",
+    "seo_desc": "Learn the Knock-Out (KO) system without the math. Card Counting Protocol 21 is the best app for unbalanced counting systems on mobile.",
     "pain_point": "converting to true count (which KO eliminates)"
   },
   {
@@ -105,7 +105,7 @@
     "count_type": "Balanced",
     "tags": ["Level 2", "High Efficiency", "Ace Side Count"],
     "seo_title": "Omega II Card Counting Trainer | Advanced Blackjack App",
-    "seo_desc": "Practice the complex Omega II system with Protocol 21. Our advanced mode supports Level 2 values and Ace side-counts.",
+    "seo_desc": "Practice the complex Omega II system with Card Counting Protocol 21. Our advanced mode supports Level 2 values and Ace side-counts.",
     "pain_point": "memorizing the complex Level 2 card values"
   },
   {
@@ -116,7 +116,7 @@
     "count_type": "Balanced",
     "tags": ["Level 2", "Old School", "Powerful"],
     "seo_title": "Zen Count Blackjack Trainer App",
-    "seo_desc": "The Zen Count requires precision. Use Protocol 21's custom drills to master this powerful Level 2 balanced system.",
+    "seo_desc": "The Zen Count requires precision. Use Card Counting Protocol 21's custom drills to master this powerful Level 2 balanced system.",
     "pain_point": "maintaining speed with multi-value cards"
   },
   {
@@ -127,7 +127,7 @@
     "count_type": "Unbalanced",
     "tags": ["Level 1", "Arnold Snyder", "Simple"],
     "seo_title": "Red 7 Card Counting App | Learn Unbalanced Counting",
-    "seo_desc": "Learn Arnold Snyder's Red 7 system. Protocol 21 helps you practice the color-dependent starting counts unique to this system.",
+    "seo_desc": "Learn Arnold Snyder's Red 7 system. Card Counting Protocol 21 helps you practice the color-dependent starting counts unique to this system.",
     "pain_point": "remembering the pivot points"
   },
   {
@@ -138,7 +138,7 @@
     "count_type": "Balanced",
     "tags": ["Level 3", "Fractional", "Hardest"],
     "seo_title": "Wong Halves Blackjack Trainer | Expert Counting App",
-    "seo_desc": "Wong Halves is the hardest system to master. Protocol 21 is the only app that supports fractional values for expert drills.",
+    "seo_desc": "Wong Halves is the hardest system to master. Card Counting Protocol 21 is the only app that supports fractional values for expert drills.",
     "pain_point": "calculating fractional values (.5) on the fly"
   }
 ]
@@ -181,11 +181,11 @@ Structure:
 
 Hook: Acknowledge the user wants to learn {system_name} but highlight the specific {pain_point} associated with it.
 
-The Solution: Introduce 'Protocol 21' as the only app that has a dedicated preset for {system_name}. Mention it handles the {count_type} logic automatically.
+The Solution: Introduce 'Card Counting Protocol 21' as the only app that has a dedicated preset for {system_name}. Mention it handles the {count_type} logic automatically.
 
 How to Practice: Describe a 3-step routine using the app to master {system_name} (Step 1: Learn Values, Step 2: Slow Drills, Step 3: Casino Speed).
 
-CTA: 'Download Protocol 21 to master {system_name} today.'
+CTA: 'Download Card Counting Protocol 21 to master {system_name} today.'
 
 Tone: Professional, encouraging, authoritative. No fluff."
 
@@ -198,7 +198,7 @@ Structure:
 
 Problem: Explain why {pain_point} causes people to lose money in casinos.
 
-Fix: Explain how the Protocol 21 app isolates this specific skill in the {drill_name} module.
+Fix: Explain how the Card Counting Protocol 21 app isolates this specific skill in the {drill_name} module.
 
 SEO: Ensure the keyword {drill_name} appears in the first 100 words.
 

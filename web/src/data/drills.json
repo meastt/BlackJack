@@ -30,13 +30,13 @@
             "Start with easy half-deck rundowns: set a timer and drill RC ÷ Decks for combinations common in 6-deck games (RC +6 / 3 decks = TC +2, RC +4 / 2 decks = TC +2).",
             "Move to fractions: RC +7 / 2 decks = TC +3.5. Most professionals floor this to TC +3. Practice knowing that floor instantly.",
             "Practice deck estimation simultaneously. True count math is worthless if your deck estimate is off. Link both skills.",
-            "Use Protocol 21's dedicated True Count Drill mode which presents a running count and deck estimate, then scores your response in under 2 seconds."
+            "Use Card Counting Protocol 21's dedicated True Count Drill mode which presents a running count and deck estimate, then scores your response in under 2 seconds."
         ],
         "tips": [
             "Memorize common divisions: +4/2=+2, +6/3=+2, +8/4=+2. It is faster to pattern-match than to calculate.",
             "Practice with 6-deck and 8-deck shoe configurations — the most common in modern casinos.",
             "Time your responses ruthlessly. Slow is wrong in a casino.",
-            "Train with casino background noise enabled in Protocol 21 to simulate table pressure."
+            "Train with casino background noise enabled in Card Counting Protocol 21 to simulate table pressure."
         ],
         "related_drill": "deck-estimation-drills",
         "related_drill_label": "Deck Estimation Drills"
@@ -72,7 +72,7 @@
             "Start with the extremes: practice identifying 1 full deck vs 2 full decks in a discard tray. These are the two most common reference points.",
             "Add half-deck increments. Can you tell 1.5 decks from 2.0 decks? This is the granularity you need in a 75% penetration game.",
             "Account for card spread. Loosely arranged or bent cards appear to take up more space than a cleanly shuffled stack. Compensate for this.",
-            "Use Protocol 21's Deck Estimation drill which presents a simulated discard tray graphic and scores your estimate, giving instant visual feedback."
+            "Use Card Counting Protocol 21's Deck Estimation drill which presents a simulated discard tray graphic and scores your estimate, giving instant visual feedback."
         ],
         "tips": [
             "Anchor your mental model to casino-standard plastic discard trays — the cards are compressed more tightly than a home deck.",
@@ -111,7 +111,7 @@
             }
         ],
         "howTo": [
-            "Begin at 50% casino dealing speed in Protocol 21. Do not advance until you achieve 100% accuracy at slow speed over 5 consecutive shoes.",
+            "Begin at 50% casino dealing speed in Card Counting Protocol 21. Do not advance until you achieve 100% accuracy at slow speed over 5 consecutive shoes.",
             "Graduate to 75% speed. Introduce pair cancellation: train yourself to cancel K+5 to 0 in a single glance without tracking each card individually.",
             "Activate the 'Casino Noise' setting. Counting in silence is a different cognitive task than counting with cocktail party chatter and slot machine sounds.",
             "Push to 110-120% of real casino speed for training. When you remove that handicap and return to normal speed, the mental load drops dramatically."
@@ -119,7 +119,7 @@
         "tips": [
             "Never vocalize the running count in your head. Train to keep a visual or spatial 'feel' for the count rather than a verbal recitation.",
             "Practice pairs cancellation exclusively for 10 minutes per session — K+5, J+3, A+6. Cancellation eliminates the majority of mental calculations in a live game.",
-            "Train with casino background noise enabled in Protocol 21. The audio distraction is a real variable you cannot ignore.",
+            "Train with casino background noise enabled in Card Counting Protocol 21. The audio distraction is a real variable you cannot ignore.",
             "After every 5-minute speed session, stop. Verify your count is still 100% accurate. Speed means nothing without accuracy."
         ],
         "related_drill": "deck-estimation-drills",

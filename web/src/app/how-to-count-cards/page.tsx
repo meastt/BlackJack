@@ -276,7 +276,7 @@ export default function HowToCountCardsPage() {
 
             <h3 className="text-2xl font-bold mb-4">Stage 2: Running Count Accuracy (10-20 hours)</h3>
             <p className="text-text-secondary leading-relaxed mb-4">
-              Practice keeping a running count with a single deck, then multiple decks. Start slow to focus on accuracy over speed. An online trainer like Protocol 21 makes this much easier.
+              Practice keeping a running count with a single deck, then multiple decks. Start slow to focus on accuracy over speed. An online trainer like Card Counting Protocol 21 makes this much easier.
             </p>
 
             <h3 className="text-2xl font-bold mb-4">Stage 3: Speed Building (15-30 hours)</h3>
@@ -338,7 +338,7 @@ export default function HowToCountCardsPage() {
                 <span className="text-2xl">2</span>
                 <div>
                   <h4 className="font-bold mb-1">Practice with Tools</h4>
-                  <p className="text-text-secondary text-sm">Use a card counting trainer app like Protocol 21 to accelerate your learning with instant feedback and progressive drills.</p>
+                  <p className="text-text-secondary text-sm">Use a card counting trainer app like Card Counting Protocol 21 to accelerate your learning with instant feedback and progressive drills.</p>
                 </div>
               </div>
 
@@ -370,10 +370,10 @@ export default function HowToCountCardsPage() {
             <div className="bg-surface-secondary rounded-lg p-8 mb-8">
               <h3 className="text-2xl font-bold mb-4">Start Your Training Today</h3>
               <p className="text-text-secondary leading-relaxed mb-6">
-                Protocol 21 provides everything you need to master card counting efficiently. Our progressive drills, instant feedback, and casino simulation will prepare you for successful advantage play.
+                Card Counting Protocol 21 provides everything you need to master card counting efficiently. Our progressive drills, instant feedback, and casino simulation will prepare you for successful advantage play.
               </p>
               <Link href="/download" className="btn btn-primary">
-                Download Protocol 21 Free
+                Download Card Counting Protocol 21 Free
               </Link>
             </div>
 
@@ -384,7 +384,7 @@ export default function HowToCountCardsPage() {
               <li>True count = running count ÷ remaining decks (required for accurate play)</li>
               <li>Expect 50-100 hours of practice before casino-ready play</li>
               <li>Use the count to adjust betting when count is positive, reduce when negative</li>
-              <li>Regular practice with tools like Protocol 21 accelerates skill development</li>
+              <li>Regular practice with tools like Card Counting Protocol 21 accelerates skill development</li>
             </ul>
           </section>
         </div>
@@ -408,7 +408,7 @@ export default function HowToCountCardsPage() {
               <p className="text-text-secondary text-sm">Compare Hi-Lo, KO, Omega II, Wong Halves, and other advanced systems.</p>
             </Link>
             <Link href="/features" className="border border-surface-tertiary rounded-lg p-6 hover:border-gold-500 transition">
-              <h3 className="font-bold mb-2">Protocol 21 Features</h3>
+              <h3 className="font-bold mb-2">Card Counting Protocol 21 Features</h3>
               <p className="text-text-secondary text-sm">Explore our comprehensive training tools and casino-grade drills.</p>
             </Link>
           </div>

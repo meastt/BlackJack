@@ -1,7 +1,7 @@
 {
   "name": "card-counter-ai",
-  "version": "1.0.0",
-  "description": "The only app that actually teaches you to count cards—from complete beginner to casino-ready",
+  "version": "1.1.0",
+  "description": "Card Counting Protocol 21 — the app that teaches you to count cards, from complete beginner to casino-ready",
   "private": true,
   "workspaces": [
     "mobile",

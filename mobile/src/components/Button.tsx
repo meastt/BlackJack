@@ -66,7 +66,7 @@ export const Button: React.FC<ButtonProps> = ({
 
 const styles = StyleSheet.create({
   button: {
-    borderRadius: 4, // Sharp Protocol 21 corners
+    borderRadius: 4, // Sharp Card Counting Protocol 21 corners
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,

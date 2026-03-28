@@ -1,4 +1,4 @@
-# Card Counter AI - Product Specification
+# Card Counting Protocol 21 - Product Specification
 
 ## Vision
 The only app that actually teaches you to count cards—from complete beginner to casino-ready. Progressive skill-building with AI coaching until you can hold a true count under pressure.

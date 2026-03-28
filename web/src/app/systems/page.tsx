@@ -8,12 +8,12 @@ const BASE_URL = "https://protocol21blackjack.com";
 
 export const metadata: Metadata = {
   title: "Card Counting Systems - Learn Hi-Lo, KO, Omega II & More",
-  description: "Master all major blackjack card counting systems with Protocol 21. Learn Hi-Lo, KO (Knock-Out), Omega II, Zen Count, Red 7, and Wong Halves from beginner to expert level.",
+  description: "Master all major blackjack card counting systems with Card Counting Protocol 21. Learn Hi-Lo, KO (Knock-Out), Omega II, Zen Count, Red 7, and Wong Halves from beginner to expert level.",
   alternates: {
     canonical: `${BASE_URL}/systems`,
   },
   openGraph: {
-    title: "Card Counting Systems - Protocol 21 Blackjack Trainer",
+    title: "Card Counting Systems - Card Counting Protocol 21 Blackjack Trainer",
     description: "Master all major blackjack card counting systems. From beginner-friendly Hi-Lo to expert Wong Halves.",
     url: `${BASE_URL}/systems`,
     type: "website",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Card Counting Systems - Protocol 21",
+    title: "Card Counting Systems - Card Counting Protocol 21",
     description: "Master Hi-Lo, KO, Omega II, Zen Count, Red 7, and Wong Halves.",
     images: [`${BASE_URL}/images/protocol-21-card-shoe.webp`],
   },
@@ -48,7 +48,7 @@ export default function SystemsPage() {
     <main className="min-h-screen">
       <CourseSchema
         name="Complete Card Counting Mastery"
-        description="Learn all major blackjack card counting systems from beginner to expert level with Protocol 21's comprehensive training program."
+        description="Learn all major blackjack card counting systems from beginner to expert level with Card Counting Protocol 21's comprehensive training program."
         url={`${BASE_URL}/systems`}
       />
 
@@ -65,12 +65,12 @@ export default function SystemsPage() {
             </h1>
             <p className="text-xl text-text-secondary leading-relaxed mb-8">
               From beginner-friendly balanced counts to expert-level fractional systems,
-              Protocol 21 supports every major card counting method. Choose your path and start training.
+              Card Counting Protocol 21 supports every major card counting method. Choose your path and start training.
             </p>
 
             <div className="flex flex-wrap gap-4">
               <Link href="/download" className="btn btn-primary">
-                Download Protocol 21
+                Download Card Counting Protocol 21
               </Link>
               <Link href="/blog" className="btn btn-outline">
                 Read Our Guides
@@ -263,7 +263,7 @@ export default function SystemsPage() {
                 Ready to Start Counting?
               </h2>
               <p className="text-text-secondary max-w-lg mx-auto mb-8 leading-relaxed">
-                Download Protocol 21 and practice any counting system with casino-grade drills.
+                Download Card Counting Protocol 21 and practice any counting system with casino-grade drills.
                 Available free for iOS and Android.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -283,7 +283,7 @@ export default function SystemsPage() {
       <footer className="footer">
         <div className="container">
           <p className="footer-brand mb-2">
-            &copy; {new Date().getFullYear()} Protocol 21. All rights reserved.
+            &copy; {new Date().getFullYear()} Card Counting Protocol 21. All rights reserved.
           </p>
           <p className="footer-brand">
             Built by fellow degens in the desert at{" "}

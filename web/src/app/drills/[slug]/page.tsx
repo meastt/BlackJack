@@ -37,13 +37,13 @@ export async function generateMetadata({ params }: DrillPageProps): Promise<Meta
 
   return {
     title: `${drill.seo_title} | Free Practice`,
-    description: `Master ${drill.target_skill.toLowerCase()} with Protocol 21's ${drill.drill_name} drill. Overcome the challenge of ${drill.pain_point}. Free for iOS and Android.`,
+    description: `Master ${drill.target_skill.toLowerCase()} with Card Counting Protocol 21's ${drill.drill_name} drill. Overcome the challenge of ${drill.pain_point}. Free for iOS and Android.`,
     alternates: {
       canonical: `${BASE_URL}/drills/${slug}`,
     },
     openGraph: {
       title: drill.seo_title,
-      description: `Master ${drill.target_skill.toLowerCase()} with Protocol 21. Overcome: ${drill.pain_point}.`,
+      description: `Master ${drill.target_skill.toLowerCase()} with Card Counting Protocol 21. Overcome: ${drill.pain_point}.`,
       url: `${BASE_URL}/drills/${slug}`,
       type: "article",
       images: [
@@ -58,7 +58,7 @@ export async function generateMetadata({ params }: DrillPageProps): Promise<Meta
     twitter: {
       card: "summary_large_image",
       title: drill.seo_title,
-      description: `Master ${drill.target_skill.toLowerCase()} with Protocol 21.`,
+      description: `Master ${drill.target_skill.toLowerCase()} with Card Counting Protocol 21.`,
       images: [`${BASE_URL}${imageUrl}`],
     },
   };
@@ -86,7 +86,7 @@ export default async function DrillPage({ params }: DrillPageProps) {
     },
     {
       question: `What is the best app to practice ${drill.drill_name}?`,
-      answer: `Protocol 21 is the most complete ${drill.drill_name} trainer available on iOS and Android. It features ${drill.drill_name}-specific drill modes with speed control, instant feedback, casino noise simulation, and offline play.`,
+      answer: `Card Counting Protocol 21 is the most complete ${drill.drill_name} trainer available on iOS and Android. It features ${drill.drill_name}-specific drill modes with speed control, instant feedback, casino noise simulation, and offline play.`,
     },
   ];
 
@@ -94,7 +94,7 @@ export default async function DrillPage({ params }: DrillPageProps) {
     <main className="min-h-screen">
       <ArticleSchema
         title={drill.seo_title}
-        description={`Master ${drill.target_skill.toLowerCase()} with Protocol 21's ${drill.drill_name} drill.`}
+        description={`Master ${drill.target_skill.toLowerCase()} with Card Counting Protocol 21's ${drill.drill_name} drill.`}
         url={`${BASE_URL}/drills/${slug}`}
         image={imageUrl}
       />
@@ -220,9 +220,9 @@ export default async function DrillPage({ params }: DrillPageProps) {
 
           {/* CTA */}
           <div className="bg-primary/10 border border-primary/20 rounded-lg p-8 text-center shadow-lg mb-8">
-            <h3 className="text-2xl font-bold mb-4">Train This Drill in Protocol 21</h3>
+            <h3 className="text-2xl font-bold mb-4">Train This Drill in Card Counting Protocol 21</h3>
             <p className="text-text-secondary leading-relaxed mb-6">
-              Protocol 21 features a dedicated <strong>{drill.drill_name}</strong> training mode with adjustable speed, casino noise simulation, instant feedback, and <strong>offline play</strong> — no Wi-Fi required and absolutely no scammy in-app coins.
+              Card Counting Protocol 21 features a dedicated <strong>{drill.drill_name}</strong> training mode with adjustable speed, casino noise simulation, instant feedback, and <strong>offline play</strong> — no Wi-Fi required and absolutely no scammy in-app coins.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/download/ios" className="btn btn-primary px-8">

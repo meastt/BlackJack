@@ -1,9 +1,9 @@
-# Protocol 21: SEO Master Plan & Execution Matrix (2026)
+# Card Counting Protocol 21: SEO Master Plan & Execution Matrix (2026)
 
 **Last Updated:** February 24, 2026  
 **Status:** Phase 1 (Technical & Foundation) Complete. Moving to Phase 2 (Pillar Content & GEO Optimization).
 
-This document serves as the single source of truth for the Protocol 21 SEO strategy. It consolidates previous audits and progress reports, and is optimized for traditional Google crawlers (SEO), zero-click snippets (AEO), and LLM-based answer engines like Perplexity and SearchGPT (GEO).
+This document serves as the single source of truth for the Card Counting Protocol 21 SEO strategy. It consolidates previous audits and progress reports, and is optimized for traditional Google crawlers (SEO), zero-click snippets (AEO), and LLM-based answer engines like Perplexity and SearchGPT (GEO).
 
 ---
 
@@ -28,7 +28,7 @@ This matrix dictates the URL structure, exact target keywords, and the specific 
 | `/deck-penetration-blackjack` | deck penetration | Informational / Pro | H2 question + 40-word bolded definition + Mathematical table. | ✅ Complete |
 | `/hi-lo-card-counting-system` | hi-lo system | Educational | Step-by-step numbered list + Interactive value chart (+1, 0, -1). | ⏳ Pending Expansion |
 | `/true-count-calculator` | true count conversion | Tool / Utility | Formula block + embedded JS widget + FAQ schema. | ✅ Complete |
-| `/card-counting-trainer-app` | best card counting app | Transactional | Comparison table (Protocol 21 vs. Competitors) + SoftwareApplication Schema. | ⏳ Pending |
+| `/card-counting-trainer-app` | best card counting app | Transactional | Comparison table (Card Counting Protocol 21 vs. Competitors) + SoftwareApplication Schema. | ⏳ Pending |
 | `/bankroll-management-blackjack` | blackjack bankroll | Informational | Risk of Ruin (RoR) data tables + bulleted rules. | ⏳ Pending |
 
 ---
@@ -44,7 +44,7 @@ When drafting the actual page content for the matrix above, use this strict cons
 > 
 > *   **AEO Optimization:** Start the article with a clear `<H2>` question containing the keyword. Immediately follow it with a 40-50 word definitive answer paragraph using `<strong>` tags on the core entities.
 > *   **GEO Optimization:** Include high-density facts, mathematical probabilities, and tabular data that LLMs love to parse. Avoid fluff.
-> *   **Conversion Hook:** Seamlessly integrate the 'Protocol 21' mobile app into the content as the ultimate tool to practice this specific concept. Mention features like 'offline play', 'Chaos Mode', and 'no scammy in-app coins'.
+> *   **Conversion Hook:** Seamlessly integrate the 'Card Counting Protocol 21' mobile app into the content as the ultimate tool to practice this specific concept. Mention features like 'offline play', 'Chaos Mode', and 'no scammy in-app coins'.
 > *   **Formatting:** Use Markdown. Include at least one data table, three `<h3>` subheadings, and a bulleted list."
 
 ---
@@ -69,7 +69,7 @@ To win rich snippets, specific schema markup must be injected into the `<head>` 
         "@graph": [
           {
             "@type": "SoftwareApplication",
-            "name": "Protocol 21: Card Counting Trainer",
+            "name": "Card Counting Protocol 21: Card Counting Trainer",
             "operatingSystem": "iOS, Android",
             "applicationCategory": "EducationalApplication",
             "offers": {

@@ -113,7 +113,6 @@ export const DecisionLabScreen: React.FC<HomeScreenProps> = ({ navigation }) => 
       setTimeLeft((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          submitScenario(true);
           return 0;
         }
         return prev - 1;
@@ -122,6 +121,11 @@ export const DecisionLabScreen: React.FC<HomeScreenProps> = ({ navigation }) => 
 
     return () => clearInterval(timer);
   }, [activeScenario, sessionComplete]);
+
+  useEffect(() => {
+    if (!activeScenario || sessionComplete || timeLeft !== 0) return;
+    submitScenario(true);
+  }, [timeLeft, activeScenario, sessionComplete]);
 
   useEffect(() => {
     if (!activeScenario || difficulty !== 'ADVANCED') {
@@ -264,7 +268,7 @@ export const DecisionLabScreen: React.FC<HomeScreenProps> = ({ navigation }) => 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.eyebrow}>PROTOCOL 21 // TABLE DECISION LAB</Text>
+        <Text style={styles.eyebrow}>CARD COUNTING PROTOCOL 21 // TABLE DECISION LAB</Text>
         <Text style={styles.title}>Decision Lab</Text>
         <Text style={styles.description}>
           Timed scenario training focused on count quality, action precision, and sizing discipline.

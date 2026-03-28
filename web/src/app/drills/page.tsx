@@ -8,12 +8,12 @@ const BASE_URL = "https://protocol21blackjack.com";
 
 export const metadata: Metadata = {
   title: "Card Counting Drills - True Count, Speed & Deck Estimation Training",
-  description: "Practice card counting with specialized drills. Master true count conversion, speed counting, and deck estimation with Protocol 21's casino-grade training exercises.",
+  description: "Practice card counting with specialized drills. Master true count conversion, speed counting, and deck estimation with Card Counting Protocol 21's casino-grade training exercises.",
   alternates: {
     canonical: `${BASE_URL}/drills`,
   },
   openGraph: {
-    title: "Card Counting Drills - Protocol 21 Training",
+    title: "Card Counting Drills - Card Counting Protocol 21 Training",
     description: "Practice true count conversion, speed counting, and deck estimation with specialized drills.",
     url: `${BASE_URL}/drills`,
     type: "website",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Card Counting Drills - Protocol 21",
+    title: "Card Counting Drills - Card Counting Protocol 21",
     description: "Master true count, speed counting, and deck estimation.",
     images: [`${BASE_URL}/images/protocol-21-true-count.webp`],
   },
@@ -109,7 +109,7 @@ export default function DrillsPage() {
         <div className="relative w-full h-64 md:h-80 rounded-xl overflow-hidden">
           <Image
             src="/images/protocol-21-true-count.webp"
-            alt="True count practice drill in Protocol 21 app"
+            alt="True count practice drill in Card Counting Protocol 21 app"
             fill
             className="object-cover"
             priority
@@ -198,7 +198,7 @@ export default function DrillsPage() {
               </div>
 
               <p className="text-text-secondary text-lg leading-relaxed">
-                Protocol 21&apos;s drill modes force you to practice each skill in isolation until it becomes
+                Card Counting Protocol 21&apos;s drill modes force you to practice each skill in isolation until it becomes
                 automatic. Only then should you move to full shoe simulation. This is the difference
                 between hoping you&apos;re ready and knowing you&apos;re ready.
               </p>
@@ -239,12 +239,12 @@ export default function DrillsPage() {
                 Ready to Train Like a Pro?
               </h2>
               <p className="text-text-secondary max-w-lg mx-auto mb-8 leading-relaxed">
-                Download Protocol 21 and access all three essential drills plus full casino simulation.
+                Download Card Counting Protocol 21 and access all three essential drills plus full casino simulation.
                 Free for iOS and Android.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/download" className="btn btn-primary px-8">
-                  Download Protocol 21
+                  Download Card Counting Protocol 21
                 </Link>
                 <Link href="/systems" className="btn btn-outline px-8">
                   Choose Your System
@@ -259,7 +259,7 @@ export default function DrillsPage() {
       <footer className="footer">
         <div className="container">
           <p className="footer-brand mb-2">
-            &copy; {new Date().getFullYear()} Protocol 21. All rights reserved.
+            &copy; {new Date().getFullYear()} Card Counting Protocol 21. All rights reserved.
           </p>
           <p className="footer-brand">
             Built by fellow degens in the desert at{" "}

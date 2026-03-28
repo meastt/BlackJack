@@ -93,11 +93,11 @@ export default async function SystemPage({ params }: SystemPageProps) {
         },
         {
             question: `Is the ${system.system_name} system hard to learn?`,
-            answer: `The ${system.system_name} is rated ${system.difficulty_level} difficulty. ${system.pain_point.charAt(0).toUpperCase() + system.pain_point.slice(1)} is the most challenging part for most players, but this can be overcome with targeted drills in Protocol 21.`,
+            answer: `The ${system.system_name} is rated ${system.difficulty_level} difficulty. ${system.pain_point.charAt(0).toUpperCase() + system.pain_point.slice(1)} is the most challenging part for most players, but this can be overcome with targeted drills in Card Counting Protocol 21.`,
         },
         {
             question: `What is the best app to learn the ${system.system_name} counting system?`,
-            answer: `Protocol 21 is specifically built to train the ${system.system_name} system with casino-grade drills, including speed training, noise simulation, and true count conversion practice. It is available free for iOS and Android.`,
+            answer: `Card Counting Protocol 21 is specifically built to train the ${system.system_name} system with casino-grade drills, including speed training, noise simulation, and true count conversion practice. It is available free for iOS and Android.`,
         },
     ];
 
@@ -112,7 +112,7 @@ export default async function SystemPage({ params }: SystemPageProps) {
             <FAQSoftwareSchema platform="Web" faqs={faqs} />
             <HowToSchema
                 name={`How to Master the ${system.system_name} Card Counting System`}
-                description={`Learn the ${system.system_name} system with Protocol 21's proven 3-step training method.`}
+                description={`Learn the ${system.system_name} system with Card Counting Protocol 21's proven 3-step training method.`}
                 steps={[
                     {
                         name: "Value Recognition",
@@ -254,9 +254,9 @@ export default async function SystemPage({ params }: SystemPageProps) {
 
                     {/* Practice CTA */}
                     <div className="bg-primary/10 border border-primary/20 rounded-lg p-8 text-center shadow-lg mb-8">
-                        <h3 className="text-2xl font-bold mb-4">Train {system.system_name} with Protocol 21</h3>
+                        <h3 className="text-2xl font-bold mb-4">Train {system.system_name} with Card Counting Protocol 21</h3>
                         <p className="text-text-secondary leading-relaxed mb-6">
-                            Protocol 21 features dedicated {system.system_name} drill modes, speed training, casino noise simulation, and offline play with no scammy in-app coins. It is the only app that supports all 6 major counting systems.
+                            Card Counting Protocol 21 features dedicated {system.system_name} drill modes, speed training, casino noise simulation, and offline play with no scammy in-app coins. It is the only app that supports all 6 major counting systems.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             <Link href="/download/ios" className="btn btn-primary px-8">

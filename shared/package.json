@@ -1,7 +1,7 @@
 {
   "name": "@card-counter-ai/shared",
   "version": "1.0.0",
-  "description": "Shared types and logic for Card Counter AI",
+  "description": "Shared types and logic for Card Counting Protocol 21",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {

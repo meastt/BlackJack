@@ -104,7 +104,7 @@ export function ProfileScreen() {
                 <Text style={styles.sectionTitle}>TRAINING NOTICE</Text>
                 <View style={styles.disclaimerCard}>
                     <Text style={styles.disclaimerText}>
-                        Card Counter AI is an educational skill-training app focused on count accuracy,
+                        Card Counting Protocol 21 is an educational skill-training app focused on count accuracy,
                         decision quality, and advantage-play readiness.
                     </Text>
                     <Text style={styles.disclaimerText}>

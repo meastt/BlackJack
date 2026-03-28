@@ -95,14 +95,14 @@ export function TrueCountConverter() {
             <div className="text-center pt-8 border-t border-white/10">
                 <h4 className="text-lg font-bold mb-4">Want to train your brain to do this instantly?</h4>
                 <p className="text-sm text-text-secondary mb-6 max-w-lg mx-auto">
-                    Protocol 21 is the ultimate iOS & Android app built to train your True Count conversion speed. No ads. No scammy chips. Just pure, casino-grade drills.
+                    Card Counting Protocol 21 is the ultimate iOS & Android app built to train your True Count conversion speed. No ads. No scammy chips. Just pure, casino-grade drills.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <Link href="/download/ios" className="btn btn-primary px-8 py-3 text-sm font-bold uppercase tracking-wide">
-                        Get Protocol 21 for iOS
+                        Get Card Counting Protocol 21 for iOS
                     </Link>
                     <Link href="/download/android" className="btn btn-outline px-8 py-3 text-sm font-bold uppercase tracking-wide">
-                        Get Protocol 21 for Android
+                        Get Card Counting Protocol 21 for Android
                     </Link>
                 </div>
             </div>
